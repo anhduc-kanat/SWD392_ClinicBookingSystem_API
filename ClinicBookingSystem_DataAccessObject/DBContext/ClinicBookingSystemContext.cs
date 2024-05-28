@@ -13,7 +13,12 @@ namespace ClinicBookingSystem_DataAcessObject.DBContext
         public ClinicBookingSystemContext(DbContextOptions<ClinicBookingSystemContext> options): base(options)
         { }
         public DbSet<User> Users => Set<User>();
-
+        public DbSet<Role> Roles => Set<Role>();
+        public DbSet<Appointment> Appointments => Set<Appointment>();
+        public DbSet<Service> Services => Set<Service>();
+        public DbSet<Specification> Specifications => Set<Specification>();
+        public DbSet<Salary> Salaries => Set<Salary>();
+        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);

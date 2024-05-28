@@ -13,6 +13,7 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        //User
         public ICollection<User> Users { get; set; }
     }
 }

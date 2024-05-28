@@ -25,7 +25,7 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         [JsonIgnore]
         public string PhoneCode { get; set; }
         public string PhoneNumber {  get; set; }
-        public DateTimeOffset DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         //Các thuộc tính thuộc lịch nghỉ làm của nhân viên
@@ -35,16 +35,18 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         public int EmergencyDateOffAttemptCount { get; set; }
         public Boolean IsOnDateOff { get; set; }
         public JobStatus JobStatus {  get; set; }
-        public DateTimeOffset StartDateOff {  get; set; }
-        public DateTimeOffset EndDateOff { get; set;}
+        public DateTime StartDateOff {  get; set; }
+        public DateTime EndDateOff { get; set;}
 
         //Role
 
-        public int RoleId { get; set; }
         public Role Role { get; set; }
-        public Boolean isStaff => Equals(Role, RoleEnums.Staff);
-        public Boolean isClincOwner => Equals(Role, RoleEnums.ClinicOwner);
-        public Boolean isDentist => Equals(Role, RoleEnums.Dentist);
-        public Boolean isCustomer => Equals(Role, RoleEnums.Customer);
+        
+        //Appointment
+        public ICollection<Appointment> Appointments { get; set; }
+        //Salary
+        public Salary Salary { get; set; }
+        //Specification
+        public ICollection<Specification> Specifications { get; set; }
     }
 }

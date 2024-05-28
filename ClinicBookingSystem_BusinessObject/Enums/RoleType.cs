@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ClinicBookingSystem_BusinessObject.Enums
 {
-    public enum RoleEnums
+    public enum RoleType
     {
         [Description("Clinic Owner")]
         ClinicOwner = 0,
