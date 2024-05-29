@@ -3,7 +3,7 @@ using ClinicBookingSystem_BusinessObject.Enums;
 
 namespace ClinicBookingSystem_BusinessObject.Entities;
 
-public class Application
+public class Application : BaseEntities
 {
     [Key]
     public int Id { get; set; }

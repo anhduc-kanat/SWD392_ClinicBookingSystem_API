@@ -2,7 +2,7 @@
 
 namespace ClinicBookingSystem_BusinessObject.Entities;
 
-public class Specification
+public class Specification : BaseEntities
 {
     [Key]
     public int Id { get; set; }

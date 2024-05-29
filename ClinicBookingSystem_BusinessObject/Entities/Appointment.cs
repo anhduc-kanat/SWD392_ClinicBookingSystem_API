@@ -15,7 +15,7 @@ public class Appointment : BaseEntities
     public bool IsApproved { get; set; }
     public AppointmentStatus Status { get; set; }
     public string Description { get; set; }
-    public string feedBack {get; set; }
+    public string FeedBack {get; set; }
     public int DurationMinute { get; set; }
     public int SlotEncounter { get; set; }
     
@@ -25,4 +25,5 @@ public class Appointment : BaseEntities
     public ICollection<Service> Services { get; set; }
     //Slot
     public ICollection<Slot> Slots { get; set; }
+
 }

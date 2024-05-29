@@ -12,7 +12,7 @@ namespace ClinicBookingSystem_BusinessObject.Entities
     public class User : BaseEntities
     {
         [Key]
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
         [JsonIgnore]
@@ -58,5 +58,11 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         public ICollection<Claim> Claims { get; set; }
         //Apllication
         public ICollection<Application> Applications { get; set; }
+        //Medical Record
+        public ICollection<MedicalRecord> MedicalRecords { get; set; }
+        //Billing
+        public ICollection<Billing> Billings { get; set; }
+        //Order
+        public ICollection<Order> Orders { get; set; }
     }
 }

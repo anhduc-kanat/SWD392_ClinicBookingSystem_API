@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ClinicBookingSystem_BusinessObject.Entities;
 
-public class Service
+public class Service : BaseEntities
 {
     [Key]
     public int Id { get; set; }
@@ -16,4 +16,6 @@ public class Service
     public Specification Specification { get; set; }
     //Appointment
     public ICollection<Appointment> Appointments { get; set; }
+    //Order
+    public ICollection<Order> Orders { get; set; }
 }
