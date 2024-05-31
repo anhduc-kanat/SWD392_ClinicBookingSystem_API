@@ -2,7 +2,7 @@
 
 namespace ClinicBookingSystem_BusinessObject.Entities;
 
-public class Claim
+public class Claim : BaseEntities
 {
     [Key]
     public int Id { get; set; }

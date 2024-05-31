@@ -2,7 +2,7 @@
 
 namespace ClinicBookingSystem_BusinessObject.Entities;
 
-public class Salary
+public class Salary : BaseEntities
 {
     [Key]
     public int Id { get; set; }

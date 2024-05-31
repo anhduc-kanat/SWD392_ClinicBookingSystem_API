@@ -13,7 +13,6 @@ namespace ClinicBookingSystem_BusinessObject.Entities
     {
         [Key]
         public int Id { get; set; }
-        // public string Username { get; set; }
         public string Email { get; set; }
         [JsonIgnore]
         public string Password { get; set; }
@@ -57,6 +56,12 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         //Claim
         public ICollection<Claim>? Claims { get; set; }
         //Apllication
-        public ICollection<Application>? Applications { get; set; }
+        public ICollection<Application> Applications { get; set; }
+        //Medical Record
+        public ICollection<MedicalRecord> MedicalRecords { get; set; }
+        //Billing
+        public ICollection<Billing> Billings { get; set; }
+        //Order
+        public ICollection<Order> Orders { get; set; }
     }
 }

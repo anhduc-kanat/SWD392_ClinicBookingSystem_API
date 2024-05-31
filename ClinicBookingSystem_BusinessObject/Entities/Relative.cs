@@ -2,7 +2,7 @@
 
 namespace ClinicBookingSystem_BusinessObject.Entities;
 
-public class Relative
+public class Relative : BaseEntities
 {
     [Key]
     public int Id { get; set; }
