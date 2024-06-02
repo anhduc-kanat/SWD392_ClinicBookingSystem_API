@@ -6,28 +6,23 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ClinicBookingSystem_DataAccessObject.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialTable : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Appointments",
+                name: "Applications",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    IsPeriod = table.Column<bool>(type: "bit", nullable: false),
-                    ReExamUnit = table.Column<int>(type: "int", nullable: false),
-                    ReExamNumber = table.Column<int>(type: "int", nullable: false),
-                    Type = table.Column<int>(type: "int", nullable: false),
-                    IsApproved = table.Column<bool>(type: "bit", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FeedBack = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DurationMinute = table.Column<int>(type: "int", nullable: false),
-                    SlotEncounter = table.Column<int>(type: "int", nullable: false),
+                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsApproved = table.Column<bool>(type: "bit", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDelete = table.Column<bool>(type: "bit", nullable: false),
@@ -35,7 +30,7 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Appointments", x => x.Id);
+                    table.PrimaryKey("PK_Applications", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -44,9 +39,9 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ClaimGroup = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ClainValue = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ClaimGroup = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClainValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDelete = table.Column<bool>(type: "bit", nullable: false),
@@ -64,7 +59,7 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TimeStart = table.Column<TimeSpan>(type: "time", nullable: false),
                     TimeEnd = table.Column<TimeSpan>(type: "time", nullable: false),
                     DateStart = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -88,10 +83,10 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DosageUnitPerDayRecommend = table.Column<int>(type: "int", nullable: false),
-                    DosageUnitPerDayActual = table.Column<int>(type: "int", nullable: false),
-                    DosageTotal = table.Column<int>(type: "int", nullable: false),
+                    DosageUnitPerDayActual = table.Column<int>(type: "int", nullable: true),
+                    DosageTotal = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDelete = table.Column<bool>(type: "bit", nullable: false),
@@ -109,7 +104,7 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDelete = table.Column<bool>(type: "bit", nullable: false),
@@ -127,7 +122,7 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     amount = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -146,7 +141,7 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StartAt = table.Column<TimeSpan>(type: "time", nullable: false),
                     EndAt = table.Column<TimeSpan>(type: "time", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
@@ -190,29 +185,29 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PhoneConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    EmailCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TotalDateOff = table.Column<int>(type: "int", nullable: false),
-                    DateOffCount = table.Column<int>(type: "int", nullable: false),
-                    TotalEmergencyDateOffAttempt = table.Column<int>(type: "int", nullable: false),
-                    EmergencyDateOffAttemptCount = table.Column<int>(type: "int", nullable: false),
-                    IsOnDateOff = table.Column<bool>(type: "bit", nullable: false),
-                    JobStatus = table.Column<int>(type: "int", nullable: false),
-                    StartDateOff = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDateOff = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false),
-                    SalaryId = table.Column<int>(type: "int", nullable: false),
-                    RelativeType = table.Column<int>(type: "int", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: true),
+                    PhoneConfirmed = table.Column<bool>(type: "bit", nullable: true),
+                    IsAccountVerified = table.Column<bool>(type: "bit", nullable: false),
+                    EmailCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateOfBirth = table.Column<bool>(type: "bit", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TotalDateOff = table.Column<int>(type: "int", nullable: true),
+                    DateOffCount = table.Column<int>(type: "int", nullable: true),
+                    TotalEmergencyDateOffAttempt = table.Column<int>(type: "int", nullable: true),
+                    EmergencyDateOffAttemptCount = table.Column<int>(type: "int", nullable: true),
+                    IsOnDateOff = table.Column<bool>(type: "bit", nullable: true),
+                    JobStatus = table.Column<int>(type: "int", nullable: true),
+                    StartDateOff = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EndDateOff = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    RoleId = table.Column<int>(type: "int", nullable: true),
+                    SalaryId = table.Column<int>(type: "int", nullable: true),
+                    GroupId = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDelete = table.Column<bool>(type: "bit", nullable: false),
@@ -225,52 +220,30 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                         name: "FK_Users_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Users_Salaries_SalaryId",
                         column: x => x.SalaryId,
                         principalTable: "Salaries",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "AppointmentSlot",
-                columns: table => new
-                {
-                    AppointmentsId = table.Column<int>(type: "int", nullable: false),
-                    SlotsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AppointmentSlot", x => new { x.AppointmentsId, x.SlotsId });
-                    table.ForeignKey(
-                        name: "FK_AppointmentSlot_Appointments_AppointmentsId",
-                        column: x => x.AppointmentsId,
-                        principalTable: "Appointments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AppointmentSlot_Slots_SlotsId",
-                        column: x => x.SlotsId,
-                        principalTable: "Slots",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Applications",
+                name: "Appointments",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Type = table.Column<int>(type: "int", nullable: false),
+                    Date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    IsPeriod = table.Column<bool>(type: "bit", nullable: true),
+                    ReExamUnit = table.Column<int>(type: "int", nullable: true),
+                    ReExamNumber = table.Column<int>(type: "int", nullable: true),
+                    IsApproved = table.Column<bool>(type: "bit", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    IsApproved = table.Column<bool>(type: "bit", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FeedBack = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsTreatment = table.Column<bool>(type: "bit", nullable: true),
+                    SlotsId = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDelete = table.Column<bool>(type: "bit", nullable: false),
@@ -278,34 +251,33 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Applications", x => x.Id);
+                    table.PrimaryKey("PK_Appointments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Applications_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Appointments_Slots_SlotsId",
+                        column: x => x.SlotsId,
+                        principalTable: "Slots",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "AppointmentUser",
+                name: "ApplicationUser",
                 columns: table => new
                 {
-                    AppointmentsId = table.Column<int>(type: "int", nullable: false),
-                    UsersId = table.Column<int>(type: "int", nullable: false)
+                    ApplicationsId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AppointmentUser", x => new { x.AppointmentsId, x.UsersId });
+                    table.PrimaryKey("PK_ApplicationUser", x => new { x.ApplicationsId, x.UserId });
                     table.ForeignKey(
-                        name: "FK_AppointmentUser_Appointments_AppointmentsId",
-                        column: x => x.AppointmentsId,
-                        principalTable: "Appointments",
+                        name: "FK_ApplicationUser_Applications_ApplicationsId",
+                        column: x => x.ApplicationsId,
+                        principalTable: "Applications",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AppointmentUser_Users_UsersId",
-                        column: x => x.UsersId,
+                        name: "FK_ApplicationUser_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -317,10 +289,10 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Total = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Total = table.Column<int>(type: "int", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDelete = table.Column<bool>(type: "bit", nullable: false),
@@ -333,8 +305,7 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                         name: "FK_Billings_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -391,9 +362,9 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDelete = table.Column<bool>(type: "bit", nullable: false),
@@ -406,8 +377,7 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                         name: "FK_MedicalRecords_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -416,7 +386,8 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    GroupId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDelete = table.Column<bool>(type: "bit", nullable: false),
@@ -429,8 +400,7 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                         name: "FK_Relatives_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -440,10 +410,10 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateOfIssue = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AwaredAt = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateOfIssue = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AwaredAt = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -462,19 +432,43 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AppointmentUser",
+                columns: table => new
+                {
+                    AppointmentsId = table.Column<int>(type: "int", nullable: false),
+                    UsersId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppointmentUser", x => new { x.AppointmentsId, x.UsersId });
+                    table.ForeignKey(
+                        name: "FK_AppointmentUser_Appointments_AppointmentsId",
+                        column: x => x.AppointmentsId,
+                        principalTable: "Appointments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AppointmentUser_Users_UsersId",
+                        column: x => x.UsersId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Transactions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    IsPay = table.Column<bool>(type: "bit", nullable: false),
-                    PayAt = table.Column<TimeSpan>(type: "time", nullable: false),
-                    QrLink = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BankName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BillingId = table.Column<int>(type: "int", nullable: false),
+                    IsPay = table.Column<bool>(type: "bit", nullable: true),
+                    PayAt = table.Column<TimeSpan>(type: "time", nullable: true),
+                    QrLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BankName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BillingId = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDelete = table.Column<bool>(type: "bit", nullable: false),
@@ -487,8 +481,7 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                         name: "FK_Transactions_Billings_BillingId",
                         column: x => x.BillingId,
                         principalTable: "Billings",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -499,10 +492,10 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DentistId = table.Column<int>(type: "int", nullable: false),
                     PatientId = table.Column<int>(type: "int", nullable: false),
-                    PreScriptionName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PreScriptionDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AppointmentId = table.Column<int>(type: "int", nullable: false),
-                    MedicalRecordId = table.Column<int>(type: "int", nullable: false),
+                    PreScriptionName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PreScriptionDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AppointmentId = table.Column<int>(type: "int", nullable: true),
+                    MedicalRecordId = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDelete = table.Column<bool>(type: "bit", nullable: false),
@@ -515,14 +508,12 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                         name: "FK_Results_Appointments_AppointmentId",
                         column: x => x.AppointmentId,
                         principalTable: "Appointments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Results_MedicalRecords_MedicalRecordId",
                         column: x => x.MedicalRecordId,
                         principalTable: "MedicalRecords",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -532,10 +523,10 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ExpectedDurationInMinute = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ExpectedDurationInMinute = table.Column<int>(type: "int", nullable: true),
                     ServiceType = table.Column<int>(type: "int", nullable: false),
-                    SpecificationId = table.Column<int>(type: "int", nullable: false),
+                    SpecificationId = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDelete = table.Column<bool>(type: "bit", nullable: false),
@@ -548,8 +539,7 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                         name: "FK_Services_Specifications_SpecificationId",
                         column: x => x.SpecificationId,
                         principalTable: "Specifications",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -558,10 +548,9 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Amount = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    TransactionId = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Amount = table.Column<int>(type: "int", nullable: true),
+                    TransactionId = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDelete = table.Column<bool>(type: "bit", nullable: false),
@@ -574,8 +563,7 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                         name: "FK_Orders_Transactions_TransactionId",
                         column: x => x.TransactionId,
                         principalTable: "Transactions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Orders_Users_Id",
                         column: x => x.Id,
@@ -646,29 +634,29 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                         column: x => x.OrdersId,
                         principalTable: "Orders",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_OrderService_Services_ServicesId",
                         column: x => x.ServicesId,
                         principalTable: "Services",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Applications_UserId",
-                table: "Applications",
+                name: "IX_ApplicationUser_UserId",
+                table: "ApplicationUser",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Appointments_SlotsId",
+                table: "Appointments",
+                column: "SlotsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppointmentService_ServicesId",
                 table: "AppointmentService",
                 column: "ServicesId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AppointmentSlot_SlotsId",
-                table: "AppointmentSlot",
-                column: "SlotsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppointmentUser_UsersId",
@@ -760,13 +748,10 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Applications");
+                name: "ApplicationUser");
 
             migrationBuilder.DropTable(
                 name: "AppointmentService");
-
-            migrationBuilder.DropTable(
-                name: "AppointmentSlot");
 
             migrationBuilder.DropTable(
                 name: "AppointmentUser");
@@ -790,7 +775,7 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                 name: "Relatives");
 
             migrationBuilder.DropTable(
-                name: "Slots");
+                name: "Applications");
 
             migrationBuilder.DropTable(
                 name: "Claims");
@@ -821,6 +806,9 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
 
             migrationBuilder.DropTable(
                 name: "Specifications");
+
+            migrationBuilder.DropTable(
+                name: "Slots");
 
             migrationBuilder.DropTable(
                 name: "Billings");

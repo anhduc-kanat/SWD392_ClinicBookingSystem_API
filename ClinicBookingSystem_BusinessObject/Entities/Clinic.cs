@@ -8,7 +8,7 @@ public class Clinic : BaseEntities
     [Key]
     public int Id { get; set; }
     public string Name { get; set; }
-    public string Description { get; set; }
+    public string? Description { get; set; }
     public TimeSpan TimeStart { get; set; }
     public TimeSpan TimeEnd { get; set; }
     public DateTime DateStart { get; set; }
@@ -17,6 +17,6 @@ public class Clinic : BaseEntities
     public ClinicStatus Status { get; set; }
     
     //User
-    public ICollection<User> Users { get; set; }
+    public ICollection<User>? Users { get; set; }
     
 }

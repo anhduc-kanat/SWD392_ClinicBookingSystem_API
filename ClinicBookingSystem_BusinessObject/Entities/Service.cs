@@ -8,14 +8,15 @@ public class Service : BaseEntities
     [Key]
     public int Id { get; set; }
     public string Name { get; set; }
-    public string Description { get; set; }
-    public int ExpectedDurationInMinute { get; set; }
-    public ServiceType ServiceType { get; set; }
+    public string? Description { get; set; }
+    public int? ExpectedDurationInMinute { get; set; }
+    
+    public ServiceType ServiceType { get; set; } = ServiceType.Examination;
     
     //Specification
-    public Specification Specification { get; set; }
+    public Specification? Specification { get; set; }
     //Appointment
-    public ICollection<Appointment> Appointments { get; set; }
+    public ICollection<Appointment>? Appointments { get; set; }
     //Order
-    public ICollection<Order> Orders { get; set; }
+    public ICollection<Order>? Orders { get; set; }
 }
