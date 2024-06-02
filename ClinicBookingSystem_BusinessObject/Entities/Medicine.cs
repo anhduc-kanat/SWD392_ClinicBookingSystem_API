@@ -12,11 +12,11 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public int DosageUnitPerDayRecommend { get; set; }
-        public int DosageUnitPerDayActual { get; set; }
-        public int DosageTotal { get; set; }
+        public int? DosageUnitPerDayActual { get; set; }
+        public int? DosageTotal { get; set; }
         //Result
-        public ICollection<Result> Results { get; set; }
+        public ICollection<Result>? Results { get; set; }
     }
 }

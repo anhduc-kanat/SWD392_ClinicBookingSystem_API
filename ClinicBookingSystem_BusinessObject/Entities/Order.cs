@@ -14,14 +14,13 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
-        public int Amount { get; set; }
+        public string? Description { get; set; }
+        public int? Amount { get; set; }
         //User
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public User? User { get; set; }
         //Services
-        public ICollection<Service> Services { get; set; }
+        public ICollection<Service>? Services { get; set; }
         //Transaction
-        public Transaction Transaction { get; set; }
+        public Transaction? Transaction { get; set; }
     }
 }

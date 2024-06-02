@@ -13,14 +13,14 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         public int Id { get; set; }
         public int DentistId { get; set; }
         public int PatientId { get; set; }
-        public string PreScriptionName { get; set; }
-        public string PreScriptionDescription { get; set; }
+        public string? PreScriptionName { get; set; }
+        public string? PreScriptionDescription { get; set; }
         //Appointment
-        public Appointment Appointment { get; set; }
+        public Appointment? Appointment { get; set; }
 
         //Medical Record
-        public MedicalRecord MedicalRecord { get; set; }
+        public MedicalRecord? MedicalRecord { get; set; }
         //Medicine
-        public ICollection<Medicine> Medicines { get; set; }
+        public ICollection<Medicine>? Medicines { get; set; }
     }
 }

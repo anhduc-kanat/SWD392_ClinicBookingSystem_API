@@ -13,16 +13,16 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public PaymentStatus Status { get; set; }
-        public bool IsPay { get; set; }
-        public TimeSpan PayAt { get; set; }
-        public string QrLink {get; set; }
-        public string BankName { get; set; }
+        public bool? IsPay { get; set; } = false;
+        public TimeSpan? PayAt { get; set; }
+        public string? QrLink {get; set; }
+        public string? BankName { get; set; }
 
         //Order
-        public ICollection<Order> Orders { get; set; }
+        public ICollection<Order>? Orders { get; set; }
         //Billing
-        public Billing Billing { get; set; }
+        public Billing? Billing { get; set; }
     }
 }
