@@ -3,76 +3,56 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClinicBookingSystem_DataAccessObject.BaseDAO;
 using ClinicBookingSystem_BusinessObject.Entities;
 using ClinicBookingSystem_DataAcessObject.DBContext;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClinicBookingSystem_DataAccessObject
 {
-    public class SlotDAO
+    public class SlotDAO : BaseDAO<Slot>
     {
         private readonly ClinicBookingSystemContext _context;
 
-        public SlotDAO(ClinicBookingSystemContext context)
+        public SlotDAO(ClinicBookingSystemContext context) : base(context)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _context = context;
         }
 
-        public async Task<IEnumerable<Slot>> GetSlotsAsync()
+        public async Task<IEnumerable<Slot>> GetAllSlots()
         {
             return await _context.Slots.ToListAsync();
         }
         //
-        public async Task<Slot> GetSlotAsync(int id)
+        public async Task<Slot> GetSlotById(int id)
         {
             var slot = await _context.Slots.FindAsync(id);
 
-            return slot ?? null;
+            return slot;
         }
-
-        public async Task<Slot> AddSlot(Slot slot)
+        //
+        public async Task<Slot> CreateSlot(Slot slot)
         {
-            if (slot == null)
-            {
-                return null;
-            }
-
             _context.Slots.Add(slot);
             await _context.SaveChangesAsync();
 
             return slot;
         }
 
-        public async Task<bool> UpdateSlot(int id, Slot slot)
+        public async Task<Slot> UpdateSlot(Slot slot)
         { 
-            var existingSlot = await GetSlotAsync(id);
-
-            existingSlot.Name = slot.Name;
-            existingSlot.Description = slot.Description;
-            existingSlot.StartAt = slot.StartAt;
-            existingSlot.EndAt = slot.EndAt;
-            existingSlot.Status = slot.Status;
-
+            var existingSlot = await GetSlotById(slot.Id);
             _context.Slots.Update(existingSlot);
             await _context.SaveChangesAsync();
-            return true;
+            return existingSlot;
         }
-        private bool SlotExists(int id)
+        //
+        public async Task<Slot> DeleteSlot(int id)
         {
-            return _context.Slots.Any(e => e.Id == id);
-        }
-
-        public async Task<bool> DeleteSlot(int id)
-        {
-            var existingSlot = await GetSlotAsync(id);
-            if (existingSlot == null)
-            {
-                return false;
-            }
+            var existingSlot = await GetSlotById(id);
             _context.Slots.Remove(existingSlot);
             await _context.SaveChangesAsync();
-
-            return true;
+            return existingSlot;
         }
 
     }

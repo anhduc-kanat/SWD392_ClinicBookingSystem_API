@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using ClinicBookingSystem_Service;
 using ClinicBookingSystem_Service.IService;
 using ClinicBookingSystem_Service.Mapping;
 using ClinicBookingSystem_Service.Service;
@@ -13,6 +14,7 @@ public static class ConfigureService
     {
         services.AddAutoMapper(typeof(MappingProfiles));
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<ISlotService, SlotService>();
         return services;
     }
 }

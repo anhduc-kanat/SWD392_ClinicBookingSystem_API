@@ -1,5 +1,10 @@
 ﻿using ClinicBookingSystem_BusinessObject.Entities;
 using ClinicBookingSystem_Service;
+using ClinicBookingSystem_Service.IService;
+using ClinicBookingSystem_Service.Models.BaseResponse;
+using ClinicBookingSystem_Service.Models.Request.Slot;
+using ClinicBookingSystem_Service.Models.Response.Slot;
+using ClinicBookingSystem_Service.Models.Response.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,57 +22,37 @@ namespace ClinicBookingSystem_API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Slot>>> GetSlots()
+        public async Task<ActionResult<BaseResponse<IEnumerable<Slot>>>> GetSlots()
         {
-            var slots = await _slotService.GetListSlots();
+            var slots = await _slotService.GetAllSlots();
             return Ok(slots);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Slot>> GetSlot(int id)
+        public async Task<ActionResult<BaseResponse<SlotResponse>>> GetSlot(int id)
         {
-            var slot = await _slotService.GetSlot(id);
-            if (slot == null)
-            {
-                return NotFound();
-            }
+            var slot = await _slotService.GetSlotById(id);
+            
             return Ok(slot);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Slot>> AddSlot(Slot slot)
+        public async Task<ActionResult<BaseResponse<SlotResponse>>> AddSlot([FromBody] CreateNewSlotRequest request)
         {
-            var createdSlot = await _slotService.AddSlot(slot);
-            return CreatedAtAction(nameof(GetSlot), new { id = createdSlot.Id }, createdSlot);
+            var createdSlot = await _slotService.CreateSlot(request);
+            return createdSlot;
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateSlot(int id, Slot slot)
+        public async Task<ActionResult<BaseResponse<SlotResponse>>> UpdateSlot(int id,[FromBody] UpdateSlotRequest request)
         {
-            if (id != slot.Id)
-            {
-                return BadRequest("Slot ID mismatch");
-            }
-
-            var updated = await _slotService.UpdateSlot(id, slot);
-            if (!updated)
-            {
-                return NotFound();
-            }
-
-            return NoContent();
+            return await _slotService.UpdateSlot(id, request);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> RemoveSlot(int id)
+        public async Task<ActionResult<BaseResponse<SlotResponse>>> DeleteSlot(int id)
         {
-            var removed = await _slotService.RemoveSlot(id);
-            if (!removed)
-            {
-                return NotFound();
-            }
-
-            return NoContent();
+            return await _slotService.DeleteSlot(id);
         }
     }
 }
