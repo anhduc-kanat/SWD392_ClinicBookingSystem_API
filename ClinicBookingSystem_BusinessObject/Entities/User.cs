@@ -13,49 +13,48 @@ namespace ClinicBookingSystem_BusinessObject.Entities
     {
         [Key]
         public int Id { get; set; }
-        public string Username { get; set; }
         public string Email { get; set; }
         [JsonIgnore]
-        public string PasswordHash { get; set; }
-        public Boolean EmailConfirmed { get; set; } = false;
-        public Boolean PhoneConfirmed { get; set; } = false;
+        public string Password { get; set; }
+        public Boolean? EmailConfirmed { get; set; } = false;
+        public Boolean? PhoneConfirmed { get; set; } = false;
         [JsonIgnore]
-        public string EmailCode { get; set; }
-        public string Address { get; set; }
+        public string? EmailCode { get; set; }
+        public string? Address { get; set; }
         [JsonIgnore]
-        public string PhoneCode { get; set; }
+        public string? PhoneCode { get; set; }
         public string PhoneNumber {  get; set; }
-        public DateTime DateOfBirth { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
         //Các thuộc tính thuộc lịch nghỉ làm của nhân viên
-        public int TotalDateOff {  get; set; }
-        public int DateOffCount {  get; set; }
-        public int TotalEmergencyDateOffAttempt { get; set; }
-        public int EmergencyDateOffAttemptCount { get; set; }
-        public Boolean IsOnDateOff { get; set; }
-        public JobStatus JobStatus {  get; set; }
-        public DateTime StartDateOff {  get; set; }
-        public DateTime EndDateOff { get; set;}
+        public int? TotalDateOff {  get; set; }
+        public int? DateOffCount {  get; set; }
+        public int? TotalEmergencyDateOffAttempt { get; set; }
+        public int? EmergencyDateOffAttemptCount { get; set; }
+        public Boolean? IsOnDateOff { get; set; }
+        public JobStatus? JobStatus {  get; set; }
+        public DateTime? StartDateOff {  get; set; }
+        public DateTime? EndDateOff { get; set;}
 
         //Role
 
-        public Role Role { get; set; }
+        public Role? Role { get; set; }
         
         //Appointment
-        public ICollection<Appointment> Appointments { get; set; }
+        public ICollection<Appointment>? Appointments { get; set; }
         //Salary
-        public Salary Salary { get; set; }
+        public Salary? Salary { get; set; }
         //Specification
-        public ICollection<Specification> Specifications { get; set; }
+        public ICollection<Specification>? Specifications { get; set; }
         //Clinic
-        public ICollection<Clinic> Clinics { get; set; }
+        public ICollection<Clinic>? Clinics { get; set; }
         
         //Relative
-        public RelativeType RelativeType { get; set; }
-        public ICollection<Relative> Relatives { get; set; }
+        public RelativeType? RelativeType { get; set; }
+        public ICollection<Relative>? Relatives { get; set; }
         //Claim
-        public ICollection<Claim> Claims { get; set; }
+        public ICollection<Claim>? Claims { get; set; }
         //Apllication
         public ICollection<Application> Applications { get; set; }
         //Medical Record
