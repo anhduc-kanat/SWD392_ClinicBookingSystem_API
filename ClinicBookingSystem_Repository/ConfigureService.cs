@@ -16,6 +16,10 @@ public static class ConfigureService
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
         services.AddScoped<UserDAO>();
+        //
+        services.AddScoped<ISlotRepository, SlotRepository>();
+        services.AddScoped<SlotDAO>();
+        //
         return services;
     }
 }
