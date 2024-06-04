@@ -13,4 +13,11 @@ public class BaseResponse<T>
         StatusCode = statusCode;
         Data = data;
     }
+
+    public BaseResponse(string? message, StatusCodeEnum statusCode)
+    {
+        Message = message;
+        StatusCode = statusCode;
+    }
+
 }
