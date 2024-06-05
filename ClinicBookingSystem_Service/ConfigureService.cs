@@ -13,6 +13,7 @@ public static class ConfigureService
     {
         services.AddAutoMapper(typeof(MappingProfiles));
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IApplicationService, ApplicationService>();
         return services;
     }
 }
