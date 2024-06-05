@@ -10,18 +10,17 @@ using System.Threading.Tasks;
 
 namespace ClinicBookingSystem_Repository.Repositories
 {
-    public class DentistRepository : BaseRepository<User>, IDentistRepository
+    public class StaffRepository : BaseRepository<User>, IStaffRepository
     {
-        private readonly DentistDAO _dentistDAO;
-
-        public DentistRepository(DentistDAO dentistDAO) : base(dentistDAO)
+        private readonly StaffDAO _staffDAO;
+        public StaffRepository(StaffDAO staffDAO) : base(staffDAO)
         {
-            _dentistDAO = dentistDAO;
+            _staffDAO = staffDAO;
         }
 
-        public async Task<IEnumerable<User>> GetDentistsByRole()
+        public async Task<IEnumerable<User>> GetStaffsByRole()
         {
-            return await _dentistDAO.GetDentistsByRole();
+            return await _staffDAO.GetStaffsByRole();
         }
     }
 }

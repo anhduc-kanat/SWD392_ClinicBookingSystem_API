@@ -16,7 +16,9 @@ public static class ConfigureService
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IDentistRepository, DentistRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<IStaffRepository, StaffRepository>();
         services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+        services.AddScoped<StaffDAO>();
         services.AddScoped<DentistDAO>();
         services.AddScoped<UserDAO>();
         return services;
