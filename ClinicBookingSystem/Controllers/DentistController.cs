@@ -1,6 +1,7 @@
 ﻿using ClinicBookingSystem_Service.Dtos.Request;
 using ClinicBookingSystem_Service.IServices;
 using ClinicBookingSystem_Service.Models.BaseResponse;
+using ClinicBookingSystem_Service.Models.Request.Dentist;
 using ClinicBookingSystem_Service.Models.Response.Dentist;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +27,7 @@ namespace ClinicBookingSystem_API.Controllers
         }
 
         [HttpPut("dentist/update-dentist/{id}")]
-        public async Task<ActionResult<BaseResponse<UpdateDentistResponse>>> UpdateDentist(int id, CreateDentistRequest request)
+        public async Task<ActionResult<BaseResponse<UpdateDentistResponse>>> UpdateDentist(int id, UpdateDentistRequest request)
         {
             var response = await _dentistService.UpdateDentist(id, request);
             return response;

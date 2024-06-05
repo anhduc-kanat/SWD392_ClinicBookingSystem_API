@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace ClinicBookingSystem_Repository.IRepositories
 {
-    public interface IDentistRepository : IBaseRepository<User>
+    public interface IStaffRepository : IBaseRepository<User>
     {
-        Task<IEnumerable<User>> GetDentistsByRole();
+        Task<IEnumerable<User>> GetStaffsByRole();
     }
 }

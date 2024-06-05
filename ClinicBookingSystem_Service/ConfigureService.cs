@@ -15,8 +15,10 @@ public static class ConfigureService
     {
         services.AddAutoMapper(typeof(MappingProfiles));
         services.AddAutoMapper(typeof(MappingDentist));
+        services.AddAutoMapper(typeof(MappingStaff));
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IDentistService, DentistService>();
+        services.AddScoped<IStaffService, StaffService>();
         return services;
     }
 }

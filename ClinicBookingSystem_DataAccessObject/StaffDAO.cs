@@ -10,19 +10,16 @@ using System.Threading.Tasks;
 
 namespace ClinicBookingSystem_DataAccessObject
 {
-    public class DentistDAO : BaseDAO<User>
+    public class StaffDAO : BaseDAO<User>
     {
         private readonly ClinicBookingSystemContext _context;
-        public DentistDAO(ClinicBookingSystemContext context) : base(context)
+        public StaffDAO(ClinicBookingSystemContext context) : base(context)
         {
             _context = context;
         }
-
-        public async Task<IEnumerable<User>> GetDentistsByRole()
+        public async Task<IEnumerable<User>> GetStaffsByRole()
         {
-            return await _context.Users.Include(u => u.Role).Where(u => u.Role.Name == "DENTIST").ToListAsync();
+            return await _context.Users.Include(u => u.Role).Where(u => u.Role.Name == "STAFF").ToListAsync();
         }
-        
     }
-
 }

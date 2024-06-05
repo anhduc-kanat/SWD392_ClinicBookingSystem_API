@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClinicBookingSystem_Service.Models.Response.Dentist
+namespace ClinicBookingSystem_Service.Models.Response.Staff
 {
-    public class GetAllDentistsResponse
+    public class GetAllStaffsResponse
     {
         public int id { get; set; }
         public string Email { get; set; }
@@ -15,6 +15,5 @@ namespace ClinicBookingSystem_Service.Models.Response.Dentist
         public DateTime DateOfBirth { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-
     }
 }

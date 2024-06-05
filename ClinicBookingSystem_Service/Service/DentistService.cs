@@ -7,6 +7,7 @@ using ClinicBookingSystem_Service.Dtos.Request;
 using ClinicBookingSystem_Service.IServices;
 using ClinicBookingSystem_Service.Models.BaseResponse;
 using ClinicBookingSystem_Service.Models.Enums;
+using ClinicBookingSystem_Service.Models.Request.Dentist;
 using ClinicBookingSystem_Service.Models.Response.Dentist;
 using System;
 using System.Collections.Generic;
@@ -41,7 +42,7 @@ namespace ClinicBookingSystem_Service.Services
             }
             catch (Exception ex)
             {
-                return new BaseResponse<CreateDentistResponse>("Error at CreateDentist Service", StatusCodeEnum.InternalServerError_500);
+                return new BaseResponse<CreateDentistResponse>("Error at CreateDentist Service: " + ex.Message, StatusCodeEnum.InternalServerError_500);
             }
             
         }
@@ -66,8 +67,8 @@ namespace ClinicBookingSystem_Service.Services
         {
             try
             {
-                IEnumerable<User> dentist = await _unitOfWork.DentistRepository.GetAllAsync();
-                IEnumerable<GetAllDentistsResponse> response = _mapper.Map<IEnumerable<GetAllDentistsResponse>>(dentist);
+                IEnumerable<User> dentists = await _unitOfWork.DentistRepository.GetDentistsByRole();
+                IEnumerable<GetAllDentistsResponse> response = _mapper.Map<IEnumerable<GetAllDentistsResponse>>(dentists);
                 return new BaseResponse<IEnumerable<GetAllDentistsResponse>>("Get All Dentists successfully", StatusCodeEnum.OK_200, response);
             }
             catch (Exception ex)
@@ -90,12 +91,12 @@ namespace ClinicBookingSystem_Service.Services
             }
         }
 
-        public async Task<BaseResponse<UpdateDentistResponse>> UpdateDentist(int id, CreateDentistRequest request)
+        public async Task<BaseResponse<UpdateDentistResponse>> UpdateDentist(int id, UpdateDentistRequest request)
         {
             try
             {
-                HashPassword hash = new HashPassword();
-                request.Password = hash.EncodePassword(request.Password);
+                /*HashPassword hash = new HashPassword();
+                request.Password = hash.EncodePassword(request.Password);*/
                 User dentist = await _unitOfWork.DentistRepository.GetByIdAsync(id);
                 _mapper.Map(request, dentist);
                 User updatedDentist = await _unitOfWork.DentistRepository.UpdateAsync(dentist);
@@ -104,9 +105,8 @@ namespace ClinicBookingSystem_Service.Services
             }
             catch (Exception ex)
             {
-                return new BaseResponse<UpdateDentistResponse>("Error at UpdateDentist Service", StatusCodeEnum.InternalServerError_500);
+                return new BaseResponse<UpdateDentistResponse>("Error at UpdateDentist Service: " + ex.Message, StatusCodeEnum.InternalServerError_500);
             }
-
         }
     }
 }
