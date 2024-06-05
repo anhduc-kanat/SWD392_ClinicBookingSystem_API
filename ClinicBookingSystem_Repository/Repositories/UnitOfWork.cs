@@ -9,13 +9,16 @@ public class UnitOfWork : BaseUnitOfWork, IUnitOfWork
 {
     private readonly ClinicBookingSystemContext _dbContext;
     private readonly IUserRepository _userRepository;
+    private readonly IApplicationRepository _applicationRepository;
     public UnitOfWork(ClinicBookingSystemContext dbContext,
-        IUserRepository userRepository
+        IUserRepository userRepository,
+        IApplicationRepository applicationRepository
     ) : base(dbContext)
     {
-        _userRepository = userRepository;
         _dbContext = dbContext;
+        _userRepository = userRepository;
+        _applicationRepository = applicationRepository;
     }
     public IUserRepository UserRepository => _userRepository;
-                
+    public IApplicationRepository ApplicationRepository => _applicationRepository;
 }
