@@ -190,29 +190,28 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PhoneConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    EmailCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: true),
+                    PhoneConfirmed = table.Column<bool>(type: "bit", nullable: true),
+                    EmailCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TotalDateOff = table.Column<int>(type: "int", nullable: false),
-                    DateOffCount = table.Column<int>(type: "int", nullable: false),
-                    TotalEmergencyDateOffAttempt = table.Column<int>(type: "int", nullable: false),
-                    EmergencyDateOffAttemptCount = table.Column<int>(type: "int", nullable: false),
-                    IsOnDateOff = table.Column<bool>(type: "bit", nullable: false),
-                    JobStatus = table.Column<int>(type: "int", nullable: false),
-                    StartDateOff = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDateOff = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TotalDateOff = table.Column<int>(type: "int", nullable: true),
+                    DateOffCount = table.Column<int>(type: "int", nullable: true),
+                    TotalEmergencyDateOffAttempt = table.Column<int>(type: "int", nullable: true),
+                    EmergencyDateOffAttemptCount = table.Column<int>(type: "int", nullable: true),
+                    IsOnDateOff = table.Column<bool>(type: "bit", nullable: true),
+                    JobStatus = table.Column<int>(type: "int", nullable: true),
+                    StartDateOff = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EndDateOff = table.Column<DateTime>(type: "datetime2", nullable: true),
                     RoleId = table.Column<int>(type: "int", nullable: false),
-                    SalaryId = table.Column<int>(type: "int", nullable: false),
-                    RelativeType = table.Column<int>(type: "int", nullable: false),
+                    SalaryId = table.Column<int>(type: "int", nullable: true),
+                    RelativeType = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDelete = table.Column<bool>(type: "bit", nullable: false),
@@ -761,6 +760,9 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Applications");
+
+            migrationBuilder.DropTable(
+                name: "Appointments");
 
             migrationBuilder.DropTable(
                 name: "AppointmentService");

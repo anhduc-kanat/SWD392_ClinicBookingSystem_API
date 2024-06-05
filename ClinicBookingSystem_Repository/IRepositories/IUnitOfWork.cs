@@ -5,4 +5,6 @@ namespace ClinicBookingSystem_Repository.IRepositories;
 public interface IUnitOfWork : IBaseUnitOfWork
 {
     IUserRepository UserRepository { get; }
+    IDentistRepository DentistRepository { get; }
+    IRoleRepository RoleRepository { get; }
 }
