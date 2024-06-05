@@ -1,0 +1,22 @@
+﻿using ClinicBookingSystem_BusinessObject.Entities;
+using ClinicBookingSystem_Service.Dtos.Request;
+using ClinicBookingSystem_Service.Models.BaseResponse;
+using ClinicBookingSystem_Service.Models.Request.User;
+using ClinicBookingSystem_Service.Models.Response.Dentist;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ClinicBookingSystem_Service.IServices
+{
+    public interface IDentistService
+    {
+        Task<BaseResponse<IEnumerable<GetAllDentistsResponse>>> GetAllDentists();
+        Task<BaseResponse<GetDentistByIdResponse>> GetDentistById(int id);
+        Task<BaseResponse<CreateDentistResponse>> CreateDentist(CreateDentistRequest request);
+        Task<BaseResponse<UpdateDentistResponse>> UpdateDentist(int id ,CreateDentistRequest user);
+        Task<BaseResponse<DeleteDentistResponse>> DeleteDentist(int id);
+    }
+}

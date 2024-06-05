@@ -56,12 +56,12 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         //Claim
         public ICollection<Claim>? Claims { get; set; }
         //Apllication
-        public ICollection<Application> Applications { get; set; }
+        public ICollection<Application>? Applications { get; set; }
         //Medical Record
-        public ICollection<MedicalRecord> MedicalRecords { get; set; }
+        public ICollection<MedicalRecord>? MedicalRecords { get; set; }
         //Billing
-        public ICollection<Billing> Billings { get; set; }
+        public ICollection<Billing>? Billings { get; set; }
         //Order
-        public ICollection<Order> Orders { get; set; }
+        public ICollection<Order>? Orders { get; set; }
     }
 }
