@@ -19,35 +19,35 @@ namespace ClinicBookingSystem_API.Controllers
         }
 
         [HttpPost]
-        [Route("dentist/create-dentist")]
+        [Route("create-dentist")]
         public async Task<ActionResult<BaseResponse<CreateDentistResponse>>> CreateDentist(CreateDentistRequest request)
         {
             var response = await _dentistService.CreateDentist(request);
             return response;
         }
 
-        [HttpPut("dentist/update-dentist/{id}")]
+        [HttpPut("update-dentist/{id}")]
         public async Task<ActionResult<BaseResponse<UpdateDentistResponse>>> UpdateDentist(int id, UpdateDentistRequest request)
         {
             var response = await _dentistService.UpdateDentist(id, request);
             return response;
         }
 
-        [HttpGet("dentist/get-dentist/{id}")]
+        [HttpGet("get-dentist/{id}")]
         public async Task<ActionResult<BaseResponse<GetDentistByIdResponse>>> GetDentistById(int id)
         {
             var response = await _dentistService.GetDentistById(id);
             return response;
         }
 
-        [HttpGet("dentist/get-dentists")]
+        [HttpGet("get-dentists")]
         public async Task<ActionResult<BaseResponse<IEnumerable<GetAllDentistsResponse>>>> GetAllDentists()
         {
             var response = await _dentistService.GetAllDentists();
             return response;
         }
 
-        [HttpDelete("dentist/delete-dentist/{id}")]
+        [HttpDelete("delete-dentist/{id}")]
         public async Task<ActionResult<BaseResponse<DeleteDentistResponse>>> DeleteDentist(int id)
         {
             var response = await _dentistService.DeleteDentist(id);

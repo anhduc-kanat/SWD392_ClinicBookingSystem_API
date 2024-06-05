@@ -19,35 +19,35 @@ namespace ClinicBookingSystem_API.Controllers
         }
 
         [HttpPost]
-        [Route("staff/create-staff")]
+        [Route("create-staff")]
         public async Task<ActionResult<BaseResponse<CreateStaffResponse>>> CreateStaff(CreateStaffRequest request)
         {
             var response = await _staffService.CreateStaff(request);
             return response;
         }
 
-        [HttpPut("staff/update-staff/{id}")]
+        [HttpPut("update-staff/{id}")]
         public async Task<ActionResult<BaseResponse<UpdateStaffResponse>>> UpdateStaff(int id, UpdateStaffRequest request)
         {
             var response = await _staffService.UpdateStaff(id, request);
             return response;
         }
 
-        [HttpGet("staff/get-staff/{id}")]
+        [HttpGet("get-staff/{id}")]
         public async Task<ActionResult<BaseResponse<GetStaffByIdResponse>>> GetStaffById(int id)
         {
             var response = await _staffService.GetStaffById(id);
             return response;
         }
 
-        [HttpGet("staff/get-staffs")]
+        [HttpGet("get-staffs")]
         public async Task<ActionResult<BaseResponse<IEnumerable<GetAllStaffsResponse>>>> GetAllStaffs()
         {
             var response = await _staffService.GetAllStaffs();
             return response;
         }
 
-        [HttpDelete("staff/delete-staff/{id}")]
+        [HttpDelete("delete-staff/{id}")]
         public async Task<ActionResult<BaseResponse<DeleteStaffResponse>>> DeleteStaff(int id)
         {
             var response = await _staffService.DeleteStaff(id);
