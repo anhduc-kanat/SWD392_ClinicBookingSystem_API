@@ -6,4 +6,7 @@ public interface IUnitOfWork : IBaseUnitOfWork
 {
     IUserRepository UserRepository { get; }
     IApplicationRepository ApplicationRepository { get; }
+    IDentistRepository DentistRepository { get; }
+    IRoleRepository RoleRepository { get; }
+    IStaffRepository StaffRepository { get; }
 }
