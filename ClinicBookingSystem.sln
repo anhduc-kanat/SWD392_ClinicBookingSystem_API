@@ -14,9 +14,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClinicBookingSystem_DataAccessObject", "ClinicBookingSystem_DataAccessObject\ClinicBookingSystem_DataAccessObject.csproj", "{8CA7C41A-C4C5-4B27-B47E-3F800FEDC67B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E2BEC210-1CB2-4A11-9409-961A59948EC3}"
-	ProjectSection(SolutionItems) = preProject
-		docker-compose.yml = docker-compose.yml
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

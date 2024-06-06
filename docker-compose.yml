@@ -1,6 +1,0 @@
-﻿services:
-  clinicbookingsystem_api:
-    image: clinicbookingsystem_api
-    build:
-      context: .
-      dockerfile: ClinicBookingSystem/Dockerfile
