@@ -14,8 +14,15 @@ public static class ConfigureService
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IApplicationRepository, ApplicationRepository>();
+        services.AddScoped<IDentistRepository, DentistRepository>();
+        services.AddScoped<IStaffRepository, StaffRepository>();
+        services.AddScoped<ICustomerRepository, CustomerRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<ITokenRepository, TokenRepository>();
+
         services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-        services.AddScoped<UserDAO>();
+ 
         return services;
     }
 }

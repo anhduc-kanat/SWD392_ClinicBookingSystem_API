@@ -18,14 +18,14 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         public string? Password { get; set; }
         public bool? EmailConfirmed { get; set; } = false;
         public bool? PhoneConfirmed { get; set; } = false;
-        public bool IsAccountVerified { get; set; } = false;
+        public bool? IsAccountVerified { get; set; } = false;
         [JsonIgnore]
         public string? EmailCode { get; set; }
         public string? Address { get; set; }
         [JsonIgnore]
         public string? PhoneCode { get; set; }
         public string? PhoneNumber {  get; set; }
-        public bool? DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         //Các thuộc tính thuộc lịch nghỉ làm của nhân viên
@@ -63,6 +63,9 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         //Billing
         public ICollection<Billing>? Billings { get; set; }
         //Order
-        public ICollection<Order>? Orders { get; set; }
+        public ICollection<Order> Orders { get; set; }
+
+        public ICollection<Token> Tokens { get; set; }
+
     }
 }
