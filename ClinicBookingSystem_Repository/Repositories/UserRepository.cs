@@ -33,4 +33,9 @@ public class UserRepository : BaseRepository<User>, IUserRepository
     {
         return await _userDAO.DeleteUser(id);
     }
+
+    public async Task<User> GetUserByPhone(string phone)
+    {
+        return await _userDAO.GetUserByPhone(phone);
+    }
 }
