@@ -1,5 +1,6 @@
 ﻿using ClinicBookingSystem_BusinessObject.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,8 @@ namespace ClinicBookingSystem_DataAcessObject.DBContext
         public DbSet<Transaction> Transactions => Set<Transaction>();
         public DbSet<Billing> Billings => Set<Billing>();
         public DbSet<Order> Orders => Set<Order>();
+
+        public DbSet<Token> Tokens => Set<Token>();
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);

@@ -9,4 +9,6 @@ public interface IUnitOfWork : IBaseUnitOfWork
     IDentistRepository DentistRepository { get; }
     IRoleRepository RoleRepository { get; }
     IStaffRepository StaffRepository { get; }
+    ICustomerRepository CustomerRepository { get; }
+    ITokenRepository TokenRepository { get; }
 }

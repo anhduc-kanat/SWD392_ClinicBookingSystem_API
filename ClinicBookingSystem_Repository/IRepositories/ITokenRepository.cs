@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace ClinicBookingSystem_Repository.IRepositories
 {
-    public interface IRoleRepository : IBaseRepository<Role>
+    public interface ITokenRepository: IBaseRepository<Token>
     {
-        Task<Role>GetRoleByName(string roleName);
+        Task<Token> GetTokenByTimestamp(string timestamp);
     }
 }

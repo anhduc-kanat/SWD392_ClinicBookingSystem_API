@@ -15,12 +15,14 @@ namespace ClinicBookingSystem_DataAccessObject
         private readonly ClinicBookingSystemContext _dbContext;
         public RoleDAO(ClinicBookingSystemContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext; 
+            _dbContext = dbContext;
         }
+
 
         public async Task<Role> GetRoleByName(string roleName)
         {
-            return await _dbContext.Roles.FirstOrDefaultAsync(r => r.Name == roleName);
+            Role role = await _dbContext.Roles.FirstOrDefaultAsync(a=> a.Name == roleName);
+            return role;
         }
     }
 }
