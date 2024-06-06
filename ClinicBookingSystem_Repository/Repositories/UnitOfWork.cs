@@ -11,15 +11,18 @@ public class UnitOfWork : BaseUnitOfWork, IUnitOfWork
     private readonly IUserRepository _userRepository;
     private readonly IApplicationRepository _applicationRepository;
     private readonly IDentistRepository _dentistRepository;
-    private readonly IRoleRepository _roleRepository;
     private readonly IStaffRepository _staffRepository;
+    private readonly ICustomerRepository _customerRepository;
+    private readonly IRoleRepository _roleRepository;
+    private readonly ITokenRepository _tokenRepository;
     public UnitOfWork(ClinicBookingSystemContext dbContext,
         IUserRepository userRepository,
-        IDentistRepository dentistRepository,
+        ICustomerRepository customerRepository,
         IRoleRepository roleRepository,
-        IStaffRepository staffRepository,
-        IApplicationRepository applicationRepository
-    ) : base(dbContext)
+        ITokenRepository tokenRepository,
+        IApplicationRepository applicationRepository,
+        IDentistRepository dentistRepository,
+        IStaffRepository staffRepository) : base(dbContext) 
     {
         _dbContext = dbContext;
         _userRepository = userRepository;
@@ -27,10 +30,16 @@ public class UnitOfWork : BaseUnitOfWork, IUnitOfWork
         _roleRepository = roleRepository;
         _staffRepository = staffRepository;
         _applicationRepository = applicationRepository;
+        _customerRepository = customerRepository;
+        _tokenRepository = tokenRepository;
     }
     public IUserRepository UserRepository => _userRepository;
     public IDentistRepository DentistRepository => _dentistRepository;
     public IRoleRepository RoleRepository => _roleRepository;
     public IStaffRepository StaffRepository => _staffRepository;
     public IApplicationRepository ApplicationRepository => _applicationRepository;
+
+    public ICustomerRepository CustomerRepository => _customerRepository;
+
+    public ITokenRepository TokenRepository => _tokenRepository;
 }

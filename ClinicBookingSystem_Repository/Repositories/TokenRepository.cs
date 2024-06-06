@@ -1,6 +1,5 @@
 ﻿using ClinicBookingSystem_BusinessObject.Entities;
 using ClinicBookingSystem_DataAccessObject;
-using ClinicBookingSystem_DataAccessObject.BaseDAO;
 using ClinicBookingSystem_Repository.BaseRepositories;
 using ClinicBookingSystem_Repository.IRepositories;
 using System;
@@ -11,16 +10,17 @@ using System.Threading.Tasks;
 
 namespace ClinicBookingSystem_Repository.Repositories
 {
-    public class RoleRepository : BaseRepository<Role>, IRoleRepository
+    public class TokenRepository : BaseRepository<Token>, ITokenRepository
     {
-        private readonly RoleDAO _roleDAO;
-        public RoleRepository(RoleDAO roleDAO) : base(roleDAO)
+        private readonly TokenDAO _tokenDAO;
+        public TokenRepository(TokenDAO tokenDAO): base(tokenDAO) 
         {
-            _roleDAO = roleDAO;
+            _tokenDAO = tokenDAO;
         }
-        public async Task<Role> GetRoleByName(string roleName)
+
+        public Task<Token> GetTokenByTimestamp(string timestamp)
         {
-            return await _roleDAO.GetRoleByName(roleName);
+            return _tokenDAO.GetTokenByTimestamp(timestamp);
         }
     }
 }
