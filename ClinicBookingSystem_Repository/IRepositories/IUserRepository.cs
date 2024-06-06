@@ -10,5 +10,8 @@ public interface IUserRepository : IBaseRepository<User>
     Task<User> CreateUser(User user);
     Task<User> UpdateUser(User user);
     Task<User> DeleteUser(int id);
+
+    Task<User> GetUserByPhone(string phone);
+
     
 }
