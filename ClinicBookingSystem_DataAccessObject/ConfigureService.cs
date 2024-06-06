@@ -10,6 +10,13 @@ public static class ConfigureService
     public static IServiceCollection ConfigureDataAccessObjectService(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<UserDAO>();
+        services.AddScoped<ApplicationDAO>();
+        services.AddScoped<RoleDAO>();
+        services.AddScoped<DentistDAO>();
+        services.AddScoped<StaffDAO>();
+        services.AddScoped<CustomerDAO>();
+        services.AddScoped<RoleDAO>();
+        services.AddScoped<TokenDAO>();
         services.AddScoped(typeof(IBaseDAO<>), typeof(BaseDAO<>));
         return services;
     }

@@ -39,4 +39,10 @@ public class UserDAO : BaseDAO<User>
         _dbContext.Users.Remove(user);
         return user;
     }
+
+    public async Task<User> GetUserByPhone(string phone)
+    {
+        User user = await _dbContext.Users.Include(u => u.Role).FirstOrDefaultAsync(a => a.PhoneNumber == phone);
+        return user;
+    }
 }

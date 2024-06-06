@@ -13,17 +13,18 @@ namespace ClinicBookingSystem_BusinessObject.Entities
     {
         [Key]
         public int Id { get; set; }
-        public string Email { get; set; }
+        public string? Email { get; set; }
         [JsonIgnore]
-        public string Password { get; set; }
-        public Boolean? EmailConfirmed { get; set; } = false;
-        public Boolean? PhoneConfirmed { get; set; } = false;
+        public string? Password { get; set; }
+        public bool? EmailConfirmed { get; set; } = false;
+        public bool? PhoneConfirmed { get; set; } = false;
+        public bool? IsAccountVerified { get; set; } = false;
         [JsonIgnore]
         public string? EmailCode { get; set; }
         public string? Address { get; set; }
         [JsonIgnore]
         public string? PhoneCode { get; set; }
-        public string PhoneNumber {  get; set; }
+        public string? PhoneNumber {  get; set; }
         public DateTime? DateOfBirth { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
@@ -32,7 +33,7 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         public int? DateOffCount {  get; set; }
         public int? TotalEmergencyDateOffAttempt { get; set; }
         public int? EmergencyDateOffAttemptCount { get; set; }
-        public Boolean? IsOnDateOff { get; set; }
+        public bool? IsOnDateOff { get; set; } = false;
         public JobStatus? JobStatus {  get; set; }
         public DateTime? StartDateOff {  get; set; }
         public DateTime? EndDateOff { get; set;}
@@ -51,17 +52,20 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         public ICollection<Clinic>? Clinics { get; set; }
         
         //Relative
-        public RelativeType? RelativeType { get; set; }
+        public int? GroupId { get; set; }
         public ICollection<Relative>? Relatives { get; set; }
         //Claim
         public ICollection<Claim>? Claims { get; set; }
         //Apllication
-        public ICollection<Application> Applications { get; set; }
+        public ICollection<Application>? Applications { get; set; }
         //Medical Record
-        public ICollection<MedicalRecord> MedicalRecords { get; set; }
+        public ICollection<MedicalRecord>? MedicalRecords { get; set; }
         //Billing
-        public ICollection<Billing> Billings { get; set; }
+        public ICollection<Billing>? Billings { get; set; }
         //Order
         public ICollection<Order> Orders { get; set; }
+
+        public ICollection<Token> Tokens { get; set; }
+
     }
 }

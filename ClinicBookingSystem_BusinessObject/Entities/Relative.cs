@@ -7,5 +7,7 @@ public class Relative : BaseEntities
     [Key]
     public int Id { get; set; }
     //User
-    public User User { get; set; } 
+    public int? GroupId { get; set; }
+    public User? User { get; set; } 
+    
 }
