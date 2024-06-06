@@ -6,17 +6,23 @@ EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["ClinicBookingSystem/ClinicBookingSystem.csproj", "ClinicBookingSystem/"]
-RUN dotnet restore "ClinicBookingSystem/ClinicBookingSystem.csproj"
+COPY ["ClinicBookingSystem/ClinicBookingSystem_API.csproj", "ClinicBookingSystem/"]
+COPY ["ClinicBookingSystem_Service/ClinicBookingSystem_Service.csproj", "ClinicBookingSystem_Service/"]
+COPY ["ClinicBookingSystem_Repository/ClinicBookingSystem_Repository.csproj", "ClinicBookingSystem_Repository/"]
+COPY ["ClinicBookingSystem_DataAccessObject/ClinicBookingSystem_DataAccessObject.csproj", "ClinicBookingSystem_DataAccessObject/"]
+COPY ["ClinicBookingSystem_BusinessObject/ClinicBookingSystem_BusinessObject.csproj", "ClinicBookingSystem_BusinessObject/"]
+RUN dotnet restore "./ClinicBookingSystem/ClinicBookingSystem_API.csproj"
 COPY . .
 WORKDIR "/src/ClinicBookingSystem"
-RUN dotnet build "ClinicBookingSystem.csproj" -c Release -o /app/build
+RUN dotnet build "./ClinicBookingSystem_API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "ClinicBookingSystem.csproj" -c Release -o /app/publish /p:UseAppHost=false
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./ClinicBookingSystem_API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "ClinicBookingSystem.dll"]
+ENTRYPOINT ["dotnet", "ClinicBookingSystem_API.dll"]
