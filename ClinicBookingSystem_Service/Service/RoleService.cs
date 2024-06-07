@@ -28,6 +28,17 @@ namespace ClinicBookingSystem_Service.Service
             var response = _mapper.Map<IEnumerable<GetRoleResponse>>(await _unitOfWork.RoleRepository.GetRoleByName(roleName));
             return new BaseResponse<IEnumerable<GetRoleResponse>>("Successful", StatusCodeEnum.OK_200, response);
         }
+        public async Task<BaseResponse<IEnumerable<GetRoleResponse>>> GetAllRoles()
+        {
+            var response = _mapper.Map<IEnumerable<GetRoleResponse>>(await _unitOfWork.RoleRepository.GetAllAsync());
+            return new BaseResponse<IEnumerable<GetRoleResponse>>("Get All Roles Successfully!", StatusCodeEnum.OK_200, response);
+        }
+        
+        public async Task<BaseResponse<GetRoleResponse>> GetRoleById(int id)
+        {
+            var response = _mapper.Map<GetRoleResponse>(await _unitOfWork.RoleRepository.GetByIdAsync(id));
+            return new BaseResponse<GetRoleResponse>("Get Role Successfully!", StatusCodeEnum.OK_200, response);
+        }
         
         public async Task<BaseResponse<CreateRoleResponse>> CreateRole(CreateRoleRequest request)
         {
@@ -37,14 +48,15 @@ namespace ClinicBookingSystem_Service.Service
                 return new BaseResponse<CreateRoleResponse>("Create Role Successfully!", StatusCodeEnum.Created_201);
         }
         
-        public async Task<BaseResponse<UpdateRoleResponse>> UpdateRoleResponse(UpdateRoleRequest request)
+        public async Task<BaseResponse<UpdateRoleResponse>> UpdateRole(int id, UpdateRoleRequest request)
         {
-                Role role = _mapper.Map<Role>(request);
+            Role role = await _unitOfWork.RoleRepository.GetByIdAsync(id);
+            _mapper.Map(request, role);
                 await _unitOfWork.RoleRepository.UpdateAsync(role);
                 await _unitOfWork.SaveChangesAsync();
                 return new BaseResponse<UpdateRoleResponse>("Update Role Successfully!", StatusCodeEnum.OK_200);
         }
-        public async Task<BaseResponse<DeleteRoleResponse>> DeleteRoleResponse(int id)
+        public async Task<BaseResponse<DeleteRoleResponse>> DeleteRole(int id)
         {
                 Role role = await _unitOfWork.RoleRepository.GetByIdAsync(id);
                 await _unitOfWork.RoleRepository.DeleteAsync(role);
