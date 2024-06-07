@@ -18,28 +18,38 @@ namespace ClinicBookingSystem_Service.Service
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public RoleService(IUnitOfWork unitOfWork)
+        public RoleService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
-        public async Task<BaseResponse<GetRoleResponse>> GetRoleByName(string roleName)
+        public async Task<BaseResponse<IEnumerable<GetRoleResponse>>> GetRoleByName(string roleName)
         {
-            GetRoleResponse response = _mapper.Map<GetRoleResponse>(await _unitOfWork.RoleRepository.GetRoleByName(roleName));
-            return new BaseResponse<GetRoleResponse>("Successful", StatusCodeEnum.OK_200, response);
+            var response = _mapper.Map<IEnumerable<GetRoleResponse>>(await _unitOfWork.RoleRepository.GetRoleByName(roleName));
+            return new BaseResponse<IEnumerable<GetRoleResponse>>("Successful", StatusCodeEnum.OK_200, response);
         }
-        private async Task<BaseResponse<CreateRoleResponse>> CreateRole(CreateRoleRequest request)
+        
+        public async Task<BaseResponse<CreateRoleResponse>> CreateRole(CreateRoleRequest request)
         {
-            try
-            {
                 Role role = _mapper.Map<Role>(request);
-                var createdRole = await _unitOfWork.RoleRepository.AddAsync(role);
+                await _unitOfWork.RoleRepository.AddAsync(role);
                 await _unitOfWork.SaveChangesAsync();
                 return new BaseResponse<CreateRoleResponse>("Create Role Successfully!", StatusCodeEnum.Created_201);
-            }
-            catch (Exception ex)
-            {
-                return new BaseResponse<CreateRoleResponse>("Error at CreateRole Service: " + ex.Message, StatusCodeEnum.InternalServerError_500);
-            }
+        }
+        
+        public async Task<BaseResponse<UpdateRoleResponse>> UpdateRoleResponse(UpdateRoleRequest request)
+        {
+                Role role = _mapper.Map<Role>(request);
+                await _unitOfWork.RoleRepository.UpdateAsync(role);
+                await _unitOfWork.SaveChangesAsync();
+                return new BaseResponse<UpdateRoleResponse>("Update Role Successfully!", StatusCodeEnum.OK_200);
+        }
+        public async Task<BaseResponse<DeleteRoleResponse>> DeleteRoleResponse(int id)
+        {
+                Role role = await _unitOfWork.RoleRepository.GetByIdAsync(id);
+                await _unitOfWork.RoleRepository.DeleteAsync(role);
+                await _unitOfWork.SaveChangesAsync();
+                return new BaseResponse<DeleteRoleResponse>("Delete Role Successfully!", StatusCodeEnum.OK_200);
         }
     }
 }
