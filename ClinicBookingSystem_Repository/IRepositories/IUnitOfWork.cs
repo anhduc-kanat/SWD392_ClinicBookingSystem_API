@@ -11,4 +11,5 @@ public interface IUnitOfWork : IBaseUnitOfWork
     IStaffRepository StaffRepository { get; }
     ICustomerRepository CustomerRepository { get; }
     ITokenRepository TokenRepository { get; }
+    ISlotRepository SlotRepository { get; }
 }
