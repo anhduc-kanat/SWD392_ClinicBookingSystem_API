@@ -17,6 +17,7 @@ public static class ConfigureService
         services.AddScoped<CustomerDAO>();
         services.AddScoped<RoleDAO>();
         services.AddScoped<TokenDAO>();
+        services.AddScoped<SlotDAO>();
         services.AddScoped(typeof(IBaseDAO<>), typeof(BaseDAO<>));
         return services;
     }

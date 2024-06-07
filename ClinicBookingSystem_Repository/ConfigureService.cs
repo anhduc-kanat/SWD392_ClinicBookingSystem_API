@@ -20,9 +20,10 @@ public static class ConfigureService
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<ITokenRepository, TokenRepository>();
+        services.AddScoped<ISlotRepository, SlotRepository>();
 
         services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
- 
+
         return services;
     }
 }
