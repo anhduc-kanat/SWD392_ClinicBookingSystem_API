@@ -18,7 +18,7 @@ public static class ConfigureService
         services.AddScoped<RoleDAO>();
         services.AddScoped<TokenDAO>();
         services.AddScoped<SlotDAO>();
-        services.AddScoped<ApplicationDAO>();
+        services.AddScoped<AppointmentDAO>();
         services.AddScoped<ClaimDAO>();
         services.AddScoped<BillingDAO>();
         services.AddScoped<ClinicDAO>();
