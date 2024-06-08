@@ -7,9 +7,9 @@ namespace ClinicBookingSystem_Repository.Repositories;
 
 public class OrderRepository : BaseRepository<Order>, IOrderRepository
 {
-    private readonly OrderDAO _orderDao;
-    public OrderRepository(OrderDAO orderDao) : base(orderDao)
+    private readonly OrderDAO _orderDAO;
+    public OrderRepository(OrderDAO orderDAO) : base(orderDAO)
     {
-        _orderDao = orderDao;
+        _orderDAO = orderDAO;
     }
 }

@@ -7,9 +7,9 @@ namespace ClinicBookingSystem_Repository.Repositories;
 
 public class AppointmentRepository : BaseRepository<Appointment>, IAppointmentRepository
 {
-    private readonly AppointmentDAO _appointmentDao;
-    public AppointmentRepository(AppointmentDAO appointmentDao) : base(appointmentDao)
+    private readonly AppointmentDAO _appointmentDAO;
+    public AppointmentRepository(AppointmentDAO appointmentDAO) : base(appointmentDAO)
     {
-        _appointmentDao = appointmentDao;
+        _appointmentDAO = appointmentDAO;
     }
 }

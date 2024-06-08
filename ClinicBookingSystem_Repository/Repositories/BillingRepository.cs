@@ -7,9 +7,9 @@ namespace ClinicBookingSystem_Repository.Repositories;
 
 public class BillingRepository : BaseRepository<Billing>, IBillingRepository 
 {
-    private readonly BillingDAO _billingDao;
-    public BillingRepository(BillingDAO billingDao) : base(billingDao)
+    private readonly BillingDAO _billingDAO;
+    public BillingRepository(BillingDAO billingDAO) : base(billingDAO)
     {
-        _billingDao = billingDao;
+        _billingDAO = billingDAO;
     }
 }

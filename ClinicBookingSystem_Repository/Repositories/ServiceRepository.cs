@@ -5,11 +5,12 @@ using ClinicBookingSystem_Repository.IRepositories;
 
 namespace ClinicBookingSystem_Repository.Repositories;
 
-public class ResultRepository : BaseRepository<Result>, IResultRepository
+public class ServiceRepository : BaseRepository<Service>, IServiceRepository
 {
-    private readonly ResultDAO _resultDAO;
-    public ResultRepository(ResultDAO resultDAO) : base(resultDAO)
+    private readonly ServiceDAO _serviceDAO;
+    public ServiceRepository(ServiceDAO serviceDAO) : base(serviceDAO)
     {
-        _resultDAO = resultDAO;
+        _serviceDAO = serviceDAO;
     }
+    
 }

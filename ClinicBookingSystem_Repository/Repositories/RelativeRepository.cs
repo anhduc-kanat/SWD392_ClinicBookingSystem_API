@@ -7,9 +7,9 @@ namespace ClinicBookingSystem_Repository.Repositories;
 
 public class RelativeRepository : BaseRepository<Relative>, IRelativeRepository
 {
-    private readonly RelativeDAO _relativeDao;
-    public RelativeRepository(RelativeDAO relativeDao) : base(relativeDao)
+    private readonly RelativeDAO _relativeDAO;
+    public RelativeRepository(RelativeDAO relativeDAO) : base(relativeDAO)
     {
-        _relativeDao = relativeDao;
+        _relativeDAO = relativeDAO;
     }
 }

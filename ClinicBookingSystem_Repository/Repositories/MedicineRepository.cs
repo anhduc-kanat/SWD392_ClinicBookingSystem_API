@@ -7,9 +7,9 @@ namespace ClinicBookingSystem_Repository.Repositories;
 
 public class MedicineRepository : BaseRepository<Medicine>, IMedicineRepository
 {
-    private readonly MedicineDAO _medicineDao;
-    public MedicineRepository(MedicineDAO medicineDao) : base(medicineDao)
+    private readonly MedicineDAO _medicineDAO;
+    public MedicineRepository(MedicineDAO medicineDAO) : base(medicineDAO)
     {
-        _medicineDao = medicineDao;
+        _medicineDAO = medicineDAO;
     }
 }
