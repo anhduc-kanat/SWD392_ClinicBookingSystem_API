@@ -1,4 +1,5 @@
-﻿using ClinicBookingSystem_DataAccessObject.BaseDAO;
+﻿using ClinicBookingSystem_DataAccessObject;
+using ClinicBookingSystem_DataAccessObject.BaseDAO;
 using ClinicBookingSystem_DataAcessObject.DBContext;
 using ClinicBookingSystem_Repository.IBaseRepository;
 
