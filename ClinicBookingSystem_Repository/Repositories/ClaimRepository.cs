@@ -7,9 +7,9 @@ namespace ClinicBookingSystem_Repository.Repositories;
 
 public class ClaimRepository : BaseRepository<Claim>, IClaimRepository
 {
-    private readonly ClaimDAO _claimDao;
-    public ClaimRepository(ClaimDAO claimDao) : base(claimDao)
+    private readonly ClaimDAO _claimDAO;
+    public ClaimRepository(ClaimDAO claimDAO) : base(claimDAO)
     {
-        _claimDao = claimDao;
+        _claimDAO = claimDAO;
     }
 }

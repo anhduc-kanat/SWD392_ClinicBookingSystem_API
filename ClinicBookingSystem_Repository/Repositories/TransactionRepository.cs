@@ -7,9 +7,9 @@ namespace ClinicBookingSystem_Repository.Repositories;
 
 public class TransactionRepository : BaseRepository<Transaction>, ITransactionRepository
 {
-    private readonly TransactionDAO _transactionDao;
-    public TransactionRepository(TransactionDAO transactionDao) : base(transactionDao)
+    private readonly TransactionDAO _transactionDAO;
+    public TransactionRepository(TransactionDAO transactionDAO) : base(transactionDAO)
     {
-        _transactionDao = transactionDao;
+        _transactionDAO = transactionDAO;
     }
 }

@@ -7,9 +7,9 @@ namespace ClinicBookingSystem_Repository.Repositories;
 
 public class SpecificationRepository : BaseRepository<Specification>, ISpecificationRepository
 {
-    private readonly SpecificationDAO _specificationDao;
-    public SpecificationRepository(SpecificationDAO specificationDao) : base(specificationDao)
+    private readonly SpecificationDAO _specificationDAO;
+    public SpecificationRepository(SpecificationDAO specificationDAO) : base(specificationDAO)
     {
-        _specificationDao = specificationDao;
+        _specificationDAO = specificationDAO;
     }
 }
