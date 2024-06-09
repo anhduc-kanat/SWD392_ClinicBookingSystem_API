@@ -13,7 +13,7 @@ public class Specification : BaseEntities
     public string? AwaredAt { get; set; }
     
     //User
-    public User User { get; set; }
+    public User? User { get; set; }
     
     //Service 
     public ICollection<Service>? Services { get; set; }

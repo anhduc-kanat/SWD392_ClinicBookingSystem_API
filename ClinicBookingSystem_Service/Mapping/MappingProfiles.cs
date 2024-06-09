@@ -1,8 +1,14 @@
 ﻿using AutoMapper;
 using ClinicBookingSystem_BusinessObject.Entities;
+using ClinicBookingSystem_Service.Models.Request.Salary;
+using ClinicBookingSystem_Service.Models.Request.Service;
 using ClinicBookingSystem_Service.Models.Request.Slot;
+using ClinicBookingSystem_Service.Models.Request.Specification;
 using ClinicBookingSystem_Service.Models.Request.User;
+using ClinicBookingSystem_Service.Models.Response.Salary;
+using ClinicBookingSystem_Service.Models.Response.Service;
 using ClinicBookingSystem_Service.Models.Response.Slot;
+using ClinicBookingSystem_Service.Models.Response.Specification;
 using ClinicBookingSystem_Service.Models.Response.User;
 
 namespace ClinicBookingSystem_Service.Mapping;
@@ -18,11 +24,34 @@ public class MappingProfiles : Profile
         CreateMap<User, DeleteUserResponse>();
         CreateMap<User, UpdateUserResponse>();
         CreateMap<UpdateUserRequest, User>().ReverseMap();
+
         //
         CreateMap<CreateNewSlotRequest, Slot>().ReverseMap();
         CreateMap<Slot, CreateNewSlotRequest>().ReverseMap();
         CreateMap<Slot, SlotResponse>();
         CreateMap<UpdateSlotRequest, Slot>().ReverseMap();
         CreateMap<Slot, UpdateSlotRequest>();
+
+        //
+        CreateMap<CreateServiceRequest, ClinicBookingSystem_BusinessObject.Entities.Service>().ReverseMap();
+        CreateMap<ClinicBookingSystem_BusinessObject.Entities.Service, CreateServiceRequest>().ReverseMap();
+        CreateMap<ClinicBookingSystem_BusinessObject.Entities.Service, ServiceResponse>();
+        CreateMap<UpdateServiceRequest, ClinicBookingSystem_BusinessObject.Entities.Service>().ReverseMap();
+        CreateMap<ClinicBookingSystem_BusinessObject.Entities.Service, UpdateServiceRequest>();
+
+        //
+        CreateMap<CreateNewSalaryRequest, Salary>().ReverseMap();
+        CreateMap<Salary, CreateNewSalaryRequest>().ReverseMap();
+        CreateMap<Salary, SalaryResponse>();
+        CreateMap<UpdateNewSalaryRequest, Salary>().ReverseMap();
+        CreateMap<Salary, UpdateNewSalaryRequest>();
+
+        //
+        CreateMap<CreateSpecificationRequest, Specification>().ReverseMap();
+        CreateMap<Specification, CreateSpecificationRequest>().ReverseMap();
+        CreateMap<Specification, SpecificationResponse>();
+        CreateMap<UpdateSpecificationRequest, Specification>().ReverseMap();
+        CreateMap<Specification, UpdateSpecificationRequest>();
+
     }
 }
