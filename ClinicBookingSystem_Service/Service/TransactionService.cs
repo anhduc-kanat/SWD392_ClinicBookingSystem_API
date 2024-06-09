@@ -26,7 +26,7 @@ public class TransactionService : ITransactionService
         return _mapper.Map<BaseResponse<CreateTransactionResponse>>(transaction);
     }
     //get transaction by id
-    public async Task<BaseResponse<GetTransactionResponse>> GetTransaction(int id)
+    public async Task<BaseResponse<GetTransactionResponse>> GetTransactionById(int id)
     {
         var transaction = await _unitOfWork.TransactionRepository.GetByIdAsync(id);
         return _mapper.Map<BaseResponse<GetTransactionResponse>>(transaction);
@@ -35,13 +35,23 @@ public class TransactionService : ITransactionService
     public async Task<BaseResponse<UpdateTransactionResponse>> UpdateTransaction(int id, UpdateTransactionRequest request)
     {
         var transaction = await _unitOfWork.TransactionRepository.GetByIdAsync(id);
-        if (transaction == null)
-        {
-            return null;
-        }
         _mapper.Map(request, transaction);
-        _unitOfWork.TransactionRepository.Update(transaction);
+        _unitOfWork.TransactionRepository.UpdateAsync(transaction);
         await _unitOfWork.SaveChangesAsync();
         return _mapper.Map<BaseResponse<UpdateTransactionResponse>>(transaction);
+    }
+    //delete transaction
+    public async Task<BaseResponse<DeleteTransactionResponse>> DeleteTransaction(int id)
+    {
+        var transaction = await _unitOfWork.TransactionRepository.GetByIdAsync(id);
+        await _unitOfWork.TransactionRepository.DeleteAsync(transaction);
+        await _unitOfWork.SaveChangesAsync();
+        return _mapper.Map<BaseResponse<DeleteTransactionResponse>>(transaction);
+    }
+    //get all transactions
+    public async Task<BaseResponse<IEnumerable<GetTransactionResponse>>> GetAllTransaction()
+    {
+        var transactions = await _unitOfWork.TransactionRepository.GetAllAsync();
+        return _mapper.Map<BaseResponse<IEnumerable<GetTransactionResponse>>>(transactions);
     }
 }
