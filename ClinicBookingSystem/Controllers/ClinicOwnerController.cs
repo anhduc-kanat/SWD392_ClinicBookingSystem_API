@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicBookingSystem_API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/clinic-owner")]
     [ApiController]
     public class ClinicOwnerController : ControllerBase
     {

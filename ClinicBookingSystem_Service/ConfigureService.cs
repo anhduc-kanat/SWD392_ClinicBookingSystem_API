@@ -15,6 +15,7 @@ public static class ConfigureService
         services.AddAutoMapper(typeof(MappingProfiles));
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ISlotService, SlotService>();
+        services.AddScoped<IClinicOwnerService, ClinicOwnerService>();
         return services;
     }
 }
