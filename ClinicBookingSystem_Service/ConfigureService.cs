@@ -16,22 +16,29 @@ public static class ConfigureService
     public static IServiceCollection ConfigureServiceService(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddAutoMapper(typeof(MappingProfiles));
-        services.AddAutoMapper(typeof(MappingDentist));
-        services.AddAutoMapper(typeof(MappingStaff));
-        services.AddAutoMapper(typeof(CustomerMapping));
-        services.AddAutoMapper(typeof(AuthenMapping));
+        
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IApplicationService, ApplicationService>();
         services.AddScoped<IDentistService, DentistService>();
         services.AddScoped<IStaffService, StaffService>();
-
+        services.AddScoped<IUserProfileService, UserProfileService>();
         services.AddScoped<HashPassword>();
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAuthenService, AuthenService>();
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<ISlotService, SlotService>();
+        services.AddScoped<IMedicalRecordService, MedicalRecordService>();
         services.AddScoped<IAppointmentService, AppointmentService>();
+        services.AddScoped<IOrderService, OrderService>();
+        services.AddScoped<ITransactionService, TransactionService>();
+        services.AddScoped<IMedicineService, MedicineService>();
+        services.AddScoped<IResultService, ResultService>();
+        services.AddScoped<IServiceService, ServiceService>();
+        services.AddScoped<ISalaryService, SalaryService>();
+        services.AddScoped<ISpecificationService, SpecificationService>();
+        services.AddScoped<IBillingService, BillingService>();
+        services.AddScoped<IClinicOwnerService, ClinicOwnerService>();
         return services;
     }
 }

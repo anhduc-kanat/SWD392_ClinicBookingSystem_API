@@ -10,7 +10,7 @@ namespace ClinicBookingSystem_BusinessObject.Entities
     {
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
-        public Boolean IsDelete { get; set; } = false;
-        public Boolean IsActive { get; set; } = true;
+        public bool IsDelete { get; set; } = false;
+        public bool IsActive { get; set; } = true;
     }
 }

@@ -8,7 +8,7 @@ public class Salary : BaseEntities
     public int Id { get; set; }
     public string Name { get; set; }
     public string? Description { get; set; }
-    public int amount { get; set; }
+    public long amount { get; set; }
     
     //Users
     public ICollection<User>? Users { get; set; }

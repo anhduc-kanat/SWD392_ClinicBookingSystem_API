@@ -17,7 +17,7 @@ public class RoleController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/get-role-by-name/{roleName}")]
+    [Route("get-role-by-name/{roleName}")]
     public async Task<ActionResult<BaseResponse<GetRoleResponse>>> GetRoleByName(string roleName)
     {
         var response = await _roleService.GetRoleByName(roleName);
@@ -25,7 +25,7 @@ public class RoleController : ControllerBase
     }
     //Create role
     [HttpPost]
-    [Route("/create-role")]
+    [Route("create-role")]
     public async Task<ActionResult<BaseResponse<CreateRoleResponse>>> CreateRole([FromBody] CreateRoleRequest request)
     {
         var response = await _roleService.CreateRole(request);
@@ -33,7 +33,7 @@ public class RoleController : ControllerBase
     }
     //Update role
     [HttpPut]
-    [Route("/update-role/{id}")]
+    [Route("update-role/{id}")]
     public async Task<ActionResult<BaseResponse<UpdateRoleResponse>>> UpdateRole(int id, [FromBody] UpdateRoleRequest request)
     {
         var response = await _roleService.UpdateRole(id, request);
@@ -41,7 +41,7 @@ public class RoleController : ControllerBase
     }
     //Delete role
     [HttpDelete]
-    [Route("/delete-role/{id}")]
+    [Route("delete-role/{id}")]
     public async Task<ActionResult<BaseResponse<DeleteRoleResponse>>> DeleteRole(int id)
     {
         var response = await _roleService.DeleteRole(id);
@@ -49,7 +49,7 @@ public class RoleController : ControllerBase
     }
     //Get role by id
     [HttpGet]
-    [Route("/get-role-by-id/{id}")]
+    [Route("get-role-by-id/{id}")]
     public async Task<ActionResult<BaseResponse<GetRoleResponse>>> GetRoleById(int id)
     {
         var response = await _roleService.GetRoleById(id);
@@ -57,7 +57,7 @@ public class RoleController : ControllerBase
     }
     //Get all roles
     [HttpGet]
-    [Route("/get-all-roles")]
+    [Route("get-all-roles")]
     public async Task<ActionResult<BaseResponse<IEnumerable<GetRoleResponse>>>> GetAllRoles()
     {
         var response = await _roleService.GetAllRoles();
