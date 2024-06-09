@@ -3,7 +3,7 @@ using ClinicBookingSystem_Repository.IBaseRepository;
 
 namespace ClinicBookingSystem_Repository.IRepositories;
 
-public interface IRelativeRepository : IBaseRepository<Relative>
+public interface IUserProfileRepository : IBaseRepository<UserProfile>
 {
     
 }

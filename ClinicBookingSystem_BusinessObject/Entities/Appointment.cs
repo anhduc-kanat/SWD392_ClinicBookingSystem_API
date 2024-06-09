@@ -17,9 +17,10 @@ public class Appointment : BaseEntities
     public string? FeedBack {get; set; }
     public bool? IsTreatment { get; set; }
     //User
-    public ICollection<User>? Users { get; set; }
+    public UserProfile? UserProfile { get; set; }
     //Service
     public ICollection<Service>? Services { get; set; }
     //Slot
     public Slot? Slots { get; set; }
+
 }
