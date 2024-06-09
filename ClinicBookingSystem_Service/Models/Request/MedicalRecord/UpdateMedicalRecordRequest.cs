@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ClinicBookingSystem_Service.Models.Request.MedicalRecord
 {
-    public class CreateMedicalRecordRequest
+    public class UpdateMedicalRecordRequest
     {
         public string Description { get; set; }
         public string Name { get; set; }
