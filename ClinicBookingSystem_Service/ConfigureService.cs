@@ -21,6 +21,8 @@ public static class ConfigureService
         services.AddAutoMapper(typeof(CustomerMapping));
         services.AddAutoMapper(typeof(AuthenMapping));
         services.AddAutoMapper(typeof(MappingUserProfile));
+        services.AddAutoMapper(typeof(MappingMedicalRecord));
+
 
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IApplicationService, ApplicationService>();
@@ -33,6 +35,7 @@ public static class ConfigureService
         services.AddScoped<IAuthenService, AuthenService>();
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<ISlotService, SlotService>();
+        services.AddScoped<IMedicalRecordService, MedicalRecordService>();
         services.AddScoped<IAppointmentService, AppointmentService>();
         return services;
     }

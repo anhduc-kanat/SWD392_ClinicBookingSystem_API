@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClinicBookingSystem_Service.Models.Request.MedicalRecord
+namespace ClinicBookingSystem_Service.Models.Response.MedicalRecord
 {
-    public class CreateMedicalRecordRequest
+    public class GetMedicalReportResponse
     {
         public string Description { get; set; }
         public string Name { get; set; }
