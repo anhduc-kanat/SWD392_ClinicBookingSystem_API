@@ -6,4 +6,5 @@ public interface IUnitOfWork : IBaseUnitOfWork
 {
     IUserRepository UserRepository { get; }
     ISlotRepository SlotRepository { get; }
+    IClinicOwnerRepository ClinicOwnerRepository { get; }
 }
