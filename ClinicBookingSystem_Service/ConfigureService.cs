@@ -40,6 +40,7 @@ public static class ConfigureService
         services.AddScoped<ISalaryService, SalaryService>();
         services.AddScoped<ISpecificationService, SpecificationService>();
         services.AddScoped<IBillingService, BillingService>();
+        services.AddScoped<IClinicOwnerService, ClinicOwnerService>();
         return services;
     }
 }
