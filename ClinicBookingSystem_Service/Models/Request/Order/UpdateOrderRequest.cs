@@ -2,5 +2,7 @@
 
 public class UpdateOrderRequest
 {
-    
+    public string? Name { get; set; }
+    public string? Description { get; set; }
+    public IEnumerable<int>? OrderId { get; set; }
 }

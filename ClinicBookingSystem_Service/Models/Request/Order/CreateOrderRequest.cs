@@ -2,6 +2,7 @@
 
 public class CreateOrderRequest
 {
-    public long amount { get; set; }
-    
+    public string Name { get; set; }
+    public string? Description { get; set; }
+    public IEnumerable<int>? OrderId { get; set; }
 }
