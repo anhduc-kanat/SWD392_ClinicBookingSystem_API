@@ -11,5 +11,4 @@ public class CreateAppointmentRequest
     public int? SlotId { get; set; }
     public int? DentistId { get; set; }
     public int? PatientId { get; set; }
-    
 }
