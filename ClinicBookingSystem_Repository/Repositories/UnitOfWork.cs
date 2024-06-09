@@ -23,7 +23,7 @@ public class UnitOfWork : BaseUnitOfWork, IUnitOfWork
     private readonly IMedicalRecordRepository _medicalRecordRepository;
     private readonly IMedicineRepository _medicineRepository;
     private readonly IOrderRepository _orderRepository;
-    private readonly IRelativeRepository _relativeRepository;
+    private readonly IUserProfileRepository _userProfileRepository;
     private readonly IResultRepository _resultRepository;
     private readonly IServiceRepository _serviceRepository;
     private readonly ISpecificationRepository _specificationRepository;
@@ -41,7 +41,7 @@ public class UnitOfWork : BaseUnitOfWork, IUnitOfWork
         IMedicalRecordRepository medicalRecordRepository,
         IMedicineRepository medicineRepository,
         IOrderRepository orderRepository,
-        IRelativeRepository relativeRepository,
+        IUserProfileRepository userProfileRepository,
         IResultRepository resultRepository,
         IRoleRepository roleRepository,
         ISalaryRepository salaryRepository,
@@ -71,7 +71,7 @@ public class UnitOfWork : BaseUnitOfWork, IUnitOfWork
         _medicalRecordRepository = medicalRecordRepository;
         _medicineRepository = medicineRepository;
         _orderRepository = orderRepository;
-        _relativeRepository = relativeRepository;
+        _userProfileRepository = userProfileRepository;
         _resultRepository = resultRepository;
         _serviceRepository = serviceRepository;
         _specificationRepository = specificationRepository;
@@ -89,7 +89,7 @@ public class UnitOfWork : BaseUnitOfWork, IUnitOfWork
     public IMedicalRecordRepository MedicalRecordRepository => _medicalRecordRepository;
     public IMedicineRepository MedicineRepository => _medicineRepository;
     public IOrderRepository OrderRepository => _orderRepository;
-    public IRelativeRepository RelativeRepository => _relativeRepository;
+    public IUserProfileRepository UserProfileRepository => _userProfileRepository;
     public IResultRepository ResultRepository => _resultRepository;
     public IRoleRepository RoleRepository => _roleRepository;
     public ISalaryRepository SalaryRepository => _salaryRepository;
