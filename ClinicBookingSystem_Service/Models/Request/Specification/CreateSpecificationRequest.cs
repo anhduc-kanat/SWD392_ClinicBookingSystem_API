@@ -13,8 +13,6 @@ namespace ClinicBookingSystem_Service.Models.Request.Specification
         public DateTime? DateOfIssue { get; set; }
         public string? ImageUrl { get; set; }
         public string? AwaredAt { get; set; }
-
-        //User
-        public int? UserId { get; set; }
+        
     }
 }

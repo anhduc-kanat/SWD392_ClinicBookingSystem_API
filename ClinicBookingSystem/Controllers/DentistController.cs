@@ -1,4 +1,4 @@
-﻿using ClinicBookingSystem_Service.Dtos.Request;
+﻿using ClinicBookingSystem_Service.Models.Request.Dentist;
 using ClinicBookingSystem_Service.IServices;
 using ClinicBookingSystem_Service.Models.BaseResponse;
 using ClinicBookingSystem_Service.Models.Request.Dentist;
@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicBookingSystem_API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/dentist")]
     [ApiController]
     public class DentistController : ControllerBase
     {

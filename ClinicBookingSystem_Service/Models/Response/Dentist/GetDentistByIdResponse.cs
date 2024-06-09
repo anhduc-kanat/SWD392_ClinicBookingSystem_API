@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClinicBookingSystem_Service.Models.Response.Salary;
+using ClinicBookingSystem_Service.Models.Response.Specification;
 
 namespace ClinicBookingSystem_Service.Models.Response.Dentist
 {
@@ -14,5 +16,7 @@ namespace ClinicBookingSystem_Service.Models.Response.Dentist
         public DateTime DateOfBirth { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public ICollection<GetSpecificationResponse> Specifications { get; set; }
+        public long SalaryAmount { get; set; }
     }
 }

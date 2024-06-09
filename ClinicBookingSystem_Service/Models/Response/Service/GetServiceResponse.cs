@@ -8,15 +8,14 @@ using System.Threading.Tasks;
 
 namespace ClinicBookingSystem_Service.Models.Response.Service
 {
-    public class ServiceResponse
+    public class GetServiceResponse
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
         public int? ExpectedDurationInMinute { get; set; }
-
+        public long Price { get; set; }
         public ServiceType ServiceType { get; set; }
 
-        //Specification
-        public int? SpecificationId { get; set; }
     }
 }

@@ -13,10 +13,10 @@ namespace ClinicBookingSystem_Service.IService
 {
     public interface ISalaryService
     {
-        public Task<BaseResponse<IEnumerable<SalaryResponse>>> GetAllSalaries();
-        public Task<BaseResponse<SalaryResponse>> GetSalaryById(int id);
-        public Task<BaseResponse<SalaryResponse>> CreateSalary(CreateNewSalaryRequest request);
-        public Task<BaseResponse<SalaryResponse>> DeleteSalary(int id);
-        public Task<BaseResponse<SalaryResponse>> UpdateSalary(int id, UpdateNewSalaryRequest request);
+        Task<BaseResponse<CreateSalaryResponse>> CreateSalary(CreateNewSalaryRequest request);
+        Task<BaseResponse<DeleteSalaryResponse>> DeleteSalary(int id);
+        Task<BaseResponse<IEnumerable<GetSalaryResponse>>> GetAllSalaries();
+        Task<BaseResponse<GetSalaryResponse>> GetSalaryById(int id);
+        Task<BaseResponse<UpdateSalaryResponse>> UpdateSalary(int id, UpdateNewSalaryRequest request);
     }
 }

@@ -9,8 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicBookingSystem_API.Controllers
 {
-    [Route("api/customer")]
     [ApiController]
+    [Route("api/customer")]
     [Authorize(Roles ="STAFF,CUSTOMER")]
     public class CustomerController
     {
@@ -21,21 +21,21 @@ namespace ClinicBookingSystem_API.Controllers
         }
 
         [HttpPut]
-        [Route("update")]
+        [Route("update-customer/{id}")]
         public async Task<ActionResult<BaseResponse<UpdateCustomerResponse>>> Update(int id, [FromBody] UpdateCustomerRequest request)
         {
             return await _customerService.UpdateCustomer(id,request);
         }
 
         [HttpDelete]
-        [Route("delete/{id}")]
+        [Route("delete-customer/{id}")]
         public async Task<ActionResult<BaseResponse<DeleteCustomerResponse>>> Delete(int id)
         {
             return await _customerService.DeleteCustomer(id);
         }
 
         [HttpGet]
-        [Route("/{id}")]
+        [Route("get-customer-by-id/{id}")]
         public async Task<ActionResult<BaseResponse<GetCustomerResponse>>> GetById(int id)
         {
             var user = await _customerService.GetCustomerById(id);
@@ -43,7 +43,7 @@ namespace ClinicBookingSystem_API.Controllers
         }
 
         [HttpPost]
-        [Route("all")]
+        [Route("get-all-customers")]
         public async Task<ActionResult<BaseResponse<IEnumerable< GetCustomerResponse>>>> GetAll()
         {
             return await _customerService.GetAllCustomer();

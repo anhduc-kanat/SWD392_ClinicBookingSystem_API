@@ -10,11 +10,11 @@ namespace ClinicBookingSystem_Service.Models.Request.Service
 {
     public class UpdateServiceRequest
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public string? Description { get; set; }
         public int? ExpectedDurationInMinute { get; set; }
 
-        public ServiceType ServiceType { get; set; }
+        public ServiceType? ServiceType { get; set; }
 
         //Specification
         public int? SpecificationId { get; set; }

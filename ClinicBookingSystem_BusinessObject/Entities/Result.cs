@@ -17,7 +17,6 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         public string? PreScriptionDescription { get; set; }
         //Appointment
         public Appointment? Appointment { get; set; }
-
         //Medical Record
         public MedicalRecord? MedicalRecord { get; set; }
         //Medicine

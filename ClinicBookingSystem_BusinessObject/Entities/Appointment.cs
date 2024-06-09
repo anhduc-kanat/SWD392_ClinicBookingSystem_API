@@ -19,7 +19,7 @@ public class Appointment : BaseEntities
     //User
     public ICollection<User>? Users { get; set; }
     //Service
-    public ICollection<Service>? Services { get; set; }
+    public Service? Services { get; set; }
     //Slot
     public Slot? Slots { get; set; }
 }

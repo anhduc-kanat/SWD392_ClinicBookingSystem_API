@@ -13,10 +13,10 @@ namespace ClinicBookingSystem_Service.IService
 {
     public interface IServiceService
     {
-        public Task<BaseResponse<IEnumerable<ServiceResponse>>> GetAllServices();
-        public Task<BaseResponse<ServiceResponse>> GetServiceById(int id);
-        public Task<BaseResponse<ServiceResponse>> CreateService(CreateServiceRequest request);
-        public Task<BaseResponse<ServiceResponse>> DeleteService(int id);
-        public Task<BaseResponse<ServiceResponse>> UpdateService(int id, UpdateServiceRequest request);
+        public Task<BaseResponse<IEnumerable<GetServiceResponse>>> GetAllServices();
+        public Task<BaseResponse<GetServiceResponse>> GetServiceById(int id);
+        public Task<BaseResponse<CreateServiceResponse>> CreateService(CreateServiceRequest request);
+        public Task<BaseResponse<DeleteServiceResponse>> DeleteService(int id);
+        public Task<BaseResponse<UpdateServiceResponse>> UpdateService(int id, UpdateServiceRequest request);
     }
 }

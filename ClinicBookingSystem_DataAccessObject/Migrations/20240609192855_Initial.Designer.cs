@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClinicBookingSystem_DataAccessObject.Migrations
 {
     [DbContext(typeof(ClinicBookingSystemContext))]
-    [Migration("20240609133818_InitialDb1")]
-    partial class InitialDb1
+    [Migration("20240609192855_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,21 +38,6 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("ApplicationUser");
-                });
-
-            modelBuilder.Entity("AppointmentService", b =>
-                {
-                    b.Property<int>("AppointmentsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ServicesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AppointmentsId", "ServicesId");
-
-                    b.HasIndex("ServicesId");
-
-                    b.ToTable("AppointmentService");
                 });
 
             modelBuilder.Entity("AppointmentUser", b =>
@@ -190,6 +175,9 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.Property<int?>("ReExamUnit")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ServicesId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("SlotsId")
                         .HasColumnType("int");
 
@@ -200,6 +188,8 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ServicesId");
 
                     b.HasIndex("SlotsId");
 
@@ -229,8 +219,8 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Total")
-                        .HasColumnType("int");
+                    b.Property<long?>("Total")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -413,8 +403,8 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Amount")
-                        .HasColumnType("int");
+                    b.Property<long?>("Amount")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -584,8 +574,8 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("amount")
-                        .HasColumnType("int");
+                    b.Property<long>("amount")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -619,18 +609,16 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ServiceType")
-                        .HasColumnType("int");
+                    b.Property<long>("Price")
+                        .HasColumnType("bigint");
 
-                    b.Property<int?>("SpecificationId")
+                    b.Property<int>("ServiceType")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SpecificationId");
 
                     b.ToTable("Services");
                 });
@@ -802,8 +790,8 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeSpan?>("PayAt")
-                        .HasColumnType("time");
+                    b.Property<DateTime?>("PayAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("QrLink")
                         .HasColumnType("nvarchar(max)");
@@ -979,21 +967,6 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("AppointmentService", b =>
-                {
-                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Appointment", null)
-                        .WithMany()
-                        .HasForeignKey("AppointmentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Service", null)
-                        .WithMany()
-                        .HasForeignKey("ServicesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("AppointmentUser", b =>
                 {
                     b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Appointment", null)
@@ -1041,9 +1014,15 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
 
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Appointment", b =>
                 {
+                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Service", "Services")
+                        .WithMany("Appointments")
+                        .HasForeignKey("ServicesId");
+
                     b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Slot", "Slots")
                         .WithMany("Appointments")
                         .HasForeignKey("SlotsId");
+
+                    b.Navigation("Services");
 
                     b.Navigation("Slots");
                 });
@@ -1105,15 +1084,6 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.Navigation("Appointment");
 
                     b.Navigation("MedicalRecord");
-                });
-
-            modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Service", b =>
-                {
-                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Specification", "Specification")
-                        .WithMany("Services")
-                        .HasForeignKey("SpecificationId");
-
-                    b.Navigation("Specification");
                 });
 
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Specification", b =>
@@ -1220,14 +1190,14 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Slot", b =>
+            modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Service", b =>
                 {
                     b.Navigation("Appointments");
                 });
 
-            modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Specification", b =>
+            modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Slot", b =>
                 {
-                    b.Navigation("Services");
+                    b.Navigation("Appointments");
                 });
 
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Transaction", b =>

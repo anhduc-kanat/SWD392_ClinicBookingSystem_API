@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ClinicBookingSystem_BusinessObject.Enums
 {
-    public enum PaymentStatus
+    public enum TransactionStatus
     {
         [Description("Pending")]
         Pending = 2,
