@@ -31,6 +31,7 @@ public static class ConfigureService
         services.AddScoped<SpecificationDAO>();
         services.AddScoped<TransactionDAO>();
         services.AddScoped<ServiceDAO>();
+        services.AddScoped<ClinicOwnerDAO>();
         services.AddScoped(typeof(IBaseDAO<>), typeof(BaseDAO<>));
         return services;
     }
