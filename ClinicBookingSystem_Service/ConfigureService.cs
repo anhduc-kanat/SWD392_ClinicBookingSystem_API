@@ -16,10 +16,10 @@ public static class ConfigureService
     public static IServiceCollection ConfigureServiceService(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddAutoMapper(typeof(MappingProfiles));
-        services.AddAutoMapper(typeof(MappingDentist));
+        /*services.AddAutoMapper(typeof(MappingDentist));
         services.AddAutoMapper(typeof(MappingStaff));
         services.AddAutoMapper(typeof(CustomerMapping));
-        services.AddAutoMapper(typeof(AuthenMapping));
+        services.AddAutoMapper(typeof(AuthenMapping));*/
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IApplicationService, ApplicationService>();
         services.AddScoped<IDentistService, DentistService>();
@@ -32,6 +32,7 @@ public static class ConfigureService
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<ISlotService, SlotService>();
         services.AddScoped<IAppointmentService, AppointmentService>();
+        services.AddScoped<IOrderService, OrderService>();
         return services;
     }
 }
