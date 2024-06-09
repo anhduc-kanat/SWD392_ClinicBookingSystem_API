@@ -15,7 +15,7 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
-        public int? Amount { get; set; }
+        public long? Amount { get; set; }
         //User
         public User? User { get; set; }
         //Services
