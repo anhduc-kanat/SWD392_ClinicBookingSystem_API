@@ -32,6 +32,9 @@ public static class ConfigureService
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<ISlotService, SlotService>();
         services.AddScoped<IAppointmentService, AppointmentService>();
+        services.AddScoped<IServiceService, ServiceService>();
+        services.AddScoped<ISalaryService, SalaryService>();
+        services.AddScoped<ISpecificationService, SpecificationService>();
         return services;
     }
 }
