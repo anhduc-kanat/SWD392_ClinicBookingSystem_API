@@ -24,32 +24,13 @@ public class MappingProfiles : Profile
         CreateMap<User, DeleteUserResponse>();
         CreateMap<User, UpdateUserResponse>();
         CreateMap<UpdateUserRequest, User>().ReverseMap();
+        
 
-        //
-        CreateMap<CreateNewSlotRequest, Slot>().ReverseMap();
-        CreateMap<Slot, CreateNewSlotRequest>().ReverseMap();
-        CreateMap<Slot, SlotResponse>();
-        CreateMap<UpdateSlotRequest, Slot>().ReverseMap();
-        CreateMap<Slot, UpdateSlotRequest>();
-
-        //
-        CreateMap<CreateServiceRequest, ClinicBookingSystem_BusinessObject.Entities.Service>().ReverseMap();
-        CreateMap<ClinicBookingSystem_BusinessObject.Entities.Service, CreateServiceRequest>().ReverseMap();
-        CreateMap<ClinicBookingSystem_BusinessObject.Entities.Service, ServiceResponse>();
-        CreateMap<UpdateServiceRequest, ClinicBookingSystem_BusinessObject.Entities.Service>().ReverseMap();
-        CreateMap<ClinicBookingSystem_BusinessObject.Entities.Service, UpdateServiceRequest>();
-
-        //
-        CreateMap<CreateNewSalaryRequest, Salary>().ReverseMap();
-        CreateMap<Salary, CreateNewSalaryRequest>().ReverseMap();
-        CreateMap<Salary, SalaryResponse>();
-        CreateMap<UpdateNewSalaryRequest, Salary>().ReverseMap();
-        CreateMap<Salary, UpdateNewSalaryRequest>();
 
         //
         CreateMap<CreateSpecificationRequest, Specification>().ReverseMap();
         CreateMap<Specification, CreateSpecificationRequest>().ReverseMap();
-        CreateMap<Specification, SpecificationResponse>();
+        CreateMap<Specification, GetSpecificationResponse>();
         CreateMap<UpdateSpecificationRequest, Specification>().ReverseMap();
         CreateMap<Specification, UpdateSpecificationRequest>();
 

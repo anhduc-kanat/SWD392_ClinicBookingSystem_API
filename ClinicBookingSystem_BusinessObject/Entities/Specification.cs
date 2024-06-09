@@ -15,6 +15,4 @@ public class Specification : BaseEntities
     //User
     public User? User { get; set; }
     
-    //Service 
-    public ICollection<Service>? Services { get; set; }
 }

@@ -12,9 +12,8 @@ public class Service : BaseEntities
     public int? ExpectedDurationInMinute { get; set; }
     
     public ServiceType ServiceType { get; set; } = ServiceType.Examination;
-    
-    //Specification
-    public Specification? Specification { get; set; }
+
+    public long Price { get; set; } = 0;
     //Appointment
     public ICollection<Appointment>? Appointments { get; set; }
     //Order

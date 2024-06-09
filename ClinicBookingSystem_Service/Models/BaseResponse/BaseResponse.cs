@@ -5,7 +5,7 @@ namespace ClinicBookingSystem_Service.Models.BaseResponse;
 public class BaseResponse<T>
 {
     public string Message { get; set; } = "Sucessfull";
-    public StatusCodeEnum StatusCode { get; set; }
+    public StatusCodeEnum StatusCode { get; set; } = StatusCodeEnum.OK_200;
     public T? Data { get; set; }
     public BaseResponse(string? message, StatusCodeEnum statusCode, T? data)
     {

@@ -10,8 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicBookingSystem_API.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/salary")]
 public class SalaryController : ControllerBase
 {
     private readonly ISalaryService _salaryService;
@@ -22,14 +22,16 @@ public class SalaryController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<BaseResponse<IEnumerable<SalaryResponse>>>> GetSalaries()
+    [Route("get-all-salaries")]
+    public async Task<ActionResult<BaseResponse<IEnumerable<GetSalaryResponse>>>> GetSalaries()
     {
         var salaries = await _salaryService.GetAllSalaries();
         return Ok(salaries);
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<BaseResponse<SalaryResponse>>> GetSalary(int id)
+    [HttpGet]
+    [Route("get-salary-by-id/{id}")]
+    public async Task<ActionResult<BaseResponse<GetSalaryResponse>>> GetSalary(int id)
     {
         var salary = await _salaryService.GetSalaryById(id);
 
@@ -37,20 +39,23 @@ public class SalaryController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<BaseResponse<SalaryResponse>>> AddSalary([FromBody] CreateNewSalaryRequest request)
+    [Route("create-salary")]
+    public async Task<ActionResult<BaseResponse<CreateSalaryResponse>>> AddSalary([FromBody] CreateNewSalaryRequest request)
     {
         var createdSalary = await _salaryService.CreateSalary(request);
         return createdSalary;
     }
 
-    [HttpPut("{id}")]
-    public async Task<ActionResult<BaseResponse<SalaryResponse>>> UpdateSalary(int id, [FromBody] UpdateNewSalaryRequest request)
+    [HttpPut]
+    [Route("update-salary/{id}")]
+    public async Task<ActionResult<BaseResponse<UpdateSalaryResponse>>> UpdateSalary(int id, [FromBody] UpdateNewSalaryRequest request)
     {
         return await _salaryService.UpdateSalary(id, request);
     }
 
-    [HttpDelete("{id}")]
-    public async Task<ActionResult<BaseResponse<SalaryResponse>>> DeleteSalary(int id)
+    [HttpDelete]
+    [Route("delete-salary/{id}")]
+    public async Task<ActionResult<BaseResponse<DeleteSalaryResponse>>> DeleteSalary(int id)
     {
         return await _salaryService.DeleteSalary(id);
     }

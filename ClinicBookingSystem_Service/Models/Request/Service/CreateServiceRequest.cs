@@ -14,9 +14,7 @@ namespace ClinicBookingSystem_Service.Models.Request.Service
         public string? Description { get; set; }
         public int? ExpectedDurationInMinute { get; set; }
 
-        public ServiceType ServiceType { get; set; }
+        public ServiceType? ServiceType { get; set; }
 
-        //Specification
-        public int? SpecificationId { get; set; }
     }
 }

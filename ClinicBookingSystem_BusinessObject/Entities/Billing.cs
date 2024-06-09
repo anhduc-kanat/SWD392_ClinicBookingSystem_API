@@ -12,7 +12,7 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         [Key]
         public int Id { get; set; }
         public string? Name { get; set; }
-        public int? Total { get; set; }
+        public long? Total { get; set; }
         public string? Description { get; set; }
         //User
         public User? User { get; set; }

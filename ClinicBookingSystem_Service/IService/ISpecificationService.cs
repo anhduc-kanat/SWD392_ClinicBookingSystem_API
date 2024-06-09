@@ -13,10 +13,10 @@ namespace ClinicBookingSystem_Service.IService
 {
     public interface ISpecificationService
     {
-        public Task<BaseResponse<IEnumerable<SpecificationResponse>>> GetAllSpecifications();
-        public Task<BaseResponse<SpecificationResponse>> GetSpecificationById(int id);
-        public Task<BaseResponse<SpecificationResponse>> CreateSpecification(CreateSpecificationRequest request);
-        public Task<BaseResponse<SpecificationResponse>> DeleteSpecification(int id);
-        public Task<BaseResponse<SpecificationResponse>> UpdateSpecification(int id, UpdateSpecificationRequest request);
+        public Task<BaseResponse<IEnumerable<GetSpecificationResponse>>> GetAllSpecifications();
+        public Task<BaseResponse<GetSpecificationResponse>> GetSpecificationById(int id);
+        public Task<BaseResponse<CreateSpecificationResponse>> CreateSpecification(CreateSpecificationRequest request);
+        public Task<BaseResponse<DeleteSpecificationResponse>> DeleteSpecification(int id);
+        public Task<BaseResponse<UpdateSpecificationResponse>> UpdateSpecification(int id, UpdateSpecificationRequest request);
     }
 }

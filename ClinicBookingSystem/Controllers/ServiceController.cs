@@ -10,7 +10,7 @@ using ClinicBookingSystem_Service.Models.Request.Service;
 
 namespace ClinicBookingSystem_API.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/service")]
 [ApiController]
 public class ServiceController : ControllerBase
 {
@@ -22,14 +22,16 @@ public class ServiceController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<BaseResponse<IEnumerable<ServiceResponse>>>> GetServices()
+    [Route("get-all-services")]
+    public async Task<ActionResult<BaseResponse<IEnumerable<GetServiceResponse>>>> GetServices()
     {
         var services = await _serviceService.GetAllServices();
         return Ok(services);
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<BaseResponse<ServiceResponse>>> GetService(int id)
+    [HttpGet]
+    [Route("get-service-by-id/{id}")]
+    public async Task<ActionResult<BaseResponse<GetServiceResponse>>> GetService(int id)
     {
         var service = await _serviceService.GetServiceById(id);
 
@@ -37,21 +39,26 @@ public class ServiceController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<BaseResponse<ServiceResponse>>> AddService([FromBody] CreateServiceRequest request)
+    [Route("create-service")]
+    public async Task<ActionResult<BaseResponse<CreateServiceResponse>>> AddService([FromBody] CreateServiceRequest request)
     {
         var createdService = await _serviceService.CreateService(request);
-        return createdService;
+        return Ok(createdService);
     }
 
-    [HttpPut("{id}")]
-    public async Task<ActionResult<BaseResponse<ServiceResponse>>> UpdateService(int id, [FromBody] UpdateServiceRequest request)
+    [HttpPut]
+    [Route("update-service/{id}")]
+    public async Task<ActionResult<BaseResponse<UpdateServiceResponse>>> UpdateService(int id, [FromBody] UpdateServiceRequest request)
     {
-        return await _serviceService.UpdateService(id, request);
+        var service = await _serviceService.UpdateService(id, request);
+        return Ok(service);
     }
 
-    [HttpDelete("{id}")]
-    public async Task<ActionResult<BaseResponse<ServiceResponse>>> DeleteService(int id)
+    [HttpDelete]
+    [Route("delete-service/{id}")]
+    public async Task<ActionResult<BaseResponse<DeleteServiceResponse>>> DeleteService(int id)
     {
-        return await _serviceService.DeleteService(id);
+        var service = await _serviceService.DeleteService(id);
+        return Ok(service);
     }
 }

@@ -8,13 +8,11 @@ namespace ClinicBookingSystem_Service.Models.Request.Specification
 {
     public class UpdateSpecificationRequest
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public string? Description { get; set; }
         public DateTime? DateOfIssue { get; set; }
         public string? ImageUrl { get; set; }
         public string? AwaredAt { get; set; }
 
-        //User
-        public int? UserId { get; set; }
     }
 }

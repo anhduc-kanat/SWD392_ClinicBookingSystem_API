@@ -39,6 +39,7 @@ public static class ConfigureService
         services.AddScoped<IServiceService, ServiceService>();
         services.AddScoped<ISalaryService, SalaryService>();
         services.AddScoped<ISpecificationService, SpecificationService>();
+        services.AddScoped<IBillingService, BillingService>();
         return services;
     }
 }

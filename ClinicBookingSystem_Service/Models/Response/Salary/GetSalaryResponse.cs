@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace ClinicBookingSystem_Service.Models.Response.Salary
 {
-    public class SalaryResponse
+    public class GetSalaryResponse
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
         public int amount { get; set; }

@@ -9,8 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicBookingSystem_API.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/specification")]
 public class SpecificationController : ControllerBase
 {
     private readonly ISpecificationService _specificationService;
@@ -21,35 +21,42 @@ public class SpecificationController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<BaseResponse<IEnumerable<SpecificationResponse>>>> GetSpecifications()
+    [Route("get-all-specifications")]
+    public async Task<ActionResult<BaseResponse<IEnumerable<GetSpecificationResponse>>>> GetSpecifications()
     {
         var specifications = await _specificationService.GetAllSpecifications();
         return Ok(specifications);
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<BaseResponse<SpecificationResponse>>> GetSalary(int id)
+    [HttpGet]
+    [Route("get-specification-by-id/{id}")]
+    public async Task<ActionResult<BaseResponse<GetSpecificationResponse>>> GetSalary(int id)
     {
         var specification = await _specificationService.GetSpecificationById(id);
         return Ok(specification);
     }
 
     [HttpPost]
-    public async Task<ActionResult<BaseResponse<SpecificationResponse>>> AddSpecification([FromBody] CreateSpecificationRequest request)
+    [Route("create-specification")]
+    public async Task<ActionResult<BaseResponse<CreateSpecificationResponse>>> AddSpecification([FromBody] CreateSpecificationRequest request)
     {
         var createdSpecification = await _specificationService.CreateSpecification(request);
-        return createdSpecification;
+        return Ok(createdSpecification);
     }
 
-    [HttpPut("{id}")]
-    public async Task<ActionResult<BaseResponse<SpecificationResponse>>> UpdateSpecification(int id, [FromBody] UpdateSpecificationRequest request)
+    [HttpPut]
+    [Route("update-specification/{id}")]
+    public async Task<ActionResult<BaseResponse<UpdateSpecificationResponse>>> UpdateSpecification(int id, [FromBody] UpdateSpecificationRequest request)
     {
-        return await _specificationService.UpdateSpecification(id, request);
+        var result = await _specificationService.UpdateSpecification(id, request);
+        return Ok(result);
     }
 
-    [HttpDelete("{id}")]
-    public async Task<ActionResult<BaseResponse<SpecificationResponse>>> DeleteSpecification(int id)
+    [HttpDelete]
+    [Route("delete-specification/{id}")]
+    public async Task<ActionResult<BaseResponse<DeleteSpecificationResponse>>> DeleteSpecification(int id)
     {
-        return await _specificationService.DeleteSpecification(id);
+        var result = await _specificationService.DeleteSpecification(id);
+        return Ok(result);
     }
 }

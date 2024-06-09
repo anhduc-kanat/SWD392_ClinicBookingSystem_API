@@ -25,7 +25,7 @@ public class BillingController : ControllerBase
     }
     // GET: api/billing/{id}
     [HttpGet]
-    [Route("get-billing-by-id{id}")]
+    [Route("get-billing-by-id/{id}")]
     public async Task<ActionResult<BaseResponse<GetBillingResponse>>> GetBillingById(int id)
     {
         var result = await _billingService.GetBillingById(id);

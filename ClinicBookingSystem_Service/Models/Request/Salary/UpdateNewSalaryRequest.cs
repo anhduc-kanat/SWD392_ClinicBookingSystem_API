@@ -8,8 +8,8 @@ namespace ClinicBookingSystem_Service.Models.Request.Salary
 {
     public class UpdateNewSalaryRequest
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public string? Description { get; set; }
-        public int amount { get; set; }
+        public int? amount { get; set; }
     }
 }
