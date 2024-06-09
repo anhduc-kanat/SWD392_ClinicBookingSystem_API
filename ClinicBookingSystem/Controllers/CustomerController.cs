@@ -35,7 +35,7 @@ namespace ClinicBookingSystem_API.Controllers
         }
 
         [HttpGet]
-        [Route("/{id}")]
+        [Route("{id}")]
         public async Task<ActionResult<BaseResponse<GetCustomerResponse>>> GetById(int id)
         {
             var user = await _customerService.GetCustomerById(id);

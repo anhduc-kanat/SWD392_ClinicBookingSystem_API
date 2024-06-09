@@ -7,9 +7,9 @@ namespace ClinicBookingSystem_Repository.Repositories;
 
 public class UserProfileRepository : BaseRepository<UserProfile>, IUserProfileRepository
 {
-    private readonly UserProfileDAO _relativeDAO;
-    public UserProfileRepository(UserProfileDAO relativeDAO) : base(relativeDAO)
+    private readonly UserProfileDAO _userProfileDAO;
+    public UserProfileRepository(UserProfileDAO userProfileDAO) : base(userProfileDAO)
     {
-        _relativeDAO = relativeDAO;
+        _userProfileDAO = userProfileDAO;
     }
 }

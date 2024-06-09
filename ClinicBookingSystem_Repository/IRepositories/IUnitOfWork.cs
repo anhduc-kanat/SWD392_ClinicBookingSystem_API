@@ -19,7 +19,7 @@ public interface IUnitOfWork : IBaseUnitOfWork
     IMedicalRecordRepository MedicalRecordRepository { get; }
     IMedicineRepository MedicineRepository { get; }
     IOrderRepository OrderRepository { get; }
-    IUserProfileRepository RelativeRepository { get; }
+    IUserProfileRepository UserProfileRepository { get; }
     IResultRepository ResultRepository { get; }
     IServiceRepository ServiceRepository { get; }
     ISpecificationRepository SpecificationRepository { get; }

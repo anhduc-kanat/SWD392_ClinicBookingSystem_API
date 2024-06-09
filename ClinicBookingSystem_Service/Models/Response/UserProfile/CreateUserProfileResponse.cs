@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClinicBookingSystem_Service.Models.Request.Relative
+namespace ClinicBookingSystem_Service.Models.Response.UserProfile
 {
-    internal class CreateRelativeRequest
+    public class CreateUserProfileResponse
     {
     }
 }
