@@ -5,10 +5,10 @@ using ClinicBookingSystem_Repository.IRepositories;
 
 namespace ClinicBookingSystem_Repository.Repositories;
 
-public class RelativeRepository : BaseRepository<Relative>, IRelativeRepository
+public class UserProfileRepository : BaseRepository<UserProfile>, IUserProfileRepository
 {
-    private readonly RelativeDAO _relativeDAO;
-    public RelativeRepository(RelativeDAO relativeDAO) : base(relativeDAO)
+    private readonly UserProfileDAO _relativeDAO;
+    public UserProfileRepository(UserProfileDAO relativeDAO) : base(relativeDAO)
     {
         _relativeDAO = relativeDAO;
     }
