@@ -4,11 +4,11 @@ using ClinicBookingSystem_DataAcessObject.DBContext;
 
 namespace ClinicBookingSystem_DataAccessObject;
 
-public class ServiceDAO : BaseDAO<Service>
+public class ClaimDAO : BaseDAO<Claim>
 {
-    private readonly ClinicBookingSystemContext _context;
-    public ServiceDAO(ClinicBookingSystemContext context) : base(context)
+    private readonly ClinicBookingSystemContext _dbContext;
+    public ClaimDAO(ClinicBookingSystemContext dbContext) : base(dbContext)
     {
-        _context = context;
+        _dbContext = dbContext;
     }
 }
