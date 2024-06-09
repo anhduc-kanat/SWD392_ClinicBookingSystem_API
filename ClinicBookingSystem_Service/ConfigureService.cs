@@ -20,11 +20,13 @@ public static class ConfigureService
         services.AddAutoMapper(typeof(MappingStaff));
         services.AddAutoMapper(typeof(CustomerMapping));
         services.AddAutoMapper(typeof(AuthenMapping));
+        services.AddAutoMapper(typeof(MappingUserProfile));
+
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IApplicationService, ApplicationService>();
         services.AddScoped<IDentistService, DentistService>();
         services.AddScoped<IStaffService, StaffService>();
-
+        services.AddScoped<IUserProfileService, UserProfileService>();
         services.AddScoped<HashPassword>();
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<IUserService, UserService>();

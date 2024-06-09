@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClinicBookingSystem_Service.IService
+namespace ClinicBookingSystem_Service.Models.Response.UserProfile
 {
-    public interface IMedicalRecord
+    public class UpdateUserProfileResponse
     {
-        
     }
 }
