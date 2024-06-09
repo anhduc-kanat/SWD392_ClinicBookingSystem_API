@@ -33,9 +33,8 @@ namespace ClinicBookingSystem_Service.Service
         public async Task<BaseResponse<IEnumerable<SlotResponse>>> GetAllSlots()
         {
             IEnumerable<Slot> slots = await _unitOfWork.SlotRepository.GetAllAsync();
-            var slotsDto = _mapper.Map<IEnumerable<SlotResponse>>(slots);
             return new BaseResponse<IEnumerable<SlotResponse>>("Get slots successfully", StatusCodeEnum.OK_200,
-                slotsDto);
+                _mapper.Map<IEnumerable<SlotResponse>>(slots));
         }
 
         public async Task<BaseResponse<SlotResponse>> GetSlotById(int id)
