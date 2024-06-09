@@ -4,10 +4,10 @@ using ClinicBookingSystem_DataAcessObject.DBContext;
 
 namespace ClinicBookingSystem_DataAccessObject;
 
-public class RelativeDAO : BaseDAO<Relative>
+public class UserProfileDAO : BaseDAO<UserProfile>
 {
     private readonly ClinicBookingSystemContext _dbContext;
-    public RelativeDAO(ClinicBookingSystemContext dbContext) : base(dbContext)
+    public UserProfileDAO(ClinicBookingSystemContext dbContext) : base(dbContext)
     {
         _dbContext = dbContext;
     }

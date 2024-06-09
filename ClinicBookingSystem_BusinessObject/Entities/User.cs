@@ -41,9 +41,7 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         //Role
 
         public Role? Role { get; set; }
-        
-        //Appointment
-        public ICollection<Appointment>? Appointments { get; set; }
+    
         //Salary
         public Salary? Salary { get; set; }
         //Specification
@@ -53,13 +51,12 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         
         //Relative
         public int? GroupId { get; set; }
-        public ICollection<Relative>? Relatives { get; set; }
+        public ICollection<UserProfile>? UserProfiles { get; set; }
         //Claim
         public ICollection<Claim>? Claims { get; set; }
         //Apllication
         public ICollection<Application>? Applications { get; set; }
-        //Medical Record
-        public ICollection<MedicalRecord>? MedicalRecords { get; set; }
+      
         //Billing
         public ICollection<Billing>? Billings { get; set; }
         //Order

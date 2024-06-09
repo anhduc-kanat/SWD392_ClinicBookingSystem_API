@@ -23,7 +23,7 @@ public static class ConfigureService
         services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
         services.AddScoped<IMedicineRepository, MedicineRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
-        services.AddScoped<IRelativeRepository, RelativeRepository>();
+        services.AddScoped<IUserProfileRepository, UserProfileRepository>();
         services.AddScoped<IResultRepository, ResultRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<ISalaryRepository, SalaryRepository>();
