@@ -18,4 +18,8 @@ public class Service : BaseEntities
     public ICollection<Appointment>? Appointments { get; set; }
     //Order
     public ICollection<Order>? Orders { get; set; }
+    //User
+    public ICollection<User>? Users { get; set; }
+
+
 }

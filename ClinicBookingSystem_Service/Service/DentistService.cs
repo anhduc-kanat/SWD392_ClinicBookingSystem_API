@@ -76,6 +76,20 @@ namespace ClinicBookingSystem_Service.Services
             }
         }
 
+        public async Task<BaseResponse<IEnumerable<GetAllDentistsResponse>>> GetAllDentistsByService(string serviceName)
+        {
+            try
+            {
+                IEnumerable<User> dentists = await _unitOfWork.DentistRepository.GetDentistsByService(serviceName);
+                IEnumerable<GetAllDentistsResponse> response = _mapper.Map<IEnumerable<GetAllDentistsResponse>>(dentists);
+                return new BaseResponse<IEnumerable<GetAllDentistsResponse>>("Get All Dentists successfully", StatusCodeEnum.OK_200, response);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<IEnumerable<GetAllDentistsResponse>>("Error at GetAllDentists Service: " + ex.Message, StatusCodeEnum.InternalServerError_500);
+            }
+        }
+
         public async Task<BaseResponse<GetDentistByIdResponse>> GetDentistById(int id)
         {
             try

@@ -53,5 +53,12 @@ namespace ClinicBookingSystem_API.Controllers
             var response = await _dentistService.DeleteDentist(id);
             return response;
         }
+
+        [HttpGet("get-dentist-service")]
+        public async Task<ActionResult<BaseResponse<IEnumerable<GetAllDentistsResponse>>>> GetDentistByService(string serviceName)
+        {
+            var response = await _dentistService.GetAllDentistsByService(serviceName);
+            return response;
+        }
     }
 }

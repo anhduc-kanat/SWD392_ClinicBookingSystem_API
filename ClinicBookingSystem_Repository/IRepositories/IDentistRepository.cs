@@ -11,5 +11,7 @@ namespace ClinicBookingSystem_Repository.IRepositories
     public interface IDentistRepository : IBaseRepository<User>
     {
         Task<IEnumerable<User>> GetDentistsByRole();
+        Task<IEnumerable<User>> GetDentistsByService(string serviceName);
+
     }
 }

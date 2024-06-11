@@ -45,6 +45,9 @@ namespace ClinicBookingSystem_DataAcessObject.DBContext
             .HasForeignKey(o => o.Id)
             .OnDelete(DeleteBehavior.NoAction);
             base.OnModelCreating(modelBuilder);
+
+
+
         }
     }
 }
