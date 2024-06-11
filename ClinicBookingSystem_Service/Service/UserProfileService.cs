@@ -105,6 +105,23 @@ namespace ClinicBookingSystem_Service.Service
             }
         }
 
+        public async Task<BaseResponse<IEnumerable<GetUserProfileResponse>>> GetUserProfilesByUser(string phone)
+        {
+            try
+            {
+                IEnumerable<UserProfile> userProfile = await _unitOfWork.UserProfileRepository.GetUserProfilesByUser(phone);
+                var response = _mapper.Map<IEnumerable<GetUserProfileResponse>>(userProfile);
+                return new BaseResponse<IEnumerable<GetUserProfileResponse>>("Successfully", StatusCodeEnum.OK_200, response);
+
+            }
+            catch (Exception ex)
+            {
+
+                return new BaseResponse<IEnumerable<GetUserProfileResponse>>("User Profile Service " + ex.Message, StatusCodeEnum.InternalServerError_500);
+
+            }
+        }
+
         public async Task<BaseResponse<UpdateUserProfileResponse>> UpdateUserProfile(int id, UpdateUserProfileRequest request)
         {
             try

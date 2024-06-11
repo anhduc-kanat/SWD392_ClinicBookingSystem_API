@@ -56,5 +56,13 @@ namespace ClinicBookingSystem_API.Controllers
             return await _userProfileService.GetUserProfiles();
 
         }
+
+        [HttpGet]
+        [Route("all-by-user")]
+        public async Task<ActionResult<BaseResponse<IEnumerable<GetUserProfileResponse>>>> GetUserProfilesByUser(string phone)
+        {
+            return await _userProfileService.GetUserProfilesByUser(phone);
+
+        }
     }
 }

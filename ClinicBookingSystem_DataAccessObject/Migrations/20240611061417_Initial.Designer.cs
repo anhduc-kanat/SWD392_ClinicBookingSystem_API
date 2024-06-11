@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClinicBookingSystem_DataAccessObject.Migrations
 {
     [DbContext(typeof(ClinicBookingSystemContext))]
-    [Migration("20240609194548_Initial")]
+    [Migration("20240611061417_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -969,6 +969,21 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.ToTable("OrderService");
                 });
 
+            modelBuilder.Entity("ServiceUser", b =>
+                {
+                    b.Property<int>("ServicesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ServicesId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("ServiceUser");
+                });
+
             modelBuilder.Entity("ApplicationUser", b =>
                 {
                     b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Application", null)
@@ -1179,6 +1194,21 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Service", null)
                         .WithMany()
                         .HasForeignKey("ServicesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ServiceUser", b =>
+                {
+                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Service", null)
+                        .WithMany()
+                        .HasForeignKey("ServicesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
