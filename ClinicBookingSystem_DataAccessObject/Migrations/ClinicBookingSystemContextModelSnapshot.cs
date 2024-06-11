@@ -37,6 +37,21 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.ToTable("ApplicationUser");
                 });
 
+            modelBuilder.Entity("AppointmentUser", b =>
+                {
+                    b.Property<int>("AppointmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AppointmentId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("AppointmentUser");
+                });
+
             modelBuilder.Entity("ClaimRole", b =>
                 {
                     b.Property<int>("ClaimsId")
@@ -136,6 +151,9 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.Property<string>("FeedBack")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -169,16 +187,11 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UserProfileId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ServicesId");
 
                     b.HasIndex("SlotsId");
-
-                    b.HasIndex("UserProfileId");
 
                     b.ToTable("Appointments");
                 });
@@ -996,6 +1009,21 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("AppointmentUser", b =>
+                {
+                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Appointment", null)
+                        .WithMany()
+                        .HasForeignKey("AppointmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ClaimRole", b =>
                 {
                     b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Claim", null)
@@ -1036,15 +1064,9 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                         .WithMany("Appointments")
                         .HasForeignKey("SlotsId");
 
-                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.UserProfile", "UserProfile")
-                        .WithMany("Appointments")
-                        .HasForeignKey("UserProfileId");
-
                     b.Navigation("Services");
 
                     b.Navigation("Slots");
-
-                    b.Navigation("UserProfile");
                 });
 
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Billing", b =>
@@ -1255,8 +1277,6 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
 
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.UserProfile", b =>
                 {
-                    b.Navigation("Appointments");
-
                     b.Navigation("MedicalRecords");
                 });
 #pragma warning restore 612, 618
