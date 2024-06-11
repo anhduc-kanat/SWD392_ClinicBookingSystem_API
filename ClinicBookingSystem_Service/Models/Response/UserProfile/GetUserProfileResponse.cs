@@ -20,6 +20,5 @@ namespace ClinicBookingSystem_Service.Models.Response.UserProfile
         public string Email { get; set; }
         public int GroupId { get; set; }
         public string Type { get; set; }
-        public int UserId { get; set; }
     }
 }

@@ -23,10 +23,10 @@ namespace ClinicBookingSystem_Service.Service
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<BaseResponse<IEnumerable<GetRoleResponse>>> GetRoleByName(string roleName)
+        public async Task<BaseResponse<GetRoleResponse>> GetRoleByName(string roleName)
         {
-            var response = _mapper.Map<IEnumerable<GetRoleResponse>>(await _unitOfWork.RoleRepository.GetRoleByName(roleName));
-            return new BaseResponse<IEnumerable<GetRoleResponse>>("Successful", StatusCodeEnum.OK_200, response);
+            var response = _mapper.Map<GetRoleResponse>(await _unitOfWork.RoleRepository.GetRoleByName(roleName));
+            return new BaseResponse<GetRoleResponse>("Successful", StatusCodeEnum.OK_200, response);
         }
         public async Task<BaseResponse<IEnumerable<GetRoleResponse>>> GetAllRoles()
         {
