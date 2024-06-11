@@ -12,4 +12,9 @@ public class UserProfileRepository : BaseRepository<UserProfile>, IUserProfileRe
     {
         _userProfileDAO = userProfileDAO;
     }
+
+    public async Task<IEnumerable<UserProfile>> GetUserProfilesByUser(string phone)
+    {
+        return await _userProfileDAO.GetUserProfilesByUser(phone);
+    }
 }
