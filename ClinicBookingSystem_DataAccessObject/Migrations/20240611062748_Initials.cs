@@ -275,6 +275,50 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Appointments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    IsPeriod = table.Column<bool>(type: "bit", nullable: true),
+                    ReExamUnit = table.Column<int>(type: "int", nullable: true),
+                    ReExamNumber = table.Column<int>(type: "int", nullable: true),
+                    IsApproved = table.Column<bool>(type: "bit", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FeedBack = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsTreatment = table.Column<bool>(type: "bit", nullable: true),
+                    UsersId = table.Column<int>(type: "int", nullable: true),
+                    ServicesId = table.Column<int>(type: "int", nullable: true),
+                    SlotsId = table.Column<int>(type: "int", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Appointments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Appointments_Services_ServicesId",
+                        column: x => x.ServicesId,
+                        principalTable: "Services",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Appointments_Slots_SlotsId",
+                        column: x => x.SlotsId,
+                        principalTable: "Slots",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Appointments_Users_UsersId",
+                        column: x => x.UsersId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Billings",
                 columns: table => new
                 {
@@ -488,49 +532,6 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Appointments",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    IsPeriod = table.Column<bool>(type: "bit", nullable: true),
-                    ReExamUnit = table.Column<int>(type: "int", nullable: true),
-                    ReExamNumber = table.Column<int>(type: "int", nullable: true),
-                    IsApproved = table.Column<bool>(type: "bit", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FeedBack = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsTreatment = table.Column<bool>(type: "bit", nullable: true),
-                    UserProfileId = table.Column<int>(type: "int", nullable: true),
-                    ServicesId = table.Column<int>(type: "int", nullable: true),
-                    SlotsId = table.Column<int>(type: "int", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Appointments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Appointments_Services_ServicesId",
-                        column: x => x.ServicesId,
-                        principalTable: "Services",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Appointments_Slots_SlotsId",
-                        column: x => x.SlotsId,
-                        principalTable: "Slots",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Appointments_UserProfiles_UserProfileId",
-                        column: x => x.UserProfileId,
-                        principalTable: "UserProfiles",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "MedicalRecords",
                 columns: table => new
                 {
@@ -679,9 +680,9 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                 column: "SlotsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Appointments_UserProfileId",
+                name: "IX_Appointments_UsersId",
                 table: "Appointments",
-                column: "UserProfileId");
+                column: "UsersId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Billings_UserId",
