@@ -26,8 +26,8 @@ namespace ClinicBookingSystem_DataAccessObject
         public async Task<IEnumerable<User>> GetDentistByService(string serviceName)
         {
 
-            return await _context.Users.Include(s => s.Services)
-                .Where(a => a.Services.Any(b=>b.Name.ToLower() == serviceName.ToLower()) && a.Role.Name =="DENTIST")
+            return await _context.Users.Include(s => s.BusinessServices)
+                .Where(a => a.BusinessServices.Any(b=>b.Name.ToLower() == serviceName.ToLower()) && a.Role.Name =="DENTIST")
                 .ToListAsync();
         }
         public async Task<IEnumerable<string>> GetAllFreeDaysOfDentist(string phone)

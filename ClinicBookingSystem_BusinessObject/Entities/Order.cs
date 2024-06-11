@@ -19,7 +19,7 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         //User
         public User? User { get; set; }
         //Services
-        public ICollection<Service>? Services { get; set; }
+        public ICollection<BusinessService>? BusinessServices { get; set; }
         //Transaction
         public Transaction? Transaction { get; set; }
     }

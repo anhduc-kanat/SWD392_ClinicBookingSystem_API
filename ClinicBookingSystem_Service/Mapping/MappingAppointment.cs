@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ClinicBookingSystem_BusinessObject.Entities;
+using ClinicBookingSystem_Service.Models.DTOs.Appointment;
 using ClinicBookingSystem_Service.Models.Request.Appointment;
 using ClinicBookingSystem_Service.Models.Response.Appointment;
 
@@ -15,5 +16,6 @@ public class MappingAppointment : Profile
         CreateMap<Appointment, UpdateAppointmentResponse>().ReverseMap();
         CreateMap<Appointment, DeleteAppointmentResponse>().ReverseMap();    
         CreateMap<Appointment, GetAppointmentResponse>().ReverseMap();
+        CreateMap<Appointment, AppointmentDto>().ReverseMap();
     }
 }
