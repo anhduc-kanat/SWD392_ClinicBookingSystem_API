@@ -30,7 +30,19 @@ namespace ClinicBookingSystem_DataAccessObject
                 .Where(a => a.Services.Any(b=>b.Name.ToLower() == serviceName.ToLower()) && a.Role.Name =="DENTIST")
                 .ToListAsync();
         }
-        
+        public async Task<IEnumerable<string>> GetAllFreeDaysOfDentist(string phone)
+        {
+            var today = DateOnly.FromDateTime(DateTime.Now);
+            var endDay = today.AddMonths(2);
+            var allDay = Enumerable.Range(0, (endDay.DayNumber - today.DayNumber) + 1)
+                .Select(d => today.AddDays(d))
+                .ToList();
+
+       /*     var bookedDate = await _context.Appointments
+                .Where(a => a.Users.)*/
+            return null;
+        }
+      
     }
 
 }

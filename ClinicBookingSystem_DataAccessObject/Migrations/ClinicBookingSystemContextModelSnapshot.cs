@@ -136,6 +136,9 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.Property<string>("FeedBack")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -169,7 +172,7 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UserProfileId")
+                    b.Property<int?>("UsersId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -178,7 +181,7 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
 
                     b.HasIndex("SlotsId");
 
-                    b.HasIndex("UserProfileId");
+                    b.HasIndex("UsersId");
 
                     b.ToTable("Appointments");
                 });
@@ -1036,15 +1039,15 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                         .WithMany("Appointments")
                         .HasForeignKey("SlotsId");
 
-                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.UserProfile", "UserProfile")
-                        .WithMany("Appointments")
-                        .HasForeignKey("UserProfileId");
+                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.User", "Users")
+                        .WithMany("Appointment")
+                        .HasForeignKey("UsersId");
 
                     b.Navigation("Services");
 
                     b.Navigation("Slots");
 
-                    b.Navigation("UserProfile");
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Billing", b =>
@@ -1242,6 +1245,8 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
 
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.User", b =>
                 {
+                    b.Navigation("Appointment");
+
                     b.Navigation("Billings");
 
                     b.Navigation("Orders");
@@ -1255,8 +1260,6 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
 
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.UserProfile", b =>
                 {
-                    b.Navigation("Appointments");
-
                     b.Navigation("MedicalRecords");
                 });
 #pragma warning restore 612, 618
