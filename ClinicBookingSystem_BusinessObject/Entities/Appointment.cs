@@ -8,21 +8,21 @@ public class Appointment : BaseEntities
     [Key]
     public int Id { get; set; }
     public DateTimeOffset Date { get; set; }
-    public bool? IsPeriod { get; set; } = false;
+    public bool? IsPeriod { get; set; }
     public int? ReExamUnit { get; set; }
     public int? ReExamNumber { get; set; }
-    public bool? IsApproved { get; set; } = false;
+    public bool? IsApproved { get; set; }
     public AppointmentStatus Status { get; set; }
     public string? Description { get; set; }
     public string? FeedBack {get; set; }
     public string? FullName { get; set; }
 
-    public bool? IsTreatment { get; set; } = false;
+    public bool? IsTreatment { get; set; }
     //User
     public ICollection<User>? Users { get; set; }
     //Service
-    public Service? Services { get; set; }
+    public BusinessService? BusinessService { get; set; }
     //Slot
-    public Slot? Slots { get; set; }
+    public Slot? Slot { get; set; }
 
 }

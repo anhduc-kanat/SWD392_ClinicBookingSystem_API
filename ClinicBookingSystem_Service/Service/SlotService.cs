@@ -11,6 +11,7 @@ using ClinicBookingSystem_Repository.Repositories;
 using ClinicBookingSystem_Service.IService;
 using AutoMapper;
 using ClinicBookingSystem_Service.Models.BaseResponse;
+using ClinicBookingSystem_Service.Models.DTOs.Slot;
 using ClinicBookingSystem_Service.Models.Enums;
 using ClinicBookingSystem_Service.Models.Request.Slot;
 using ClinicBookingSystem_Service.Models.Response.Slot;
@@ -46,7 +47,16 @@ namespace ClinicBookingSystem_Service.Service
 
         public async Task<BaseResponse<SlotResponse>> CreateSlot(CreateNewSlotRequest request)
         {
-            var slot = _mapper.Map<Slot>(request);
+            TimeSpan StartTime = new TimeSpan(request.StartAtHour, request.StartAtMinute, 0);
+            TimeSpan EndTime = new TimeSpan(request.EndAtHour, request.EndAtMinute, 0);
+            SlotDto slotDto = new SlotDto
+            {
+                Name = request.Name,
+                Description = request.Description,
+                StartAt = StartTime,
+                EndAt = EndTime
+            };
+            var slot = _mapper.Map<Slot>(slotDto);
             await _unitOfWork.SlotRepository.AddAsync(slot);
             await _unitOfWork.SaveChangesAsync();
             var newSlotDto = _mapper.Map<SlotResponse>(slot);

@@ -5,7 +5,7 @@ using ClinicBookingSystem_Repository.IRepositories;
 
 namespace ClinicBookingSystem_Repository.Repositories;
 
-public class ServiceRepository : BaseRepository<Service>, IServiceRepository
+public class ServiceRepository : BaseRepository<BusinessService>, IServiceRepository
 {
     private readonly ServiceDAO _serviceDAO;
     public ServiceRepository(ServiceDAO serviceDAO) : base(serviceDAO)
@@ -13,28 +13,28 @@ public class ServiceRepository : BaseRepository<Service>, IServiceRepository
         _serviceDAO = serviceDAO;
     }
 
-    public async Task<Service> CreateService(Service service)
+    public async Task<BusinessService> CreateService(BusinessService businessService)
     {
-        return await _serviceDAO.CreateService(service);
+        return await _serviceDAO.CreateService(businessService);
     }
 
-    public async Task<Service> DeleteService(int id)
+    public async Task<BusinessService> DeleteService(int id)
     {
         return await _serviceDAO.DeleteService(id);
     }
 
-    public async Task<IEnumerable<Service>> GetAllServices()
+    public async Task<IEnumerable<BusinessService>> GetAllServices()
     {
         return await _serviceDAO.GetAllServices();
     }
 
-    public async Task<Service> GetServiceById(int id)
+    public async Task<BusinessService> GetServiceById(int id)
     {
         return await _serviceDAO.GetServiceById(id);
     }
 
-    public async Task<Service> UpdateService(Service service)
+    public async Task<BusinessService> UpdateService(BusinessService businessService)
     {
-        return await _serviceDAO.UpdateService(service);
+        return await _serviceDAO.UpdateService(businessService);
     }
 }
