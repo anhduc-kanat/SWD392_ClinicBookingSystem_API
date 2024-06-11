@@ -3,10 +3,10 @@ using ClinicBookingSystem_BusinessObject.Entities;
 using ClinicBookingSystem_Repository.IRepositories;
 using ClinicBookingSystem_Service.IService;
 using ClinicBookingSystem_Service.Models.BaseResponse;
+using ClinicBookingSystem_Service.Models.DTOs.Appointment;
 using ClinicBookingSystem_Service.Models.Enums;
 using ClinicBookingSystem_Service.Models.Request.Appointment;
 using ClinicBookingSystem_Service.Models.Response.Appointment;
-
 namespace ClinicBookingSystem_Service.Service;
 
 public class AppointmentService : IAppointmentService
@@ -34,7 +34,27 @@ public class AppointmentService : IAppointmentService
 
     public async Task<BaseResponse<CreateAppointmentResponse>> CreateAppointment(CreateAppointmentRequest request)
     {
-        Appointment appointment = _mapper.Map<Appointment>(request);
+        //Appointment appointment = _mapper.Map<Appointment>(request);
+        DateTime date = new DateTime(request.Date.Year, request.Date.Month, request.Date.Day, 0, 0, 0);
+        User patient = await _unitOfWork.UserRepository.GetByIdAsync(request.PatientId);
+        User dentist = await _unitOfWork.DentistRepository.GetByIdAsync(request.DentistId);
+        Slot slot = await _unitOfWork.SlotRepository.GetByIdAsync(request.SlotId);
+        BusinessService businessService = await _unitOfWork.ServiceRepository.GetByIdAsync(request.ServiceId);
+        ICollection<User> users = new List<User>();
+        users.Add(patient);
+        users.Add(dentist);
+        AppointmentDto appointmentDto = new AppointmentDto
+        {  
+            Date = date,
+            IsPeriod = request.IsPeriod,
+            ReexamUnit = request.ReexamUnit,
+            ReexamNumber = request.ReexamNumber,
+            IsTreatment = request.IsTreatment,
+            BusinessService = businessService,
+            Slot = slot,
+            Users = users
+        };
+        var appointment = _mapper.Map<Appointment>(appointmentDto);
         await _unitOfWork.AppointmentRepository.AddAsync(appointment);
         await _unitOfWork.SaveChangesAsync();
         var result = _mapper.Map<CreateAppointmentResponse>(appointment);

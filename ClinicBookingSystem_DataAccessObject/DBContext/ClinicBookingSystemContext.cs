@@ -16,7 +16,7 @@ namespace ClinicBookingSystem_DataAcessObject.DBContext
         public DbSet<User> Users => Set<User>();
         public DbSet<Role> Roles => Set<Role>();
         public DbSet<Appointment> Appointments => Set<Appointment>();
-        public DbSet<Service> Services => Set<Service>();
+        public DbSet<BusinessService> BusinessServices => Set<BusinessService>();
         public DbSet<Specification> Specifications => Set<Specification>();
         public DbSet<Salary> Salaries => Set<Salary>();
         public DbSet<Clinic> Clinics => Set<Clinic>();

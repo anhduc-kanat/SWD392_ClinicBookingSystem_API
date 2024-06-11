@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ClinicBookingSystem_BusinessObject.Entities;
+using ClinicBookingSystem_Service.Models.DTOs.Slot;
 using ClinicBookingSystem_Service.Models.Request.Slot;
 using ClinicBookingSystem_Service.Models.Response.Slot;
 
@@ -11,6 +12,8 @@ public class MappingSlot : Profile
     {
         CreateMap<CreateNewSlotRequest, Slot>();
         CreateMap<UpdateSlotRequest, Slot>();
-        CreateMap<Slot, SlotResponse>();
+        CreateMap<Slot, SlotResponse>().ReverseMap();
+        CreateMap<Slot, SlotDto>().ReverseMap();
+
     }
 }

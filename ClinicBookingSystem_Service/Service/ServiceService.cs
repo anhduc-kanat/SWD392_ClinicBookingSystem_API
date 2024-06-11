@@ -28,7 +28,7 @@ namespace ClinicBookingSystem_Service.Service
 
         public async Task<BaseResponse<CreateServiceResponse>> CreateService(CreateServiceRequest request)
         {
-            var service = _mapper.Map<ClinicBookingSystem_BusinessObject.Entities.Service>(request);
+            var service = _mapper.Map<BusinessService>(request);
             await _unitOfWork.ServiceRepository.AddAsync(service);
             await _unitOfWork.SaveChangesAsync();
             var newServiceDto = _mapper.Map<CreateServiceResponse>(service);
@@ -37,15 +37,16 @@ namespace ClinicBookingSystem_Service.Service
 
         public async Task<BaseResponse<DeleteServiceResponse>> DeleteService(int id)
         {
-            var service = await _unitOfWork.ServiceRepository.DeleteService(id);
+            BusinessService businessService = await _unitOfWork.ServiceRepository.GetByIdAsync(id);
+            await _unitOfWork.ServiceRepository.DeleteAsync(businessService);
             await _unitOfWork.SaveChangesAsync();
-            var result = _mapper.Map<DeleteServiceResponse>(service);
+            var result = _mapper.Map<DeleteServiceResponse>(businessService);
             return new BaseResponse<DeleteServiceResponse>("Delete service successfully", StatusCodeEnum.OK_200, result);
         }
 
         public async Task<BaseResponse<IEnumerable<GetServiceResponse>>> GetAllServices()
         {
-            IEnumerable<ClinicBookingSystem_BusinessObject.Entities.Service> services = await _unitOfWork.ServiceRepository.GetAllAsync();
+            IEnumerable<BusinessService> services = await _unitOfWork.ServiceRepository.GetAllAsync();
             var servicesDto = _mapper.Map<IEnumerable<GetServiceResponse>>(services);
             return new BaseResponse<IEnumerable<GetServiceResponse>>("Get services successfully", StatusCodeEnum.OK_200,
                 servicesDto);
