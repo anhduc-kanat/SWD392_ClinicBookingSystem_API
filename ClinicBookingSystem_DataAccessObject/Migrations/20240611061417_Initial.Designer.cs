@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClinicBookingSystem_DataAccessObject.Migrations
 {
     [DbContext(typeof(ClinicBookingSystemContext))]
-    [Migration("20240611042414_Initials")]
-    partial class Initials
+    [Migration("20240611061417_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
