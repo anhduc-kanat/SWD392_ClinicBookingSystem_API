@@ -19,7 +19,7 @@ public class Appointment : BaseEntities
 
     public bool? IsTreatment { get; set; } = false;
     //User
-    public User? Users { get; set; }
+    public ICollection<User>? Users { get; set; }
     //Service
     public Service? Services { get; set; }
     //Slot
