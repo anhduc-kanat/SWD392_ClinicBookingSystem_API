@@ -37,9 +37,9 @@ namespace ClinicBookingSystem_DataAccessObject
             var allDay = Enumerable.Range(0, (endDay.DayNumber - today.DayNumber) + 1)
                 .Select(d => today.AddDays(d))
                 .ToList();
-
-       /*     var bookedDate = await _context.Appointments
-                .Where(a => a.Users.)*/
+/*
+            var bookedDate = await _context.Appointments
+                .Where(a => a.Users.PhoneNumber == phone && a.App)*/
             return null;
         }
       
