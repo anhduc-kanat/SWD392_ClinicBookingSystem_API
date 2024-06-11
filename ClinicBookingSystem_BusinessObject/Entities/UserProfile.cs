@@ -27,7 +27,6 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         //Medical Record
         public ICollection<MedicalRecord>? MedicalRecords { get; set; }
 
-        //Appointment
-        public ICollection<Appointment>? Appointments { get; set; }
+     
     }
 }
