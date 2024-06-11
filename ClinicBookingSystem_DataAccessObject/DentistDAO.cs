@@ -22,6 +22,14 @@ namespace ClinicBookingSystem_DataAccessObject
         {
             return await _context.Users.Include(u => u.Role).Where(u => u.Role.Name == "DENTIST").ToListAsync();
         }
+
+        public async Task<IEnumerable<User>> GetDentistByService(string serviceName)
+        {
+
+            return await _context.Users.Include(s => s.Services)
+                .Where(a => a.Services.Any(b=>b.Name.ToLower() == serviceName.ToLower()) && a.Role.Name =="DENTIST")
+                .ToListAsync();
+        }
         
     }
 

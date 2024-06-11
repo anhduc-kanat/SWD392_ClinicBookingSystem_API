@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ClinicBookingSystem_DataAccessObject.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Initials : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -341,6 +341,30 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ClinicUser_Users_UsersId",
+                        column: x => x.UsersId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ServiceUser",
+                columns: table => new
+                {
+                    ServicesId = table.Column<int>(type: "int", nullable: false),
+                    UsersId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ServiceUser", x => new { x.ServicesId, x.UsersId });
+                    table.ForeignKey(
+                        name: "FK_ServiceUser_Services_ServicesId",
+                        column: x => x.ServicesId,
+                        principalTable: "Services",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ServiceUser_Users_UsersId",
                         column: x => x.UsersId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -710,6 +734,11 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                 column: "MedicalRecordId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ServiceUser_UsersId",
+                table: "ServiceUser",
+                column: "UsersId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Specifications_UserId",
                 table: "Specifications",
                 column: "UserId");
@@ -760,6 +789,9 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
 
             migrationBuilder.DropTable(
                 name: "OrderService");
+
+            migrationBuilder.DropTable(
+                name: "ServiceUser");
 
             migrationBuilder.DropTable(
                 name: "Specifications");

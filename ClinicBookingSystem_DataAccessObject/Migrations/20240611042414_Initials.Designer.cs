@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClinicBookingSystem_DataAccessObject.Migrations
 {
     [DbContext(typeof(ClinicBookingSystemContext))]
-    [Migration("20240609194548_Initial")]
-    partial class Initial
+    [Migration("20240611042414_Initials")]
+    partial class Initials
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -969,6 +969,21 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.ToTable("OrderService");
                 });
 
+            modelBuilder.Entity("ServiceUser", b =>
+                {
+                    b.Property<int>("ServicesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ServicesId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("ServiceUser");
+                });
+
             modelBuilder.Entity("ApplicationUser", b =>
                 {
                     b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Application", null)
@@ -1179,6 +1194,21 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Service", null)
                         .WithMany()
                         .HasForeignKey("ServicesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ServiceUser", b =>
+                {
+                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Service", null)
+                        .WithMany()
+                        .HasForeignKey("ServicesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -15,6 +15,8 @@ namespace ClinicBookingSystem_Service.IServices
     public interface IDentistService
     {
         Task<BaseResponse<IEnumerable<GetAllDentistsResponse>>> GetAllDentists();
+        Task<BaseResponse<IEnumerable<GetAllDentistsResponse>>> GetAllDentistsByService(string serviceName);
+
         Task<BaseResponse<GetDentistByIdResponse>> GetDentistById(int id);
         Task<BaseResponse<CreateDentistResponse>> CreateDentist(CreateDentistRequest request);
         Task<BaseResponse<UpdateDentistResponse>> UpdateDentist(int id ,UpdateDentistRequest request);

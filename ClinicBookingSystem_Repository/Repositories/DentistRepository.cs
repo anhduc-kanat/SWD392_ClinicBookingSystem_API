@@ -23,5 +23,11 @@ namespace ClinicBookingSystem_Repository.Repositories
         {
             return await _dentistDAO.GetDentistsByRole();
         }
+
+        public async Task<IEnumerable<User>> GetDentistsByService(string serviceName)
+        {
+            return await _dentistDAO.GetDentistByService(serviceName);
+
+        }
     }
 }
