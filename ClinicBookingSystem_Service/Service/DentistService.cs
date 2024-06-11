@@ -90,6 +90,19 @@ namespace ClinicBookingSystem_Service.Services
             }
         }
 
+        public async Task<BaseResponse<IEnumerable<DateTime>>> GetAvailableDate(int id)
+        {
+            try
+            {
+                IEnumerable<DateTime> response = await _unitOfWork.DentistRepository.GetAvailableDate(id);
+                return new BaseResponse<IEnumerable<DateTime>>("Get Dentist By ID successfully!", StatusCodeEnum.OK_200, response);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<IEnumerable<DateTime>>("Error at GetDentistById Service: " + ex.Message, StatusCodeEnum.InternalServerError_500);
+            }
+        }
+
         public async Task<BaseResponse<GetDentistByIdResponse>> GetDentistById(int id)
         {
             try
