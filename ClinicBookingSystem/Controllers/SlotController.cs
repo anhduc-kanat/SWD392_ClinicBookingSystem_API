@@ -59,6 +59,16 @@ namespace ClinicBookingSystem_API.Controllers
         {
             return await _slotService.DeleteSlot(id);
         }
+
+
+
+        [HttpGet]
+        [Route("get-all-available-slots")]
+        public async Task<ActionResult<BaseResponse<IEnumerable<SlotResponse>>>> GetNotAvailableSlots(int dentistId, DateTime date)
+        {
+            var slots = await _slotService.CheckSlotAvailable(dentistId, date);
+            return Ok(slots);
+        }
     }
 }
 
