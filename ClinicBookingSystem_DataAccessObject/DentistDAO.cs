@@ -18,6 +18,16 @@ namespace ClinicBookingSystem_DataAccessObject
             _context = context;
         }
 
+
+        public async Task<User> CreateNewDentist(User user, List<Service>services)
+        {
+
+              await _context.Users.AddAsync(user);
+              user.Services = services;
+              return user;
+        }
+
+
         public async Task<IEnumerable<User>> GetDentistsByRole()
         {
             return await _context.Users.Include(u => u.Role).Where(u => u.Role.Name == "DENTIST").ToListAsync();
