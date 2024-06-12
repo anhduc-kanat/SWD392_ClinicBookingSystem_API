@@ -12,4 +12,12 @@ public class AppointmentRepository : BaseRepository<Appointment>, IAppointmentRe
     {
         _appointmentDAO = appointmentDAO;
     }
+    public async Task<IEnumerable<Appointment>> GetAllAppointment()
+    {
+        return await _appointmentDAO.GetAllAppointment();
+    }
+    public async Task<Appointment> GetAppointmentById(int Id)
+    {
+        return await _appointmentDAO.GetAppointmentById(Id);
+    }
 }

@@ -11,8 +11,6 @@ namespace ClinicBookingSystem_BusinessObject.Entities
 {
     public class User : BaseEntities
     {
-        [Key]
-        public int Id { get; set; }
         public string? Email { get; set; }
         [JsonIgnore]
         public string? Password { get; set; }

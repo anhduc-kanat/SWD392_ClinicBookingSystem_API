@@ -9,8 +9,6 @@ namespace ClinicBookingSystem_BusinessObject.Entities
 {
     public class Token : BaseEntities
     {
-        [Key]
-        public int Id { get; set; }
         public string AccessToken { get; set; }
         public DateTime Expired { get; set; }
         public string RefreshToken { get; set; }

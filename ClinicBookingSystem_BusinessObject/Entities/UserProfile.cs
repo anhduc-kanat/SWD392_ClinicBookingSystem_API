@@ -9,8 +9,6 @@ namespace ClinicBookingSystem_BusinessObject.Entities
 {
     public class UserProfile:BaseEntities
     {
-        [Key]
-        public int Id { get; set; }
         //User
         public string? FirstName { get; set; }
         public string? LastName { get; set; }

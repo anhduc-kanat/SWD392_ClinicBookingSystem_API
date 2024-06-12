@@ -11,8 +11,6 @@ namespace ClinicBookingSystem_BusinessObject.Entities
 {
     public class Order : BaseEntities
     {
-        [Key]
-        public int Id { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
         public long? Amount { get; set; }
