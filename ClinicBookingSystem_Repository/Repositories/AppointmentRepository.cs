@@ -20,4 +20,8 @@ public class AppointmentRepository : BaseRepository<Appointment>, IAppointmentRe
     {
         return await _appointmentDAO.GetAppointmentById(Id);
     }
+    public async Task<IEnumerable<Appointment>> GetAllAppointmentPagination(int pageNumber, int pageSize)
+    {
+        return await _appointmentDAO.GetAllAsyncPagination(pageNumber, pageSize);
+    }
 }

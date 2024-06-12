@@ -13,13 +13,13 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class, IBaseEntiti
     {
         _baseDao = baseDao;
     }
-    public async Task<IQueryable> GetQueryableAsync()
+    public async Task<IQueryable<T>> GetQueryableAsync()
     {
-        return _baseDao.GetQueryableAsync();
+        return await Task.FromResult(_baseDao.GetQueryableAsync());
     }
-    public async Task<IEnumerable<T>> GetAllAsync()
+    public async Task<IQueryable<T>> GetAllAsync()
     {
-        return await _baseDao.GetAllAsync();
+        return await Task.FromResult(_baseDao.GetAllAsync());
     }
     public async Task<T> GetByIdAsync(int id)
     {
@@ -36,5 +36,9 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class, IBaseEntiti
     public async Task<T> DeleteAsync(T entity)
     {
         return await _baseDao.DeleteAsync(entity);
+    }
+    public async Task<IEnumerable<T>> GetAllAsyncPagination(int pageNumber, int pageSize)
+    {
+        return await _baseDao.GetAllAsyncPagination(pageNumber, pageSize);
     }
 }

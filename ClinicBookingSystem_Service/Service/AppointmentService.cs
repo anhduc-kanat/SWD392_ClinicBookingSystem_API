@@ -5,6 +5,7 @@ using ClinicBookingSystem_Service.IService;
 using ClinicBookingSystem_Service.Models.BaseResponse;
 using ClinicBookingSystem_Service.Models.DTOs.Appointment;
 using ClinicBookingSystem_Service.Models.Enums;
+using ClinicBookingSystem_Service.Models.Pagination;
 using ClinicBookingSystem_Service.Models.Request.Appointment;
 using ClinicBookingSystem_Service.Models.Response.Appointment;
 namespace ClinicBookingSystem_Service.Service;
@@ -25,13 +26,24 @@ public class AppointmentService : IAppointmentService
         return new BaseResponse<IEnumerable<GetAppointmentResponse>>("Get all appointments successfully", StatusCodeEnum.OK_200, result);
     }
 
+    public async Task<PaginationResponse<GetAppointmentResponse>> GetAllAppointmentsPagination(int pageNumber, int pageSize)
+    {
+        var appointments = await _unitOfWork.AppointmentRepository.GetAllAppointmentPagination(pageNumber, pageSize);
+        var result = _mapper.Map<IList<GetAppointmentResponse>>(appointments);
+        return new PaginationResponse<GetAppointmentResponse>(
+            result,
+            pageNumber,
+            pageSize,
+            result.Count
+        );
+    }
     public async Task<BaseResponse<GetAppointmentResponse>> GetAppointmentById(int id)
     {
         Appointment appointment = await _unitOfWork.AppointmentRepository.GetAppointmentById(id);
         var result = _mapper.Map<GetAppointmentResponse>(appointment);
         return new BaseResponse<GetAppointmentResponse>("Get appointment by id successfully", StatusCodeEnum.OK_200, result);
     }
-
+    
     public async Task<BaseResponse<CreateAppointmentResponse>> CreateAppointment(CreateAppointmentRequest request)
     {
         //Appointment appointment = _mapper.Map<Appointment>(request);
