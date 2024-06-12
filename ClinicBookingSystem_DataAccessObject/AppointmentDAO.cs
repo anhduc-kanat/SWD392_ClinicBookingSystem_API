@@ -12,4 +12,14 @@ public class AppointmentDAO : BaseDAO<Appointment>
     {
         _dbContext = dbContext;
     }
+
+    public async Task<IEnumerable<Appointment>> GetAllAppointment()
+    {
+        return await _dbContext.Appointments.Include(p => p.Slot)
+            .Include(p => p.Users)
+            .ThenInclude(p => p.Role)
+            .Include(p => p.BusinessService)
+            .ToListAsync();
+    }
+    
 }

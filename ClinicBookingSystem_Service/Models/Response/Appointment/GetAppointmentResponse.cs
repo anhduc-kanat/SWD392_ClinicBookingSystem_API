@@ -24,8 +24,7 @@ public class GetAppointmentResponse
     public string ServiceName { get; set; }
     public ServiceType ServiceType { get; set; }
     public string SlotName { get; set; }
-    public int SlotStartAtHour { get; set; }
-    public int SlotStartAtMinute { get; set; }
-    public int SlotEndAtHour { get; set; }
-    public int SlotEndAtMinute { get; set; }
+    public TimeSpan StartAt { get; set; }
+    public TimeSpan EndAt { get; set; }
+    
 }
