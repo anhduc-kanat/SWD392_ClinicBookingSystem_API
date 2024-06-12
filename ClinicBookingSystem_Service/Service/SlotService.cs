@@ -13,10 +13,12 @@ using AutoMapper;
 using ClinicBookingSystem_Service.Models.BaseResponse;
 using ClinicBookingSystem_Service.Models.DTOs.Slot;
 using ClinicBookingSystem_Service.Models.Enums;
+using ClinicBookingSystem_Service.Models.Request.Appointment;
 using ClinicBookingSystem_Service.Models.Request.Slot;
 using ClinicBookingSystem_Service.Models.Response.Slot;
 using ClinicBookingSystem_Service.Models.Response.User;
 using ClinicBookingSystem_Service.Models.Request.User;
+using ClinicBookingSystem_Service.Models.Response.Appointment;
 
 namespace ClinicBookingSystem_Service.Service
 {
@@ -62,6 +64,7 @@ namespace ClinicBookingSystem_Service.Service
             var newSlotDto = _mapper.Map<SlotResponse>(slot);
             return new BaseResponse<SlotResponse>("Add slot successfully", StatusCodeEnum.OK_200, newSlotDto);
         }
+        
 
         public async Task<BaseResponse<SlotResponse>> DeleteSlot(int id)
         {
