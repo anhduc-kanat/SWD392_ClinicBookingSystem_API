@@ -17,5 +17,8 @@ namespace ClinicBookingSystem_Service
         public Task<BaseResponse<SlotResponse>> CreateSlot(CreateNewSlotRequest request);
         public Task<BaseResponse<SlotResponse>> DeleteSlot(int id);
         public Task<BaseResponse<SlotResponse>> UpdateSlot(int id, UpdateSlotRequest request);
+
+        public Task<BaseResponse<IEnumerable<SlotResponse>>> CheckSlotAvailable(int dentistId, DateTime dateTime);
+
     }
 }

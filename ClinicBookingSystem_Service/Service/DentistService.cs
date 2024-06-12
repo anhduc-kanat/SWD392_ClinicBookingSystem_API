@@ -38,7 +38,7 @@ namespace ClinicBookingSystem_Service.Services
                 List<ClinicBookingSystem_BusinessObject.Entities.Service> services = new List<ClinicBookingSystem_BusinessObject.Entities.Service>();
                 foreach (int serviceId in request.ServicesId)
                 {
-                    var service = await _unitOfWork.ServiceRepository.GetServiceById(serviceId);
+                    var service = await _unitOfWork.ServiceRepository.GetByIdAsync(serviceId);
                     if (service != null)
                     {
                         services.Add(service);
