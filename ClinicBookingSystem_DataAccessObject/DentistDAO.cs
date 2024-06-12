@@ -18,6 +18,16 @@ namespace ClinicBookingSystem_DataAccessObject
             _context = context;
         }
 
+
+        public async Task<User> CreateNewDentist(User user, List<BusinessService>services)
+        {
+
+              await _context.Users.AddAsync(user);
+              user.BusinessServices = services;
+              return user;
+        }
+
+
         public async Task<IEnumerable<User>> GetDentistsByRole()
         {
             return await _context.Users.Include(u => u.Role).Where(u => u.Role.Name == "DENTIST").ToListAsync();
@@ -30,17 +40,24 @@ namespace ClinicBookingSystem_DataAccessObject
                 .Where(a => a.BusinessServices.Any(b=>b.Name.ToLower() == serviceName.ToLower()) && a.Role.Name =="DENTIST")
                 .ToListAsync();
         }
-        public async Task<IEnumerable<string>> GetAllFreeDaysOfDentist(string phone)
+        public async Task<IEnumerable<DateTime>> GetAllFreeDaysOfDentist(int id)
         {
-            var today = DateOnly.FromDateTime(DateTime.Now);
+            var today = DateTime.Today;
             var endDay = today.AddMonths(2);
-            var allDay = Enumerable.Range(0, (endDay.DayNumber - today.DayNumber) + 1)
-                .Select(d => today.AddDays(d))
-                .ToList();
-/*
-            var bookedDate = await _context.Appointments
-                .Where(a => a.Users.PhoneNumber == phone && a.App)*/
-            return null;
+
+            IEnumerable<DateTime> allDays = Enumerable.Range(0, (endDay - today).Days + 1)
+                                .Select(d => today.AddDays(d))
+                                .ToList();
+            int slot = await _context.Slots.CountAsync();
+
+            var bookedDates = await _context.Appointments
+                .Where(a => a.Users.Any(u => u.Id == id) && a.Date >= today && a.Date <= endDay)
+                .GroupBy(a => a.Date.Date)
+                .Where(g => g.Count() >= slot)
+                .Select(a => a.Key)
+                .ToListAsync();
+
+            return bookedDates;
         }
       
     }

@@ -35,7 +35,16 @@ namespace ClinicBookingSystem_Service.Services
                 User user = _mapper.Map<User>(request);
                 Role role = await _unitOfWork.RoleRepository.GetRoleByName("DENTIST");
                 user.Role = role;
-                var createdUser = await _unitOfWork.DentistRepository.AddAsync(user);
+                List<BusinessService> services = new List<BusinessService>();
+                foreach (int serviceId in request.ServicesId)
+                {
+                    var service = await _unitOfWork.ServiceRepository.GetServiceById(serviceId);
+                    if (service != null)
+                    {
+                        services.Add(service);
+                    }
+                }
+                var createdUser = await _unitOfWork.DentistRepository.CreateNewDentist(user,services);
                 await _unitOfWork.SaveChangesAsync();
                 return new BaseResponse<CreateDentistResponse>("Create Dentist Successfully!", StatusCodeEnum.Created_201);
             }
@@ -87,6 +96,19 @@ namespace ClinicBookingSystem_Service.Services
             catch (Exception ex)
             {
                 return new BaseResponse<IEnumerable<GetAllDentistsResponse>>("Error at GetAllDentists Service: " + ex.Message, StatusCodeEnum.InternalServerError_500);
+            }
+        }
+
+        public async Task<BaseResponse<IEnumerable<DateTime>>> GetAvailableDate(int id)
+        {
+            try
+            {
+                IEnumerable<DateTime> response = await _unitOfWork.DentistRepository.GetAvailableDate(id);
+                return new BaseResponse<IEnumerable<DateTime>>("Get Dentist By ID successfully!", StatusCodeEnum.OK_200, response);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<IEnumerable<DateTime>>("Error at GetDentistById Service: " + ex.Message, StatusCodeEnum.InternalServerError_500);
             }
         }
 

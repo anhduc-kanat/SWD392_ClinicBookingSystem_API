@@ -60,5 +60,12 @@ namespace ClinicBookingSystem_API.Controllers
             var response = await _dentistService.GetAllDentistsByService(serviceName);
             return response;
         }
+
+        [HttpGet("get-date")]
+        public async Task<ActionResult<BaseResponse<IEnumerable<DateTime>>>> GetAvailableDateOfDentist(int id)
+        {
+            var response = await _dentistService.GetAvailableDate(id);
+            return response;
+        }
     }
 }
