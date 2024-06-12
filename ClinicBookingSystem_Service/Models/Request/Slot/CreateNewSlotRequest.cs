@@ -10,7 +10,7 @@ namespace ClinicBookingSystem_Service.Models.Request.Slot
     {
         public string Name { get; set; }
         public string? Description { get; set; }
-        public int StartAtHour { get; set; }
+        public int StartAtHour { get; set; } 
         public int StartAtMinute { get; set; }
         public int EndAtHour { get; set; }
         public int EndAtMinute { get; set; }
