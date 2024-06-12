@@ -70,5 +70,13 @@ namespace ClinicBookingSystem_Service.Service
             var result = _mapper.Map<SlotResponse>(existSlot);
             return new BaseResponse<SlotResponse>("Update successfully", StatusCodeEnum.OK_200, result);
         }
+
+        public async Task<BaseResponse<IEnumerable<SlotResponse>>> CheckSlotAvailable(int dentistId, DateTime dateTime)
+        {
+            var slots = await _unitOfWork.SlotRepository.CheckAvailableSlot(dentistId, dateTime);
+            var response = _mapper.Map<IEnumerable<SlotResponse>>(slots);
+            return new BaseResponse<IEnumerable<SlotResponse>> ("Update successfully", StatusCodeEnum.OK_200, response);
+
+        }
     }
 }
