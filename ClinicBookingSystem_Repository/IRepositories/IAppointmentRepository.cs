@@ -7,4 +7,5 @@ public interface IAppointmentRepository : IBaseRepository<Appointment>
 {
     Task<IEnumerable<Appointment>> GetAllAppointment();
     Task<Appointment> GetAppointmentById(int Id);
+    Task<IEnumerable<Appointment>> GetAllAppointmentPagination(int pageNumber, int pageSize);
 }

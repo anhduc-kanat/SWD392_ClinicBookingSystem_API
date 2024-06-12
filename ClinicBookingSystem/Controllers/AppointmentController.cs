@@ -1,5 +1,6 @@
 ﻿using ClinicBookingSystem_Service.IService;
 using ClinicBookingSystem_Service.Models.BaseResponse;
+using ClinicBookingSystem_Service.Models.Pagination;
 using ClinicBookingSystem_Service.Models.Request.Appointment;
 using ClinicBookingSystem_Service.Models.Response.Appointment;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +24,16 @@ public class AppointmentController : ControllerBase
         var response = await _appointmentService.GetAllAppointments();
         return Ok(response);
     }
+
+    [HttpGet]
+    [Route("get-all-appointment-pagination")]
+    public async Task<ActionResult<PaginationResponse<GetAppointmentResponse>>> GetAllAppointmentsPagination([FromQuery] PaginationRequest request)
+    {
+        var response = await _appointmentService.GetAllAppointmentsPagination(request.PageNumber, request.PageSize);
+        return Ok(response);
+    }
+    
+
     // GET: api/appointment/1
     [HttpGet]
     [Route("get-appointment-by-id/{id}")]
