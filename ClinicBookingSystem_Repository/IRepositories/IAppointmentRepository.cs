@@ -6,4 +6,5 @@ namespace ClinicBookingSystem_Repository.IRepositories;
 public interface IAppointmentRepository : IBaseRepository<Appointment>
 {
     Task<IEnumerable<Appointment>> GetAllAppointment();
+    Task<Appointment> GetAppointmentById(int Id);
 }

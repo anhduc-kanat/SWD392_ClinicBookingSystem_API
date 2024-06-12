@@ -9,8 +9,6 @@ namespace ClinicBookingSystem_BusinessObject.Entities
 {
     public class Result : BaseEntities
     {
-        [Key]
-        public int Id { get; set; }
         public int DentistId { get; set; }
         public int PatientId { get; set; }
         public string? PreScriptionName { get; set; }

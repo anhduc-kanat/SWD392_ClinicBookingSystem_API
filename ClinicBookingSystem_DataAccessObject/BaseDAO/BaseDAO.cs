@@ -1,23 +1,27 @@
-﻿using ClinicBookingSystem_DataAccessObject.IBaseDAO;
+﻿using ClinicBookingSystem_BusinessObject.IEntities;
+using ClinicBookingSystem_DataAccessObject.IBaseDAO;
 using ClinicBookingSystem_DataAcessObject.DBContext;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClinicBookingSystem_DataAccessObject.BaseDAO;
 
-public class BaseDAO<T> : IBaseDAO<T> where T : class
+public class BaseDAO<T> : IBaseDAO<T> where T : class, IBaseEntities
 {
     private readonly DbContext _dbContext;
     public BaseDAO(DbContext dbContext)
     {
         _dbContext = dbContext;
     }
-    public async Task<IQueryable<T>> GetQueryableAsync()
+    public IQueryable<T> GetQueryableAsync()
     {
-        return _dbContext.Set<T>();
+        return _dbContext.Set<T>()
+            .Where(entity => entity.IsActive == true && entity.IsDelete == false);
     }
     public async Task<T> GetByIdAsync(int id)
     {
-        return await _dbContext.Set<T>().FindAsync(id);
+        return await _dbContext.Set<T>()
+            .Where(entity => entity.IsActive == true && entity.IsDelete == false)
+            .FirstOrDefaultAsync(entity => entity.Id == id);
     }
     public async Task<T> AddAsync(T entity)
     {
@@ -36,6 +40,8 @@ public class BaseDAO<T> : IBaseDAO<T> where T : class
     }
     public async Task<IEnumerable<T>> GetAllAsync()
     {
-        return await _dbContext.Set<T>().ToListAsync();
+        return await _dbContext.Set<T>()
+            .Where(entity => entity.IsActive == true && entity.IsDelete == false)
+            .ToListAsync();
     }
 }
