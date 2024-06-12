@@ -23,10 +23,10 @@ namespace ClinicBookingSystem_Service.Service
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<BaseResponse<IEnumerable<GetRoleResponse>>> GetRoleByName(string roleName)
+        public async Task<BaseResponse<GetRoleResponse>> GetRoleByName(string roleName)
         {
-            var response = _mapper.Map<IEnumerable<GetRoleResponse>>(await _unitOfWork.RoleRepository.GetRoleByName(roleName));
-            return new BaseResponse<IEnumerable<GetRoleResponse>>("Successful", StatusCodeEnum.OK_200, response);
+            var response = _mapper.Map<GetRoleResponse>(await _unitOfWork.RoleRepository.GetRoleByName(roleName));
+            return new BaseResponse<GetRoleResponse>("Successful", StatusCodeEnum.OK_200, response);
         }
         public async Task<BaseResponse<IEnumerable<GetRoleResponse>>> GetAllRoles()
         {
@@ -45,7 +45,8 @@ namespace ClinicBookingSystem_Service.Service
                 Role role = _mapper.Map<Role>(request);
                 await _unitOfWork.RoleRepository.AddAsync(role);
                 await _unitOfWork.SaveChangesAsync();
-                return new BaseResponse<CreateRoleResponse>("Create Role Successfully!", StatusCodeEnum.Created_201);
+                return new BaseResponse<CreateRoleResponse>("Create Role Successfully!", StatusCodeEnum.Created_201,
+                    _mapper.Map<CreateRoleResponse>(role));
         }
         
         public async Task<BaseResponse<UpdateRoleResponse>> UpdateRole(int id, UpdateRoleRequest request)
@@ -54,14 +55,16 @@ namespace ClinicBookingSystem_Service.Service
             _mapper.Map(request, role);
                 await _unitOfWork.RoleRepository.UpdateAsync(role);
                 await _unitOfWork.SaveChangesAsync();
-                return new BaseResponse<UpdateRoleResponse>("Update Role Successfully!", StatusCodeEnum.OK_200);
+                return new BaseResponse<UpdateRoleResponse>("Update Role Successfully!", StatusCodeEnum.OK_200,
+                    _mapper.Map<UpdateRoleResponse>(role));
         }
         public async Task<BaseResponse<DeleteRoleResponse>> DeleteRole(int id)
         {
                 Role role = await _unitOfWork.RoleRepository.GetByIdAsync(id);
                 await _unitOfWork.RoleRepository.DeleteAsync(role);
                 await _unitOfWork.SaveChangesAsync();
-                return new BaseResponse<DeleteRoleResponse>("Delete Role Successfully!", StatusCodeEnum.OK_200);
+                return new BaseResponse<DeleteRoleResponse>("Delete Role Successfully!", StatusCodeEnum.OK_200, 
+                    _mapper.Map<DeleteRoleResponse>(role));
         }
     }
 }

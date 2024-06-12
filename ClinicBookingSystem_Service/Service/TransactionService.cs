@@ -3,6 +3,7 @@ using ClinicBookingSystem_BusinessObject.Entities;
 using ClinicBookingSystem_Repository.IRepositories;
 using ClinicBookingSystem_Service.IService;
 using ClinicBookingSystem_Service.Models.BaseResponse;
+using ClinicBookingSystem_Service.Models.Enums;
 using ClinicBookingSystem_Service.Models.Request.Transaction;
 using ClinicBookingSystem_Service.Models.Response.Transaction;
 
@@ -20,28 +21,45 @@ public class TransactionService : ITransactionService
     //Create transaction
     public async Task<BaseResponse<CreateTransactionResponse>> CreateTransaction(CreateTransactionRequest request)
     {
-        var transaction = _mapper.Map<Transaction>(request);
+        Transaction transaction = _mapper.Map<Transaction>(request);
         await _unitOfWork.TransactionRepository.AddAsync(transaction);
         await _unitOfWork.SaveChangesAsync();
-        return _mapper.Map<BaseResponse<CreateTransactionResponse>>(transaction);
+        var result = _mapper.Map<CreateTransactionResponse>(transaction);
+        return new BaseResponse<CreateTransactionResponse>("Create transaction successfully",
+            StatusCodeEnum.Created_201, result);
     }
     //get transaction by id
-    public async Task<BaseResponse<GetTransactionResponse>> GetTransaction(int id)
+    public async Task<BaseResponse<GetTransactionResponse>> GetTransactionById(int id)
     {
-        var transaction = await _unitOfWork.TransactionRepository.GetByIdAsync(id);
-        return _mapper.Map<BaseResponse<GetTransactionResponse>>(transaction);
+        Transaction transaction = await _unitOfWork.TransactionRepository.GetByIdAsync(id);
+        var result = _mapper.Map<GetTransactionResponse>(transaction);
+        return new BaseResponse<GetTransactionResponse>("Get transaction by id successfully", StatusCodeEnum.OK_200, result);
     }
     //update transaction
     public async Task<BaseResponse<UpdateTransactionResponse>> UpdateTransaction(int id, UpdateTransactionRequest request)
     {
-        var transaction = await _unitOfWork.TransactionRepository.GetByIdAsync(id);
-        if (transaction == null)
-        {
-            return null;
-        }
+        Transaction transaction = await _unitOfWork.TransactionRepository.GetByIdAsync(id);
         _mapper.Map(request, transaction);
-        _unitOfWork.TransactionRepository.Update(transaction);
+        _unitOfWork.TransactionRepository.UpdateAsync(transaction);
         await _unitOfWork.SaveChangesAsync();
-        return _mapper.Map<BaseResponse<UpdateTransactionResponse>>(transaction);
+        var result = _mapper.Map<UpdateTransactionResponse>(transaction);
+        return new BaseResponse<UpdateTransactionResponse>("Update transaction successfully", StatusCodeEnum.OK_200,
+            result);
+    }
+    //delete transaction
+    public async Task<BaseResponse<DeleteTransactionResponse>> DeleteTransaction(int id)
+    {
+        Transaction transaction = await _unitOfWork.TransactionRepository.GetByIdAsync(id);
+        await _unitOfWork.TransactionRepository.DeleteAsync(transaction);
+        await _unitOfWork.SaveChangesAsync();
+        var result = _mapper.Map<DeleteTransactionResponse>(transaction);
+        return new BaseResponse<DeleteTransactionResponse>("Delete transaction successfully", StatusCodeEnum.OK_200, result);
+    }
+    //get all transactions
+    public async Task<BaseResponse<IEnumerable<GetTransactionResponse>>> GetAllTransaction()
+    {
+        IEnumerable<Transaction> transactions = await _unitOfWork.TransactionRepository.GetAllAsync();
+        var result = _mapper.Map<IEnumerable<GetTransactionResponse>>(transactions);
+        return new BaseResponse<IEnumerable<GetTransactionResponse>>("Get all transaction sucessfully", StatusCodeEnum.OK_200, result);
     }
 }

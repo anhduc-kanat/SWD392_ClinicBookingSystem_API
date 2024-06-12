@@ -1,5 +1,5 @@
 ﻿using ClinicBookingSystem_BusinessObject.Entities;
-using ClinicBookingSystem_Service.Dtos.Request;
+using ClinicBookingSystem_Service.Models.Request.Dentist;
 using ClinicBookingSystem_Service.Models.BaseResponse;
 using ClinicBookingSystem_Service.Models.Request.Dentist;
 using ClinicBookingSystem_Service.Models.Request.User;
@@ -15,9 +15,12 @@ namespace ClinicBookingSystem_Service.IServices
     public interface IDentistService
     {
         Task<BaseResponse<IEnumerable<GetAllDentistsResponse>>> GetAllDentists();
+        Task<BaseResponse<IEnumerable<GetAllDentistsResponse>>> GetAllDentistsByService(string serviceName);
+
         Task<BaseResponse<GetDentistByIdResponse>> GetDentistById(int id);
         Task<BaseResponse<CreateDentistResponse>> CreateDentist(CreateDentistRequest request);
         Task<BaseResponse<UpdateDentistResponse>> UpdateDentist(int id ,UpdateDentistRequest request);
         Task<BaseResponse<DeleteDentistResponse>> DeleteDentist(int id);
+        Task<BaseResponse<IEnumerable<DateTime>>> GetAvailableDate(int id);
     }
 }

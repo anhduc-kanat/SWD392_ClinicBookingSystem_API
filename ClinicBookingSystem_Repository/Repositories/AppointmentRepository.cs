@@ -12,4 +12,8 @@ public class AppointmentRepository : BaseRepository<Appointment>, IAppointmentRe
     {
         _appointmentDAO = appointmentDAO;
     }
+    public async Task<IEnumerable<Appointment>> GetAllAppointment()
+    {
+        return await _appointmentDAO.GetAllAppointment();
+    }
 }

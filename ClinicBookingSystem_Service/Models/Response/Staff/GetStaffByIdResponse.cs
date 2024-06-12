@@ -14,5 +14,6 @@ namespace ClinicBookingSystem_Service.Models.Response.Staff
         public DateTime DateOfBirth { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public long SalaryAmount { get; set; }
     }
 }

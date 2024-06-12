@@ -43,5 +43,11 @@ namespace ClinicBookingSystem_Repository.Repositories
         {
             return await _slotDAO.UpdateSlot(slot);
         }
+
+        public async Task<IEnumerable< Slot>> CheckAvailableSlot(int dentistId, DateTime dateTime)
+        {
+            return await _slotDAO.CheckAvailableSlot(dentistId,dateTime);
+
+        }
     }
 }
