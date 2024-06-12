@@ -21,6 +21,7 @@ public class AppointmentService : IAppointmentService
     public async Task<BaseResponse<IEnumerable<GetAppointmentResponse>>> GetAllAppointments()
     {
         IEnumerable<Appointment> appointments = await _unitOfWork.AppointmentRepository.GetAllAsync();
+        
         var result = _mapper.Map<IEnumerable<GetAppointmentResponse>>(appointments);
         return new BaseResponse<IEnumerable<GetAppointmentResponse>>("Get all appointments successfully", StatusCodeEnum.OK_200, result);
     }
@@ -60,6 +61,36 @@ public class AppointmentService : IAppointmentService
         var result = _mapper.Map<CreateAppointmentResponse>(appointment);
         return new BaseResponse<CreateAppointmentResponse>("Create appointment successfully", StatusCodeEnum.Created_201, result);
     }
+
+    public async Task<BaseResponse<CustomerBookingAppointmentResponse>> UserBookingAppointment(
+        CustomerBookingAppointmentRequest request)
+    {
+        Slot slot = await _unitOfWork.SlotRepository.GetByIdAsync(request.SlotId);
+        DateTime date = new DateTime(request.Date.Year, request.Date.Month, request.Date.Day, slot.StartAt.Hours, slot.StartAt.Minutes, slot.StartAt.Seconds);
+        User patient = await _unitOfWork.UserRepository.GetByIdAsync(request.PatientId);
+        User dentist = await _unitOfWork.DentistRepository.GetByIdAsync(request.DentistId);
+        BusinessService businessService = await _unitOfWork.ServiceRepository.GetByIdAsync(request.ServiceId);
+        ICollection<User> users = new List<User>();
+        users.Add(patient);
+        users.Add(dentist);
+        AppointmentDto appointmentDto = new AppointmentDto
+        {
+            Date = date,
+            IsPeriod = false,
+            ReexamUnit = 0,
+            ReexamNumber = 0,
+            IsTreatment = false,
+            BusinessService = businessService,
+            Slot = slot,
+            Users = users
+        };
+        var appointment = _mapper.Map<Appointment>(appointmentDto);
+        await _unitOfWork.AppointmentRepository.AddAsync(appointment);
+        await _unitOfWork.SaveChangesAsync();
+        var result = _mapper.Map<CustomerBookingAppointmentResponse>(appointment);
+        return new BaseResponse<CustomerBookingAppointmentResponse>("User booking appointment successfully", StatusCodeEnum.Created_201, result);
+    }
+
     public async Task<BaseResponse<UpdateAppointmentResponse>> UpdateAppointment(int id, UpdateAppointmentRequest request)
     {
         Appointment appointment = await _unitOfWork.AppointmentRepository.GetByIdAsync(id);
