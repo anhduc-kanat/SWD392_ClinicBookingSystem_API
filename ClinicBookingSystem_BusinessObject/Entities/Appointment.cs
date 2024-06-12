@@ -5,8 +5,7 @@ namespace ClinicBookingSystem_BusinessObject.Entities;
 
 public class Appointment : BaseEntities
 {
-    [Key]
-    public int Id { get; set; }
+
     public DateTimeOffset Date { get; set; }
     public bool? IsPeriod { get; set; }
     public int? ReExamUnit { get; set; }

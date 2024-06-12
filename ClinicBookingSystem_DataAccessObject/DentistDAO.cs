@@ -30,13 +30,17 @@ namespace ClinicBookingSystem_DataAccessObject
 
         public async Task<IEnumerable<User>> GetDentistsByRole()
         {
-            return await _context.Users.Include(u => u.Role).Where(u => u.Role.Name == "DENTIST").ToListAsync();
+            return await GetQueryableAsync()
+                .Include(u => u.Role)
+                .Where(u => u.Role.Name == "DENTIST")
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<User>> GetDentistByService(string serviceName)
         {
 
-            return await _context.Users.Include(s => s.BusinessServices)
+            return await GetQueryableAsync()
+                .Include(s => s.BusinessServices)
                 .Where(a => a.BusinessServices.Any(b=>b.Name.ToLower() == serviceName.ToLower()) && a.Role.Name =="DENTIST")
                 .ToListAsync();
         }

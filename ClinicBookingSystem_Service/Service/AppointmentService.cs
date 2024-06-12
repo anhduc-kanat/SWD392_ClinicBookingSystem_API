@@ -27,7 +27,7 @@ public class AppointmentService : IAppointmentService
 
     public async Task<BaseResponse<GetAppointmentResponse>> GetAppointmentById(int id)
     {
-        Appointment appointment = await _unitOfWork.AppointmentRepository.GetByIdAsync(id);
+        Appointment appointment = await _unitOfWork.AppointmentRepository.GetAppointmentById(id);
         var result = _mapper.Map<GetAppointmentResponse>(appointment);
         return new BaseResponse<GetAppointmentResponse>("Get appointment by id successfully", StatusCodeEnum.OK_200, result);
     }
