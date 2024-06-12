@@ -12,7 +12,10 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
         _baseDao = baseDao;
     }
-
+    public async Task<IQueryable> GetQueryableAsync()
+    {
+        return await _baseDao.GetQueryableAsync();
+    }
     public async Task<IEnumerable<T>> GetAllAsync()
     {
         return await _baseDao.GetAllAsync();

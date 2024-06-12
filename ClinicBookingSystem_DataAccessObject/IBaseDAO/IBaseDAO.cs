@@ -7,5 +7,5 @@ public interface IBaseDAO<T> where T : class
     Task<T> UpdateAsync(T entity);
     Task<T> DeleteAsync(T entity);
     Task<IEnumerable<T>> GetAllAsync();
-    
+    Task<IQueryable<T>> GetQueryableAsync();
 }

@@ -11,6 +11,10 @@ public class BaseDAO<T> : IBaseDAO<T> where T : class
     {
         _dbContext = dbContext;
     }
+    public async Task<IQueryable<T>> GetQueryableAsync()
+    {
+        return _dbContext.Set<T>();
+    }
     public async Task<T> GetByIdAsync(int id)
     {
         return await _dbContext.Set<T>().FindAsync(id);
