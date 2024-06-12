@@ -19,6 +19,11 @@ namespace ClinicBookingSystem_Repository.Repositories
             _dentistDAO = dentistDAO;
         }
 
+        public async Task<User> CreateNewDentist(User user, List<Service> services)
+        {
+            return await _dentistDAO.CreateNewDentist(user, services);
+        }
+
         public async Task<IEnumerable<DateTime>> GetAvailableDate(int id)
         {
             return await _dentistDAO.GetAllFreeDaysOfDentist(id);
@@ -34,5 +39,7 @@ namespace ClinicBookingSystem_Repository.Repositories
             return await _dentistDAO.GetDentistByService(serviceName);
 
         }
+
+
     }
 }

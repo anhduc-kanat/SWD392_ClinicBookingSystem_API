@@ -35,7 +35,16 @@ namespace ClinicBookingSystem_Service.Services
                 User user = _mapper.Map<User>(request);
                 Role role = await _unitOfWork.RoleRepository.GetRoleByName("DENTIST");
                 user.Role = role;
-                var createdUser = await _unitOfWork.DentistRepository.AddAsync(user);
+                List<ClinicBookingSystem_BusinessObject.Entities.Service> services = new List<ClinicBookingSystem_BusinessObject.Entities.Service>();
+                foreach (int serviceId in request.ServicesId)
+                {
+                    var service = await _unitOfWork.ServiceRepository.GetServiceById(serviceId);
+                    if (service != null)
+                    {
+                        services.Add(service);
+                    }
+                }
+                var createdUser = await _unitOfWork.DentistRepository.CreateNewDentist(user,services);
                 await _unitOfWork.SaveChangesAsync();
                 return new BaseResponse<CreateDentistResponse>("Create Dentist Successfully!", StatusCodeEnum.Created_201);
             }
