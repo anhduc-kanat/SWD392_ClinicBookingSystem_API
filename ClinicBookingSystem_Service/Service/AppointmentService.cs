@@ -20,8 +20,7 @@ public class AppointmentService : IAppointmentService
     }
     public async Task<BaseResponse<IEnumerable<GetAppointmentResponse>>> GetAllAppointments()
     {
-        IEnumerable<Appointment> appointments = await _unitOfWork.AppointmentRepository.GetAllAsync();
-        
+        var appointments = await _unitOfWork.AppointmentRepository.GetAllAppointment();
         var result = _mapper.Map<IEnumerable<GetAppointmentResponse>>(appointments);
         return new BaseResponse<IEnumerable<GetAppointmentResponse>>("Get all appointments successfully", StatusCodeEnum.OK_200, result);
     }
