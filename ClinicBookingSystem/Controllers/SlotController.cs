@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicBookingSystem_API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/slot")]
     [ApiController]
     public class SlotController : ControllerBase
     {
@@ -22,13 +22,15 @@ namespace ClinicBookingSystem_API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<BaseResponse<IEnumerable<Slot>>>> GetSlots()
+        [Route("get-all-slots")]
+        public async Task<ActionResult<BaseResponse<IEnumerable<SlotResponse>>>> GetSlots()
         {
             var slots = await _slotService.GetAllSlots();
             return Ok(slots);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("get-slot-by-id/{id}")]
         public async Task<ActionResult<BaseResponse<SlotResponse>>> GetSlot(int id)
         {
             var slot = await _slotService.GetSlotById(id);
@@ -37,22 +39,35 @@ namespace ClinicBookingSystem_API.Controllers
         }
 
         [HttpPost]
+        [Route("create-slot")]
         public async Task<ActionResult<BaseResponse<SlotResponse>>> AddSlot([FromBody] CreateNewSlotRequest request)
         {
             var createdSlot = await _slotService.CreateSlot(request);
             return createdSlot;
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
+        [Route("update-slot/{id}")]
         public async Task<ActionResult<BaseResponse<SlotResponse>>> UpdateSlot(int id,[FromBody] UpdateSlotRequest request)
         {
             return await _slotService.UpdateSlot(id, request);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Route("delete-slot/{id}")]
         public async Task<ActionResult<BaseResponse<SlotResponse>>> DeleteSlot(int id)
         {
             return await _slotService.DeleteSlot(id);
+        }
+
+
+
+        [HttpGet]
+        [Route("get-all-available-slots")]
+        public async Task<ActionResult<BaseResponse<IEnumerable<SlotResponse>>>> GetNotAvailableSlots(int dentistId, DateTime date)
+        {
+            var slots = await _slotService.CheckSlotAvailable(dentistId, date);
+            return Ok(slots);
         }
     }
 }

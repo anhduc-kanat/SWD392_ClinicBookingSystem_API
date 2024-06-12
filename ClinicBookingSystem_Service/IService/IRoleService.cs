@@ -12,7 +12,7 @@ namespace ClinicBookingSystem_Service.IService
 {
     public interface IRoleService
     {
-        Task<BaseResponse<IEnumerable<GetRoleResponse>>> GetRoleByName(string roleName);
+        Task<BaseResponse<GetRoleResponse>> GetRoleByName(string roleName);
         Task<BaseResponse<UpdateRoleResponse>> UpdateRole(int id, UpdateRoleRequest request);
         Task<BaseResponse<DeleteRoleResponse>> DeleteRole(int id);
         Task<BaseResponse<CreateRoleResponse>> CreateRole(CreateRoleRequest request);

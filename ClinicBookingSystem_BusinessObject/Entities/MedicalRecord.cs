@@ -17,6 +17,6 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         //Result
         public ICollection<Result>? Results { get; set; }
         //User
-        public User? User { get; set; }
+        public UserProfile? UserProfile { get; set; }
     }
 }

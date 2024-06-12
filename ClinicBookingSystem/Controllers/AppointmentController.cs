@@ -55,4 +55,13 @@ public class AppointmentController : ControllerBase
         var response = await _appointmentService.DeleteAppointment(id);
         return Ok(response);
     }
+    // POST: api/appointment/user-booking-appointment
+    [HttpPost]
+    [Route("user-booking-appointment")]
+    public async Task<ActionResult<BaseResponse<CustomerBookingAppointmentResponse>>>
+        UserBookingAppointment([FromBody] CustomerBookingAppointmentRequest request)
+    {
+        var response = await _appointmentService.UserBookingAppointment(request);
+        return Ok(response);
+    }
 }

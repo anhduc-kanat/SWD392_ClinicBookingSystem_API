@@ -16,11 +16,11 @@ namespace ClinicBookingSystem_DataAcessObject.DBContext
         public DbSet<User> Users => Set<User>();
         public DbSet<Role> Roles => Set<Role>();
         public DbSet<Appointment> Appointments => Set<Appointment>();
-        public DbSet<Service> Services => Set<Service>();
+        public DbSet<BusinessService> BusinessServices => Set<BusinessService>();
         public DbSet<Specification> Specifications => Set<Specification>();
         public DbSet<Salary> Salaries => Set<Salary>();
         public DbSet<Clinic> Clinics => Set<Clinic>();
-        public DbSet<Relative> Relatives => Set<Relative>();
+        public DbSet<UserProfile> UserProfiles => Set<UserProfile>();
         public DbSet<Claim> Claims => Set<Claim>();
         public DbSet<Slot> Slots => Set<Slot>();
         public DbSet<Application> Applications => Set<Application>();
@@ -45,6 +45,9 @@ namespace ClinicBookingSystem_DataAcessObject.DBContext
             .HasForeignKey(o => o.Id)
             .OnDelete(DeleteBehavior.NoAction);
             base.OnModelCreating(modelBuilder);
+
+
+
         }
     }
 }

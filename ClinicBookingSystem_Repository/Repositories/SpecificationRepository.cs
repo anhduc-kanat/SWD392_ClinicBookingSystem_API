@@ -12,4 +12,29 @@ public class SpecificationRepository : BaseRepository<Specification>, ISpecifica
     {
         _specificationDAO = specificationDAO;
     }
+
+    public async Task<Specification> CreateSpecification(Specification specification)
+    {
+        return await _specificationDAO.CreateSpecification(specification);
+    }
+
+    public async Task<Specification> DeleteSpecification(int id)
+    {
+        return await _specificationDAO.DeleteSpecification(id);
+    }
+
+    public async Task<IEnumerable<Specification>> GetAllSSpecifications()
+    {
+        return await _specificationDAO.GetAllSpecifications();
+    }
+
+    public async Task<Specification> GetSpecificationById(int id)
+    {
+        return await _specificationDAO.GetSpecificationById(id);
+    }
+
+    public async Task<Specification> UpdateSpecification(Specification specification)
+    {
+        return await _specificationDAO.UpdateSpecification(specification);
+    }
 }

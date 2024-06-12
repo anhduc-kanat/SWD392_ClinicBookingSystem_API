@@ -1,4 +1,4 @@
-﻿using ClinicBookingSystem_Service.Dtos.Request;
+﻿using ClinicBookingSystem_Service.Models.Request.Dentist;
 using ClinicBookingSystem_Service.IServices;
 using ClinicBookingSystem_Service.Models.BaseResponse;
 using ClinicBookingSystem_Service.Models.Request.Dentist;
@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicBookingSystem_API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/dentist")]
     [ApiController]
     public class DentistController : ControllerBase
     {
@@ -51,6 +51,20 @@ namespace ClinicBookingSystem_API.Controllers
         public async Task<ActionResult<BaseResponse<DeleteDentistResponse>>> DeleteDentist(int id)
         {
             var response = await _dentistService.DeleteDentist(id);
+            return response;
+        }
+
+        [HttpGet("get-dentist-service")]
+        public async Task<ActionResult<BaseResponse<IEnumerable<GetAllDentistsResponse>>>> GetDentistByService(string serviceName)
+        {
+            var response = await _dentistService.GetAllDentistsByService(serviceName);
+            return response;
+        }
+
+        [HttpGet("get-date")]
+        public async Task<ActionResult<BaseResponse<IEnumerable<DateTime>>>> GetAvailableDateOfDentist(int id)
+        {
+            var response = await _dentistService.GetAvailableDate(id);
             return response;
         }
     }

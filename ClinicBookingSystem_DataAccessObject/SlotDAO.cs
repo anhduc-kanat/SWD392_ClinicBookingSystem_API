@@ -55,5 +55,17 @@ namespace ClinicBookingSystem_DataAccessObject
             return existingSlot;
         }
 
+
+        public async Task<IEnumerable<Slot>> CheckAvailableSlot(int dentistId, DateTime dateTime)
+        {
+            var slots = _context.Slots
+                                  .Where(s => !_context.Appointments
+                                      .Include(b => b.Users) // Bao gồm bảng liên kết AppointmentUser
+                                      .Any(b => b.Slot.Id == s.Id &&
+                                                b.Date.Date == dateTime &&
+                                                b.Users.Any(c => c.Id == dentistId)))
+                                  .ToList();
+            return slots;
+        }
     }
 }
