@@ -21,5 +21,6 @@ namespace ClinicBookingSystem_Service.IServices
         Task<BaseResponse<CreateDentistResponse>> CreateDentist(CreateDentistRequest request);
         Task<BaseResponse<UpdateDentistResponse>> UpdateDentist(int id ,UpdateDentistRequest request);
         Task<BaseResponse<DeleteDentistResponse>> DeleteDentist(int id);
+        Task<BaseResponse<IEnumerable<DateTime>>> GetAvailableDate(int id);
     }
 }
