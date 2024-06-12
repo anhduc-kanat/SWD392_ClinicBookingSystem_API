@@ -1,18 +1,22 @@
-﻿using ClinicBookingSystem_DataAccessObject;
+﻿using ClinicBookingSystem_BusinessObject.IEntities;
+using ClinicBookingSystem_DataAccessObject;
 using ClinicBookingSystem_DataAccessObject.BaseDAO;
 using ClinicBookingSystem_DataAcessObject.DBContext;
 using ClinicBookingSystem_Repository.IBaseRepository;
 
 namespace ClinicBookingSystem_Repository.BaseRepositories;
 
-public class BaseRepository<T> : IBaseRepository<T> where T : class
+public class BaseRepository<T> : IBaseRepository<T> where T : class, IBaseEntities
 {
     private readonly BaseDAO<T> _baseDao;
     public BaseRepository(BaseDAO<T> baseDao)
     {
         _baseDao = baseDao;
     }
-
+    public async Task<IQueryable> GetQueryableAsync()
+    {
+        return _baseDao.GetQueryableAsync();
+    }
     public async Task<IEnumerable<T>> GetAllAsync()
     {
         return await _baseDao.GetAllAsync();
