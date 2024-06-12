@@ -15,7 +15,7 @@ public class AppointmentDAO : BaseDAO<Appointment>
 
     public async Task<IEnumerable<Appointment>> GetAllAppointment()
     {
-        return await GetQueryableAsync()
+        return await GetAllAsync()
             .Include(p => p.Slot)
             .Include(p => p.Users)
             .ThenInclude(p => p.Role)

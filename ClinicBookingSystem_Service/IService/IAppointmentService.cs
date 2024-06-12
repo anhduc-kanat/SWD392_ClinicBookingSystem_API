@@ -1,4 +1,6 @@
-﻿using ClinicBookingSystem_Service.Models.BaseResponse;
+﻿using ClinicBookingSystem_BusinessObject.Entities;
+using ClinicBookingSystem_Service.Models.BaseResponse;
+using ClinicBookingSystem_Service.Models.Pagination;
 using ClinicBookingSystem_Service.Models.Request.Appointment;
 using ClinicBookingSystem_Service.Models.Response.Appointment;
 
@@ -14,4 +16,5 @@ public interface IAppointmentService
 
     Task<BaseResponse<CustomerBookingAppointmentResponse>> UserBookingAppointment(
         CustomerBookingAppointmentRequest request);
+    Task<PaginationResponse<GetAppointmentResponse>> GetAllAppointmentsPagination(int pageNumber, int pageSize);
 }

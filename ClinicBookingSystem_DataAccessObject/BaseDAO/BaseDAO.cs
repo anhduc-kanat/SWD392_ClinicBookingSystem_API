@@ -38,10 +38,18 @@ public class BaseDAO<T> : IBaseDAO<T> where T : class, IBaseEntities
         _dbContext.Set<T>().Remove(entity);
         return entity;
     }
-    public async Task<IEnumerable<T>> GetAllAsync()
+    public IQueryable<T> GetAllAsync()
+    {
+        return _dbContext.Set<T>()
+            .Where(entity => entity.IsActive == true && entity.IsDelete == false)
+            .AsQueryable();
+    }
+    public async Task<IEnumerable<T>> GetAllAsyncPagination(int pageNumber, int pageSize)
     {
         return await _dbContext.Set<T>()
             .Where(entity => entity.IsActive == true && entity.IsDelete == false)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
     }
 }
