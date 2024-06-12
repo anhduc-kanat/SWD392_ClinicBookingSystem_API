@@ -11,4 +11,7 @@ public interface IAppointmentService
     Task<BaseResponse<CreateAppointmentResponse>> CreateAppointment(CreateAppointmentRequest request);
     Task<BaseResponse<UpdateAppointmentResponse>> UpdateAppointment(int id, UpdateAppointmentRequest request);
     Task<BaseResponse<DeleteAppointmentResponse>> DeleteAppointment(int id);
+
+    Task<BaseResponse<CustomerBookingAppointmentResponse>> UserBookingAppointment(
+        CustomerBookingAppointmentRequest request);
 }
