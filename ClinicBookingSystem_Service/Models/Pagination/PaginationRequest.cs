@@ -2,7 +2,7 @@
 
 public class PaginationRequest
 {
-    private int _pageNumber = 1;
+    private int _pageNumber;
     private int _pageSize;
     public int PageNumber
     {
