@@ -26,7 +26,7 @@ public class MappingAppointment : Profile
             .ForMember(dest => dest.StartAt, opt => opt.MapFrom(src => src.Slot.StartAt))
             .ForMember(dest => dest.EndAt, opt => opt.MapFrom(src => src.Slot.EndAt))
 
-            .ForMember(dest => dest.UserBookingName,
+            .ForMember(dest => dest.PatientName,
                 opt => opt.MapFrom(src =>
                     src.Users.FirstOrDefault(p => p.Role.Name.Equals("CUSTOMER")).FirstName + " " +
                     src.Users.FirstOrDefault(p => p.Role.Name.Equals("CUSTOMER")).LastName))
