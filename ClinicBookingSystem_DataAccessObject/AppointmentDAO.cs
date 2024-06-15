@@ -34,6 +34,16 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .ThenInclude(p => p.UserProfiles)
             .Include(p => p.BusinessService)
             .FirstOrDefaultAsync(p => p.Id == Id);
-
+    }
+    public async Task<IEnumerable<Appointment>> GetAllAppointmentPagination(int pageNumber, int pageSize)
+    {
+        return await GetQueryableAsync()
+            .Include(p => p.Slot)
+            .Include(p => p.Users)
+            .ThenInclude(p => p.Role)
+            .Include(p => p.BusinessService)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
     }
 }

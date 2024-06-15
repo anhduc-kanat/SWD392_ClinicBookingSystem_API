@@ -52,4 +52,10 @@ public class BaseDAO<T> : IBaseDAO<T> where T : class, IBaseEntities
             .Take(pageSize)
             .ToListAsync();
     }
+    public async Task<int> CountAllAsync()
+    {
+        return await _dbContext.Set<T>()
+            .Where(entity => entity.IsActive == true && entity.IsDelete == false)
+            .CountAsync();
+    }
 }

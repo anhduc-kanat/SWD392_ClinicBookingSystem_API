@@ -41,4 +41,8 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class, IBaseEntiti
     {
         return await _baseDao.GetAllAsyncPagination(pageNumber, pageSize);
     }
+    public async Task<int> CountAllAsync()
+    {
+        return await _baseDao.CountAllAsync();
+    }
 }
