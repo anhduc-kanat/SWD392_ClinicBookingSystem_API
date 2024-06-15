@@ -26,11 +26,15 @@ public class MappingAppointment : Profile
             .ForMember(dest => dest.StartAt, opt => opt.MapFrom(src => src.Slot.StartAt))
             .ForMember(dest => dest.EndAt, opt => opt.MapFrom(src => src.Slot.EndAt))
 
-            .ForMember(dest => dest.PatientId , opt => opt.MapFrom(src => src.Users.FirstOrDefault(p => p.Role.Name.Equals("CUSTOMER")).Id))
-            .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.Users.FirstOrDefault(p => p.Role.Name.Equals("CUSTOMER")).FirstName))
-            .ForMember(dest => dest.DentistId , opt => opt.MapFrom(src => src.Users.FirstOrDefault(p => p.Role.Name.Equals("DENTIST")).Id))
-            .ForMember(dest => dest.DentistName, opt => opt.MapFrom(src => src.Users.FirstOrDefault(p => p.Role.Name.Equals("DENTIST")).FirstName));
-        
+            .ForMember(dest => dest.UserBookingName,
+                opt => opt.MapFrom(src =>
+                    src.Users.FirstOrDefault(p => p.Role.Name.Equals("CUSTOMER")).FirstName + " " +
+                    src.Users.FirstOrDefault(p => p.Role.Name.Equals("CUSTOMER")).LastName))
+            .ForMember(dest => dest.DentistName,
+                opt => opt.MapFrom(src =>
+                    src.Users.FirstOrDefault(p => p.Role.Name.Equals("DENTIST")).FirstName + " " +
+                    src.Users.FirstOrDefault(p => p.Role.Name.Equals("DENTIST")).LastName));
+            
         //Customer booking appointment
         CreateMap<Appointment, CustomerBookingAppointmentResponse>().ReverseMap();
         CreateMap<Appointment, CustomerBookingAppointmentRequest>();

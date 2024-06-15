@@ -58,7 +58,7 @@ namespace ClinicBookingSystem_DataAccessObject
 
         public async Task<IEnumerable<Slot>> CheckAvailableSlot(int dentistId, DateTime dateTime)
         {
-            var slots = _context.Slots
+            var slots = GetQueryableAsync()
                                   .Where(s => !_context.Appointments
                                       .Include(b => b.Users) // Bao gồm bảng liên kết AppointmentUser
                                       .Any(b => b.Slot.Id == s.Id &&
