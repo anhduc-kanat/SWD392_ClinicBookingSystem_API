@@ -31,6 +31,8 @@ public class AppointmentService : IAppointmentService
         var appointments = await _unitOfWork.AppointmentRepository.GetAllAppointmentPagination(pageNumber, pageSize);
         var result = _mapper.Map<IList<GetAppointmentResponse>>(appointments);
         return new PaginationResponse<GetAppointmentResponse>(
+            "Get all appointments successfully",
+            StatusCodeEnum.OK_200,
             result,
             pageNumber,
             pageSize,
