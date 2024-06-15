@@ -8,7 +8,7 @@ namespace ClinicBookingSystem_Service.Models.Response.Appointment;
 public class GetAppointmentResponse
 {
     public int Id { get; set; }
-    public DateTimeOffset Date { get; set; }
+    public DateOnly Date { get; set; }
     public bool IsPeriod { get; set; }
     public int ReExamUnit { get; set; }
     public int ReExamNumber { get; set; }

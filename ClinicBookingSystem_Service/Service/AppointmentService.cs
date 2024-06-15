@@ -29,12 +29,13 @@ public class AppointmentService : IAppointmentService
     public async Task<PaginationResponse<GetAppointmentResponse>> GetAllAppointmentsPagination(int pageNumber, int pageSize)
     {
         var appointments = await _unitOfWork.AppointmentRepository.GetAllAppointmentPagination(pageNumber, pageSize);
+        int count = await _unitOfWork.AppointmentRepository.CountAllAsync();
         var result = _mapper.Map<IList<GetAppointmentResponse>>(appointments);
         return new PaginationResponse<GetAppointmentResponse>(
             result,
             pageNumber,
             pageSize,
-            result.Count
+            count
         );
     }
     public async Task<BaseResponse<GetAppointmentResponse>> GetAppointmentById(int id)

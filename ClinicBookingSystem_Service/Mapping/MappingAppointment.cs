@@ -20,6 +20,8 @@ public class MappingAppointment : Profile
         CreateMap<Appointment, UpdateAppointmentResponse>().ReverseMap();
         CreateMap<Appointment, DeleteAppointmentResponse>().ReverseMap();
         CreateMap<Appointment, GetAppointmentResponse>()
+            .ForMember(dest => dest.Date, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.Date.DateTime)))
+
             .ForMember(dest => dest.ServiceName, opt => opt.MapFrom(src => src.BusinessService.Name))
             .ForMember(dest => dest.ServiceType, opt => opt.MapFrom(src => src.BusinessService.ServiceType))
             .ForMember(dest => dest.SlotName, opt => opt.MapFrom(src => src.Slot.Name))
