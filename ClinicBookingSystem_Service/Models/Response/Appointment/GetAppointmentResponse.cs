@@ -17,9 +17,8 @@ public class GetAppointmentResponse
     public string Description { get; set; }
     public string FeedBack { get; set; }
     public bool IsTreatment { get; set; }
-    public int DentistId { get; set; }
     public string DentistName { get; set; }
-    public int PatientId { get; set; }
+    public string UserBookingName { get; set; }
     public string PatientName { get; set; }
     public string ServiceName { get; set; }
     public ServiceType ServiceType { get; set; }

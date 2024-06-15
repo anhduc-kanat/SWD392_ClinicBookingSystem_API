@@ -19,6 +19,8 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .Include(p => p.Slot)
             .Include(p => p.Users)
             .ThenInclude(p => p.Role)
+            .Include(p => p.Users)
+            .ThenInclude(p => p.UserProfiles)
             .Include(p => p.BusinessService)
             .ToListAsync();
     }
@@ -28,6 +30,8 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .Include(p => p.Slot)
             .Include(p => p.Users)
             .ThenInclude(p => p.Role)
+            .Include(p => p.Users)
+            .ThenInclude(p => p.UserProfiles)
             .Include(p => p.BusinessService)
             .FirstOrDefaultAsync(p => p.Id == Id);
     }
