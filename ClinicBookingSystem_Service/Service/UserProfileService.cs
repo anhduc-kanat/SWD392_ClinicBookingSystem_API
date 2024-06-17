@@ -141,5 +141,13 @@ namespace ClinicBookingSystem_Service.Service
 
             }
         }
+        
+        public async Task<BaseResponse<IEnumerable<GetUserProfileResponse>>> GetUserProfileByUserId(int userId)
+        {
+                IEnumerable<UserProfile> userProfile = await _unitOfWork.UserProfileRepository.GetUserProfileById(userId);
+                var response = _mapper.Map<IEnumerable<GetUserProfileResponse>>(userProfile);
+                return new BaseResponse<IEnumerable<GetUserProfileResponse>>("Successfully", StatusCodeEnum.OK_200,
+                    response);
+        }
     }
 }

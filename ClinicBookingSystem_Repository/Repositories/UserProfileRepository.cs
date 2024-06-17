@@ -17,4 +17,8 @@ public class UserProfileRepository : BaseRepository<UserProfile>, IUserProfileRe
     {
         return await _userProfileDAO.GetUserProfilesByUser(phone);
     }
+    public async Task<IEnumerable<UserProfile>> GetUserProfileById(int userId)
+    {
+        return await _userProfileDAO.GetUserProfileById(userId);
+    }
 }

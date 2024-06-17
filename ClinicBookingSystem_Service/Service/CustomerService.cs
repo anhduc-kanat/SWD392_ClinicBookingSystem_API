@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClinicBookingSystem_Service.Models.Request.Relative;
 
 namespace ClinicBookingSystem_Service.Service
 {
@@ -39,7 +40,11 @@ namespace ClinicBookingSystem_Service.Service
                 Role role = await _unitOfWork.RoleRepository.GetRoleByName("CUSTOMER");
                 User customerAddData = _mapper.Map<User>(request);
                 customerAddData.Role = role;
+                var userProfileRequest = _mapper.Map<CreateUserProfileRequest>(customerAddData);
+                UserProfile userProfile = _mapper.Map<UserProfile>(userProfileRequest);
+                userProfile.User = customerAddData;
                 var user = await _unitOfWork.CustomerRepository.AddAsync(customerAddData);
+                await _unitOfWork.UserProfileRepository.AddAsync(userProfile);
                 await _unitOfWork.SaveChangesAsync();
                 var response = _mapper.Map<RegisterResponse>(user);
                 return new BaseResponse<RegisterResponse>("Add Succesfully", StatusCodeEnum.Created_201, response);
