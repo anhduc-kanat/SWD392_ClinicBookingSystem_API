@@ -79,15 +79,15 @@ public class AppointmentController : ControllerBase
         return Ok(response);
     }
     //POST: api/appointment/staff-booking-appointment
-    /*[HttpPost]
+    [HttpPost]
     [Route("staff-booking-appointment")]
     [Authorize(Roles = "STAFF")]
     public async Task<ActionResult<BaseResponse<StaffBookingAppointmentResponse>>>
         StaffBookingAppointment([FromBody] StaffBookingAppointmentForCustomerRequest request)
     {
-        var response = await _appointmentService.StaffBookingAppointment(request);
+        var response = await _appointmentService.StaffBookingAppointmentForUser(request);
         return Ok(response);
-    }*/
+    }
     
     //GET: api/appointment/user-get-appointment
     [HttpGet]

@@ -20,4 +20,7 @@ public interface IAppointmentService
 
     Task<PaginationResponse<UserGetAppointmentResponse>> GetAppointmentByUserId(int userId, int pageNumber,
         int pageSize);
+
+    Task<BaseResponse<CustomerBookingAppointmentResponse>> StaffBookingAppointmentForUser(
+        StaffBookingAppointmentForCustomerRequest request);
 }

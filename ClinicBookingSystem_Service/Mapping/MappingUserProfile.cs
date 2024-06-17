@@ -26,6 +26,7 @@ namespace ClinicBookingSystem_Service.Mapping
             CreateMap<UserProfile, GetUserProfileResponse>();
             CreateMap<UserProfile, CreateUserProfileResponse>();
 
+            CreateMap<CreateUserProfileRequest, User>().ReverseMap();
         }
     }
 }

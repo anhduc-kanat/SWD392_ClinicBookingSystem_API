@@ -1,9 +1,8 @@
-﻿using ClinicBookingSystem_Service.IService;
+﻿using ClinicBookingSystem_BusinessObject.Entities;
+using ClinicBookingSystem_Service.IService;
 using ClinicBookingSystem_Service.Models.BaseResponse;
-using ClinicBookingSystem_Service.Models.Request.Customer;
 using ClinicBookingSystem_Service.Models.Request.Relative;
 using ClinicBookingSystem_Service.Models.Request.UserProfile;
-using ClinicBookingSystem_Service.Models.Response.Customer;
 using ClinicBookingSystem_Service.Models.Response.UserProfile;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +11,7 @@ namespace ClinicBookingSystem_API.Controllers
 {
     [Route("api/user-profile")]
     [ApiController]
-    public class UserProfileController
+    public class UserProfileController : ControllerBase
     {
         private readonly IUserProfileService _userProfileService;
         public UserProfileController(IUserProfileService userProfileService)
@@ -62,6 +61,19 @@ namespace ClinicBookingSystem_API.Controllers
         public async Task<ActionResult<BaseResponse<IEnumerable<GetUserProfileResponse>>>> GetUserProfilesByUser(string phone)
         {
             return await _userProfileService.GetUserProfilesByUser(phone);
+        }
+        
+        /// <summary>
+        /// Lấy tất cả các profile của customer, login vào và lấy Bearer token truyền vô headers
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("get-profile-by-customer")]
+        [Authorize(Roles = "CUSTOMER")]
+        public async Task<ActionResult<BaseResponse<IEnumerable<GetUserProfileResponse>>>> GetUserProfileByUserId()
+        {
+            var userId = int.Parse(User.Claims.First(c => c.Type == "userId").Value);
+            return await _userProfileService.GetUserProfileByUserId(userId);
         }
     }
 }

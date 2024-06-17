@@ -14,18 +14,20 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         public string? Email { get; set; }
         [JsonIgnore]
         public string? Password { get; set; }
-        public bool? EmailConfirmed { get; set; } = false;
-        public bool? PhoneConfirmed { get; set; } = false;
-        public bool? IsAccountVerified { get; set; } = false;
+        public bool? EmailConfirmed { get; set; }
+        public bool? PhoneConfirmed { get; set; }
+        public bool? IsAccountVerified { get; set; }
         [JsonIgnore]
         public string? EmailCode { get; set; }
         public string? Address { get; set; }
         [JsonIgnore]
         public string? PhoneCode { get; set; }
         public string? PhoneNumber {  get; set; }
+        public string? CCCD { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
+        public int? Gender { get; set; }
         //Các thuộc tính thuộc lịch nghỉ làm của nhân viên
         public int? TotalDateOff {  get; set; }
         public int? DateOffCount {  get; set; }
