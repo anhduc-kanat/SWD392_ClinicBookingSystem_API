@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClinicBookingSystem_DataAccessObject.Migrations
 {
     [DbContext(typeof(ClinicBookingSystemContext))]
-    [Migration("20240614072240_Initial")]
+    [Migration("20240617094949_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -219,6 +219,12 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("UserBookingName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserTreatmentName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

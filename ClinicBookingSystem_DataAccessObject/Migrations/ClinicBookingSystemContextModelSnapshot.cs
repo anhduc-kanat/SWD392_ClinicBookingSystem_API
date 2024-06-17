@@ -217,6 +217,12 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("UserBookingName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserTreatmentName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BusinessServiceId");
