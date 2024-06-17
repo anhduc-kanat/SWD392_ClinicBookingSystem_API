@@ -24,4 +24,13 @@ public class AppointmentRepository : BaseRepository<Appointment>, IAppointmentRe
     {
         return await _appointmentDAO.GetAllAppointmentPagination(pageNumber, pageSize);
     }
+    public async Task<IEnumerable<Appointment>> GetAppointmentByUserId(int userId, int pageNumber, int pageSize)
+    {
+        return await _appointmentDAO.GetAppointmentByUserId(userId, pageNumber, pageSize);
+    }
+
+    public async Task<int> CountUserAppointment(int userId)
+    {
+        return await _appointmentDAO.CountUserAppointment(userId);
+    }
 }

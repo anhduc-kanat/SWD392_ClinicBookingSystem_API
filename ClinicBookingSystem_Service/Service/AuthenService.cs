@@ -19,6 +19,8 @@ using ClinicBookingSystem_Service.Models.Request.Authen;
 using System.Security.Cryptography;
 using System.Data;
 using Azure;
+using Claim = System.Security.Claims.Claim;
+
 namespace ClinicBookingSystem_Service.Service
 {
     public class AuthenService : IAuthenService
@@ -66,6 +68,7 @@ namespace ClinicBookingSystem_Service.Service
             string timestampString = timestamp.ToString("yyyy-MM-dd HH:mm:ss.fffffff");
             var authClaims = new List<System.Security.Claims.Claim>
                     {
+                        new System.Security.Claims.Claim("userId", user.Id.ToString()),
                         new System.Security.Claims.Claim(ClaimTypes.MobilePhone, user.PhoneNumber),
                         new System.Security.Claims.Claim(ClaimTypes.Role, role.Name),
                         new System.Security.Claims.Claim("Timestamp", timestampString),

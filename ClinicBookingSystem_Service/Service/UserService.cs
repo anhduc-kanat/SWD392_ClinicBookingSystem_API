@@ -170,5 +170,5 @@ public class UserService : IUserService
         return new BaseResponse<UpdateUserResponse>("Update user as base success", StatusCodeEnum.OK_200, result);
     }
     //--------------------------------------------------------------------------------//
-
+    
 }

@@ -15,7 +15,8 @@ public class Appointment : BaseEntities
     public string? Description { get; set; }
     public string? FeedBack {get; set; }
     public string? FullName { get; set; }
-
+    public string? UserTreatmentName { get; set; }
+    public string? UserBookingName { get; set; }
     public bool? IsTreatment { get; set; }
     //User
     public ICollection<User>? Users { get; set; }
