@@ -1,4 +1,5 @@
-﻿using ClinicBookingSystem_BusinessObject.Entities;
+﻿using System.Reflection;
+using ClinicBookingSystem_BusinessObject.Entities;
 using ClinicBookingSystem_DataAccessObject;
 using ClinicBookingSystem_DataAcessObject.DBContext;
 using ClinicBookingSystem_Repository;
@@ -61,7 +62,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Clinic Booking System", Version = "v1" });
-
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
