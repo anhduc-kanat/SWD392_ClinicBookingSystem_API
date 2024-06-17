@@ -3,6 +3,7 @@ using ClinicBookingSystem_Service.Models.BaseResponse;
 using ClinicBookingSystem_Service.Models.Pagination;
 using ClinicBookingSystem_Service.Models.Request.Appointment;
 using ClinicBookingSystem_Service.Models.Response.Appointment;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicBookingSystem_API.Controllers;
@@ -69,10 +70,14 @@ public class AppointmentController : ControllerBase
     // POST: api/appointment/user-booking-appointment
     [HttpPost]
     [Route("user-booking-appointment")]
+    [Authorize(Roles ="CUSTOMER")]
     public async Task<ActionResult<BaseResponse<CustomerBookingAppointmentResponse>>>
         UserBookingAppointment([FromBody] CustomerBookingAppointmentRequest request)
     {
+        var userId = User.Claims.First(c => c.Type == "userId").Value;
+        request.PatientId = int.Parse(userId);
         var response = await _appointmentService.UserBookingAppointment(request);
         return Ok(response);
     }
+    
 }
