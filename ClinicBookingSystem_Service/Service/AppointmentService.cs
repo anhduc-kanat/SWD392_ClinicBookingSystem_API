@@ -32,6 +32,8 @@ public class AppointmentService : IAppointmentService
         int count = await _unitOfWork.AppointmentRepository.CountAllAsync();
         var result = _mapper.Map<IList<GetAppointmentResponse>>(appointments);
         return new PaginationResponse<GetAppointmentResponse>(
+            "Get all appointments successfully",
+            StatusCodeEnum.OK_200,
             result,
             pageNumber,
             pageSize,
