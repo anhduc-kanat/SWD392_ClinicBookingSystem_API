@@ -74,9 +74,29 @@ public class AppointmentController : ControllerBase
     public async Task<ActionResult<BaseResponse<CustomerBookingAppointmentResponse>>>
         UserBookingAppointment([FromBody] CustomerBookingAppointmentRequest request)
     {
-        var userId = User.Claims.First(c => c.Type == "userId").Value;
-        request.PatientId = int.Parse(userId);
-        var response = await _appointmentService.UserBookingAppointment(request);
+        var userId = int.Parse(User.Claims.First(c => c.Type == "userId").Value);
+        var response = await _appointmentService.UserBookingAppointment(userId, request);
+        return Ok(response);
+    }
+    //POST: api/appointment/staff-booking-appointment
+    /*[HttpPost]
+    [Route("staff-booking-appointment")]
+    [Authorize(Roles = "STAFF")]
+    public async Task<ActionResult<BaseResponse<StaffBookingAppointmentResponse>>>
+        StaffBookingAppointment([FromBody] StaffBookingAppointmentForCustomerRequest request)
+    {
+        var response = await _appointmentService.StaffBookingAppointment(request);
+        return Ok(response);
+    }*/
+    
+    //GET: api/appointment/user-get-appointment
+    [HttpGet]
+    [Route("user-get-appointment/{userId}")]
+    //[Authorize(Roles="CUSTOMER")]
+    public async Task<ActionResult<PaginationResponse<UserGetAppointmentResponse>>> UserGetAppointmentResponse([FromQuery] PaginationRequest paginationRequest, int userId)
+    {
+        //var userId = int.Parse(User.Claims.First(c => c.Type == "userId").Value);
+        var response = await _appointmentService.GetAppointmentByUserId(userId, paginationRequest.PageNumber, paginationRequest.PageSize);
         return Ok(response);
     }
     

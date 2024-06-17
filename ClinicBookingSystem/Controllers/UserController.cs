@@ -83,5 +83,6 @@ namespace ClinicBookingSystem.Controllers
         {
             return await _userService.UpdateUserFromBase(id, user);
         }
+        
     }
 }

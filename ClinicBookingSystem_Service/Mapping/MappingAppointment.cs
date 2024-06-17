@@ -40,5 +40,20 @@ public class MappingAppointment : Profile
         //Customer booking appointment
         CreateMap<Appointment, CustomerBookingAppointmentResponse>().ReverseMap();
         CreateMap<Appointment, CustomerBookingAppointmentRequest>();
+        //Get appointment by user id
+        CreateMap<Appointment, UserGetAppointmentResponse>()
+            .ForMember(dest => dest.Date, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.Date.DateTime)))
+
+            .ForMember(dest => dest.SlotName, opt => opt.MapFrom(src => src.Slot.Name))
+            .ForMember(dest => dest.StartAt, opt => opt.MapFrom(src => src.Slot.StartAt))
+            .ForMember(dest => dest.EndAt, opt => opt.MapFrom(src => src.Slot.EndAt))
+
+            .ForMember(dest => dest.DentistName,
+                opt => opt.MapFrom(src =>
+                    src.Users.FirstOrDefault(p => p.Role.Name.Equals("DENTIST")).FirstName + " " +
+                    src.Users.FirstOrDefault(p => p.Role.Name.Equals("DENTIST")).LastName))
+            .ForMember(dest => dest.ServiceName, opt => opt.MapFrom(src => src.BusinessService.Name))
+            .ForMember(dest => dest.ServiceType, opt => opt.MapFrom(src => src.BusinessService.ServiceType))
+            .ForMember(dest => dest.UserTreatmentName, opt => opt.MapFrom(src => src.FullName));
     }
 }
