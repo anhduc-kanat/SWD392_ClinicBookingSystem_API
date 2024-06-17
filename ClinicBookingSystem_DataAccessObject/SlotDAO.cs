@@ -62,7 +62,7 @@ namespace ClinicBookingSystem_DataAccessObject
                                   .Where(s => !_context.Appointments
                                       .Include(b => b.Users) // Bao gồm bảng liên kết AppointmentUser
                                       .Any(b => b.Slot.Id == s.Id &&
-                                                b.Date.Date == dateTime &&
+                                                b.Date.Date == dateTime.Date &&
                                                 b.Users.Any(c => c.Id == dentistId)))
                                   .ToList();
             return slots;

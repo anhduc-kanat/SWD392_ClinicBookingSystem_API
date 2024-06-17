@@ -46,4 +46,27 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .Take(pageSize)
             .ToListAsync();
     }
+    public async Task<IEnumerable<Appointment>> GetAppointmentByUserId(int userId, int pageNumber, int pageSize)
+    {
+        return await GetQueryableAsync()
+            .Include(p => p.Slot)
+            .Include(p => p.Users)
+            .ThenInclude(p => p.Role)
+            .Include(p => p.BusinessService)
+            .Where(p => p.Users.Any(p => p.Id == userId))
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+    }
+
+    public async Task<int> CountUserAppointment(int userId)
+    {
+        return await GetQueryableAsync()
+            .Include(p => p.Slot)
+            .Include(p => p.Users)
+            .ThenInclude(p => p.Role)
+            .Include(p => p.BusinessService)
+            .Where(p => p.Users.Any(p => p.Id == userId))
+            .CountAsync();
+    }
 }

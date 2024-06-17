@@ -32,6 +32,8 @@ public class AppointmentService : IAppointmentService
         int count = await _unitOfWork.AppointmentRepository.CountAllAsync();
         var result = _mapper.Map<IList<GetAppointmentResponse>>(appointments);
         return new PaginationResponse<GetAppointmentResponse>(
+            "Get all appointments successfully",
+            StatusCodeEnum.OK_200,
             result,
             pageNumber,
             pageSize,
@@ -74,13 +76,15 @@ public class AppointmentService : IAppointmentService
         return new BaseResponse<CreateAppointmentResponse>("Create appointment successfully", StatusCodeEnum.Created_201, result);
     }
 
-    public async Task<BaseResponse<CustomerBookingAppointmentResponse>> UserBookingAppointment(
+    public async Task<BaseResponse<CustomerBookingAppointmentResponse>> UserBookingAppointment(int userId,
         CustomerBookingAppointmentRequest request)
     {
         Slot slot = await _unitOfWork.SlotRepository.GetByIdAsync(request.SlotId);
         DateTime date = new DateTime(request.Date.Year, request.Date.Month, request.Date.Day, slot.StartAt.Hours, slot.StartAt.Minutes, slot.StartAt.Seconds);
-        User patient = await _unitOfWork.UserRepository.GetByIdAsync(request.PatientId);
+        User patient = await _unitOfWork.UserRepository.GetByIdAsync(userId);
         User dentist = await _unitOfWork.DentistRepository.GetByIdAsync(request.DentistId);
+        IEnumerable<Slot> dentistAvailableSlot = await _unitOfWork.SlotRepository.CheckAvailableSlot(dentist.Id, date);
+        if (!dentistAvailableSlot.Any(a => a.Id == slot.Id)) throw new Exception("a");
         BusinessService businessService = await _unitOfWork.ServiceRepository.GetByIdAsync(request.ServiceId);
         ICollection<User> users = new List<User>();
         users.Add(patient);
@@ -103,6 +107,37 @@ public class AppointmentService : IAppointmentService
         return new BaseResponse<CustomerBookingAppointmentResponse>("User booking appointment successfully", StatusCodeEnum.Created_201, result);
     }
 
+    
+    public async Task<BaseResponse<CustomerBookingAppointmentResponse>> StaffBookingAppointmentForUser(
+        StaffBookingAppointmentForCustomerRequest request)
+    {
+        Slot slot = await _unitOfWork.SlotRepository.GetByIdAsync(request.SlotId);
+        DateTime date = new DateTime(request.Date.Year, request.Date.Month, request.Date.Day, slot.StartAt.Hours, slot.StartAt.Minutes, slot.StartAt.Seconds);
+        User patient = await _unitOfWork.UserRepository.GetByIdAsync(request.PatientId);
+        User dentist = await _unitOfWork.DentistRepository.GetByIdAsync(request.DentistId);
+        IEnumerable<Slot> dentistAvailableSlot = await _unitOfWork.SlotRepository.CheckAvailableSlot(dentist.Id, date);
+        if (!dentistAvailableSlot.Any(a => a.Id == slot.Id)) throw new Exception("This slot is unavailable");
+        BusinessService businessService = await _unitOfWork.ServiceRepository.GetByIdAsync(request.ServiceId);
+        ICollection<User> users = new List<User>();
+        users.Add(patient);
+        users.Add(dentist);
+        AppointmentDto appointmentDto = new AppointmentDto
+        {
+            Date = date,
+            IsPeriod = false,
+            ReexamUnit = 0,
+            ReexamNumber = 0,
+            IsTreatment = false,
+            BusinessService = businessService,
+            Slot = slot,
+            Users = users
+        };
+        var appointment = _mapper.Map<Appointment>(appointmentDto);
+        await _unitOfWork.AppointmentRepository.AddAsync(appointment);
+        await _unitOfWork.SaveChangesAsync();
+        var result = _mapper.Map<CustomerBookingAppointmentResponse>(appointment);
+        return new BaseResponse<CustomerBookingAppointmentResponse>("User booking appointment successfully", StatusCodeEnum.Created_201, result);
+    }
     public async Task<BaseResponse<UpdateAppointmentResponse>> UpdateAppointment(int id, UpdateAppointmentRequest request)
     {
         Appointment appointment = await _unitOfWork.AppointmentRepository.GetByIdAsync(id);
@@ -119,5 +154,20 @@ public class AppointmentService : IAppointmentService
         await _unitOfWork.SaveChangesAsync();
         var result = _mapper.Map<DeleteAppointmentResponse>(appointment);
         return new BaseResponse<DeleteAppointmentResponse>("Delete appointment successfully", StatusCodeEnum.OK_200, result);
+    }
+    
+    public async Task<PaginationResponse<UserGetAppointmentResponse>> GetAppointmentByUserId(int userId, int pageNumber, int pageSize)
+    {
+        var appointments = await _unitOfWork.AppointmentRepository.GetAppointmentByUserId(userId, pageNumber, pageSize);
+        int count = await _unitOfWork.AppointmentRepository.CountUserAppointment(userId);
+        var result = _mapper.Map<IList<UserGetAppointmentResponse>>(appointments);
+        return new PaginationResponse<UserGetAppointmentResponse>(
+            "Get all appointments successfully",
+            StatusCodeEnum.OK_200,
+            result,
+            pageNumber,
+            pageSize,
+            count
+        );
     }
 }

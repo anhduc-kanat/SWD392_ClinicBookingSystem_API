@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ClinicBookingSystem_DataAccessObject.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -265,6 +265,8 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FeedBack = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserTreatmentName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserBookingName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsTreatment = table.Column<bool>(type: "bit", nullable: true),
                     BusinessServiceId = table.Column<int>(type: "int", nullable: true),
                     SlotId = table.Column<int>(type: "int", nullable: true),
