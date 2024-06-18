@@ -63,8 +63,8 @@ public class AppointmentService : IAppointmentService
         {  
             Date = date,
             IsPeriod = request.IsPeriod,
-            ReExamUnit = request.ReexamUnit,
-            ReExamNumber = request.ReexamNumber,
+            ReExamUnit = request.ReExamUnit,
+            ReExamNumber = request.ReExamNumber,
             IsTreatment = request.IsTreatment,
             BusinessService = businessService,
             Slot = slot,
@@ -82,14 +82,17 @@ public class AppointmentService : IAppointmentService
     {
         Slot slot = await _unitOfWork.SlotRepository.GetByIdAsync(request.SlotId);
         DateTime date = new DateTime(request.Date.Year, request.Date.Month, request.Date.Day, slot.StartAt.Hours, slot.StartAt.Minutes, slot.StartAt.Seconds);
-        User userBooking = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+        User userAccount = await _unitOfWork.UserRepository.GetByIdAsync(userId);
         UserProfile patient = await _unitOfWork.UserProfileRepository.GetByIdAsync(request.PatientId);
         User dentist = await _unitOfWork.DentistRepository.GetByIdAsync(request.DentistId);
         IEnumerable<Slot> dentistAvailableSlot = await _unitOfWork.SlotRepository.CheckAvailableSlot(dentist.Id, date);
+        
+        //Validate if dentist free at this slot
         if (!dentistAvailableSlot.Any(a => a.Id == slot.Id)) throw new Exception("This slot is unavailable");
         BusinessService businessService = await _unitOfWork.ServiceRepository.GetByIdAsync(request.ServiceId);
+        //Add user into list of users
         ICollection<User> users = new List<User>();
-        users.Add(userBooking);
+        users.Add(userAccount);
         users.Add(dentist);
         AppointmentDto appointmentDto = new AppointmentDto
         {
@@ -99,13 +102,27 @@ public class AppointmentService : IAppointmentService
             ReExamNumber = 0,
             IsTreatment = false,
             BusinessService = businessService,
+            UserTreatmentId = patient.Id,
+            UserTreatmentName = patient.FirstName + patient.LastName,
+            UserAccountId = userAccount.Id,
+            UserAccountName = userAccount.FirstName + userAccount.LastName,
+            DentistTreatmentId = dentist.Id,
+            DentistTreatmentName = dentist.FirstName + dentist.LastName,
             Slot = slot,
             Users = users
         };
         var appointment = _mapper.Map<Appointment>(appointmentDto);
+        //set who is the person booking the appointment and who is the patient
+        /*appointment.UserAccountId = userAccount.Id;
+        appointment.UserAccountName = userAccount.FirstName + userAccount.LastName;
+
         appointment.UserTreatmentName = patient.FirstName + patient.LastName;
-        appointment.UserBookingName = userBooking.FirstName + patient.LastName;
+        appointment.UserTreatmentId = patient.Id;
+        
+        appointment.DentistTreatmentId = */
+        //Set default status for appointment
         appointment.Status = AppointmentStatus.Scheduled;
+        
         await _unitOfWork.AppointmentRepository.AddAsync(appointment);
         await _unitOfWork.SaveChangesAsync();
         var result = _mapper.Map<CustomerBookingAppointmentResponse>(appointment);
@@ -113,19 +130,25 @@ public class AppointmentService : IAppointmentService
     }
 
     
-    public async Task<BaseResponse<CustomerBookingAppointmentResponse>> StaffBookingAppointmentForUser(
+    public async Task<BaseResponse<CustomerBookingAppointmentResponse>> StaffBookingAppointmentForUser(int staffId,
         StaffBookingAppointmentForCustomerRequest request)
     {
         Slot slot = await _unitOfWork.SlotRepository.GetByIdAsync(request.SlotId);
         DateTime date = new DateTime(request.Date.Year, request.Date.Month, request.Date.Day, slot.StartAt.Hours, slot.StartAt.Minutes, slot.StartAt.Seconds);
-        User patient = await _unitOfWork.UserRepository.GetByIdAsync(request.PatientId);
-        User dentist = await _unitOfWork.DentistRepository.GetByIdAsync(request.DentistId);
-        IEnumerable<Slot> dentistAvailableSlot = await _unitOfWork.SlotRepository.CheckAvailableSlot(dentist.Id, date);
+        User userAccount = await _unitOfWork.UserRepository.GetByIdAsync(request.UserAccountId);
+        UserProfile patient = await _unitOfWork.UserProfileRepository.GetByIdAsync(request.PatientId);
+        User dentistTreatment = await _unitOfWork.DentistRepository.GetByIdAsync(request.DentistId);
+        User staff = await _unitOfWork.StaffRepository.GetByIdAsync(staffId);
+        
+        IEnumerable<Slot> dentistAvailableSlot = await _unitOfWork.SlotRepository.CheckAvailableSlot(dentistTreatment.Id, date);
+        
+        //Validate if dentist free at this slot
         if (!dentistAvailableSlot.Any(a => a.Id == slot.Id)) throw new Exception("This slot is unavailable");
         BusinessService businessService = await _unitOfWork.ServiceRepository.GetByIdAsync(request.ServiceId);
+        //Add user into list of users
         ICollection<User> users = new List<User>();
-        users.Add(patient);
-        users.Add(dentist);
+        users.Add(userAccount);
+        users.Add(dentistTreatment);
         AppointmentDto appointmentDto = new AppointmentDto
         {
             Date = date,
@@ -138,6 +161,19 @@ public class AppointmentService : IAppointmentService
             Users = users
         };
         var appointment = _mapper.Map<Appointment>(appointmentDto);
+        //set who is the person booking the appointment and who is the patient
+        appointment.UserAccountId = userAccount.Id;
+        appointment.UserAccountName = userAccount.FirstName + userAccount.LastName;
+        
+        appointment.UserTreatmentName = patient.FirstName + patient.LastName;
+        appointment.UserTreatmentId = patient.Id;
+
+        appointment.StaffAccountId = staff.Id;
+        appointment.StaffAccountName = staff.FirstName + staff.LastName;
+
+        appointment.DentistTreatmentId = dentistTreatment.Id;
+        appointment.DentistAccountName = dentistTreatment.FirstName + dentistTreatment.LastName;
+        //Set default status for appointment
         appointment.Status = AppointmentStatus.Scheduled;
         await _unitOfWork.AppointmentRepository.AddAsync(appointment);
         await _unitOfWork.SaveChangesAsync();
@@ -177,14 +213,17 @@ public class AppointmentService : IAppointmentService
         );
     }
 
-    public async Task<BaseResponse<StaffCheckinCustomerResponse>> StaffCheckinCustomerAppointment(int appointmentId)
+    public async Task<BaseResponse<StaffUpdateAppointmentStatusResponse>> StaffUpdateAppointmentStatus(int appointmentId, AppointmentStatus appointmentStatus)
     {
         Appointment appointment = await _unitOfWork.AppointmentRepository.GetByIdAsync(appointmentId);
         if (appointment.Status != AppointmentStatus.Scheduled) throw new Exception("Can not perform this action !");
-        appointment.Status = AppointmentStatus.OnGoing;
+        if (appointmentStatus == AppointmentStatus.Rejected || appointmentStatus == AppointmentStatus.OnGoing) 
+        appointment.Status = appointmentStatus;
+        else throw new Exception("Can not perform this action !");
         await _unitOfWork.AppointmentRepository.UpdateAsync(appointment);
         await _unitOfWork.SaveChangesAsync();
-        var result = _mapper.Map<StaffCheckinCustomerResponse>(appointment);
-        return new BaseResponse<StaffCheckinCustomerResponse>("Staff checkin customer appointment successfully", StatusCodeEnum.OK_200, result);
+        var result = _mapper.Map<StaffUpdateAppointmentStatusResponse>(appointment);
+        return new BaseResponse<StaffUpdateAppointmentStatusResponse>("Staff update customer appointment successfully", StatusCodeEnum.OK_200, result);
     }
+    
 }
