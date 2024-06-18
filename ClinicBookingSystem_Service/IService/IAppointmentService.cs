@@ -1,4 +1,5 @@
 ﻿using ClinicBookingSystem_BusinessObject.Entities;
+using ClinicBookingSystem_BusinessObject.Enums;
 using ClinicBookingSystem_Service.Models.BaseResponse;
 using ClinicBookingSystem_Service.Models.Pagination;
 using ClinicBookingSystem_Service.Models.Request.Appointment;
@@ -21,8 +22,9 @@ public interface IAppointmentService
     Task<PaginationResponse<UserGetAppointmentResponse>> GetAppointmentByUserId(int userId, int pageNumber,
         int pageSize);
 
-    Task<BaseResponse<CustomerBookingAppointmentResponse>> StaffBookingAppointmentForUser(
+    Task<BaseResponse<CustomerBookingAppointmentResponse>> StaffBookingAppointmentForUser(int staffId,
         StaffBookingAppointmentForCustomerRequest request);
 
-    Task<BaseResponse<StaffCheckinCustomerResponse>> StaffCheckinCustomerAppointment(int appointmentId);
+    Task<BaseResponse<StaffUpdateAppointmentStatusResponse>> StaffUpdateAppointmentStatus(int appointmentId,
+        AppointmentStatus appointmentStatus);
 }
