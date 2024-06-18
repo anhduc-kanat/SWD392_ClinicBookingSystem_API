@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ClinicBookingSystem_BusinessObject.Entities;
+using ClinicBookingSystem_BusinessObject.Enums;
 using ClinicBookingSystem_Repository.IRepositories;
 using ClinicBookingSystem_Service.IService;
 using ClinicBookingSystem_Service.Models.BaseResponse;
@@ -104,6 +105,7 @@ public class AppointmentService : IAppointmentService
         var appointment = _mapper.Map<Appointment>(appointmentDto);
         appointment.UserTreatmentName = patient.FirstName + patient.LastName;
         appointment.UserBookingName = userBooking.FirstName + patient.LastName;
+        appointment.Status = AppointmentStatus.Scheduled;
         await _unitOfWork.AppointmentRepository.AddAsync(appointment);
         await _unitOfWork.SaveChangesAsync();
         var result = _mapper.Map<CustomerBookingAppointmentResponse>(appointment);
@@ -136,6 +138,7 @@ public class AppointmentService : IAppointmentService
             Users = users
         };
         var appointment = _mapper.Map<Appointment>(appointmentDto);
+        appointment.Status = AppointmentStatus.Scheduled;
         await _unitOfWork.AppointmentRepository.AddAsync(appointment);
         await _unitOfWork.SaveChangesAsync();
         var result = _mapper.Map<CustomerBookingAppointmentResponse>(appointment);
@@ -172,5 +175,16 @@ public class AppointmentService : IAppointmentService
             pageSize,
             count
         );
+    }
+
+    public async Task<BaseResponse<StaffCheckinCustomerResponse>> StaffCheckinCustomerAppointment(int appointmentId)
+    {
+        Appointment appointment = await _unitOfWork.AppointmentRepository.GetByIdAsync(appointmentId);
+        if (appointment.Status != AppointmentStatus.Scheduled) throw new Exception("Can not perform this action !");
+        appointment.Status = AppointmentStatus.OnGoing;
+        await _unitOfWork.AppointmentRepository.UpdateAsync(appointment);
+        await _unitOfWork.SaveChangesAsync();
+        var result = _mapper.Map<StaffCheckinCustomerResponse>(appointment);
+        return new BaseResponse<StaffCheckinCustomerResponse>("Staff checkin customer appointment successfully", StatusCodeEnum.OK_200, result);
     }
 }

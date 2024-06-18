@@ -93,10 +93,20 @@ public class AppointmentController : ControllerBase
     [HttpGet]
     [Route("user-get-appointment/{userId}")]
     //[Authorize(Roles="CUSTOMER")]
-    public async Task<ActionResult<PaginationResponse<UserGetAppointmentResponse>>> UserGetAppointmentResponse([FromQuery] PaginationRequest paginationRequest, int userId)
+    public async Task<ActionResult<PaginationResponse<UserGetAppointmentResponse>>> UserGetAppointment([FromQuery] PaginationRequest paginationRequest, int userId)
     {
         //var userId = int.Parse(User.Claims.First(c => c.Type == "userId").Value);
         var response = await _appointmentService.GetAppointmentByUserId(userId, paginationRequest.PageNumber, paginationRequest.PageSize);
+        return Ok(response);
+    }
+    
+    //UPDATE: api/appointment/staff-checkin-customer-appointment
+    [HttpPut]
+    [Route("staff-checkin-customer/{appointmentId}")]
+    //[Authorize(Roles = "STAFF")]
+    public async Task<ActionResult<BaseResponse<StaffCheckinCustomerResponse>>> StaffCheckinCustomer(int appointmentId)
+    {
+        var response = await _appointmentService.StaffCheckinCustomerAppointment(appointmentId); 
         return Ok(response);
     }
     

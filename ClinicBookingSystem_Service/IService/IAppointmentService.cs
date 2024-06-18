@@ -23,4 +23,6 @@ public interface IAppointmentService
 
     Task<BaseResponse<CustomerBookingAppointmentResponse>> StaffBookingAppointmentForUser(
         StaffBookingAppointmentForCustomerRequest request);
+
+    Task<BaseResponse<StaffCheckinCustomerResponse>> StaffCheckinCustomerAppointment(int appointmentId);
 }

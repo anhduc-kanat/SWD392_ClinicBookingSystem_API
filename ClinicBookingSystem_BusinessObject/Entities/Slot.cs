@@ -10,6 +10,7 @@ public class Slot : BaseEntities
     public TimeSpan StartAt { get; set; }
     public TimeSpan EndAt { get; set; }
     public SlotStatus Status { get; set; }
+    public bool IsMorningShift { get; set; }
     //Appointment
     public ICollection<Appointment>? Appointments { get; set; }
 }
