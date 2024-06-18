@@ -55,5 +55,7 @@ public class MappingAppointment : Profile
             .ForMember(dest => dest.ServiceName, opt => opt.MapFrom(src => src.BusinessService.Name))
             .ForMember(dest => dest.ServiceType, opt => opt.MapFrom(src => src.BusinessService.ServiceType))
             .ForMember(dest => dest.UserTreatmentName, opt => opt.MapFrom(src => src.FullName));
+        //Check-in
+        CreateMap<StaffCheckinCustomerResponse, Appointment>().ReverseMap();
     }
 }
