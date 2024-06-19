@@ -1,4 +1,5 @@
-﻿using ClinicBookingSystem_Service.IService;
+﻿using ClinicBookingSystem_BusinessObject.Enums;
+using ClinicBookingSystem_Service.IService;
 using ClinicBookingSystem_Service.Models.BaseResponse;
 using ClinicBookingSystem_Service.Models.Pagination;
 using ClinicBookingSystem_Service.Models.Request.Appointment;
@@ -85,7 +86,8 @@ public class AppointmentController : ControllerBase
     public async Task<ActionResult<BaseResponse<StaffBookingAppointmentResponse>>>
         StaffBookingAppointment([FromBody] StaffBookingAppointmentForCustomerRequest request)
     {
-        var response = await _appointmentService.StaffBookingAppointmentForUser(request);
+        int staffId = int.Parse(User.Claims.First(c => c.Type == "userId").Value);
+        var response = await _appointmentService.StaffBookingAppointmentForUser(staffId, request);
         return Ok(response);
     }
     
@@ -93,10 +95,39 @@ public class AppointmentController : ControllerBase
     [HttpGet]
     [Route("user-get-appointment/{userId}")]
     //[Authorize(Roles="CUSTOMER")]
-    public async Task<ActionResult<PaginationResponse<UserGetAppointmentResponse>>> UserGetAppointmentResponse([FromQuery] PaginationRequest paginationRequest, int userId)
+    public async Task<ActionResult<PaginationResponse<UserGetAppointmentResponse>>> UserGetAppointment([FromQuery] PaginationRequest paginationRequest, int userId)
     {
         //var userId = int.Parse(User.Claims.First(c => c.Type == "userId").Value);
         var response = await _appointmentService.GetAppointmentByUserId(userId, paginationRequest.PageNumber, paginationRequest.PageSize);
+        return Ok(response);
+    }
+    
+    /// <summary>
+    /// - Staff chỉ được quyền update status của cuộc hẹn là Rejected (4) và OnGoing (2)
+    /// </summary>
+    /// <remarks>
+    /// appointmentStatus:
+    /// 
+    /// + 0: Cancelled (Bị hủy bởi customer)
+    /// 
+    /// + 1: Done (Đã hoàn thành cuộc hẹn => tức là khi sinh ra result)
+    /// 
+    /// + 2: OnGoing (Staff check-in customer, bắt đầu cuộc hẹn)
+    /// 
+    /// + 3: Scheduled (Hệ thống tự động tạo ra khi customer đặt lịch)
+    /// 
+    /// + 4: Rejected (Staff hủy cuộc hẹn của customer)
+    /// </remarks>
+    /// <param name="appointmentId"></param>
+    /// <param name="appointmentStatus"></param>
+    /// <returns></returns>
+    //UPDATE: api/appointment/staff-checkin-customer-appointment
+    [HttpPut]
+    [Route("staff-update-customer-appointment/{appointmentId}")]
+    //[Authorize(Roles = "STAFF")]
+    public async Task<ActionResult<BaseResponse<StaffUpdateAppointmentStatusResponse>>> StaffCheckinCustomer(int appointmentId, AppointmentStatus appointmentStatus)
+    {
+        var response = await _appointmentService.StaffUpdateAppointmentStatus(appointmentId, appointmentStatus); 
         return Ok(response);
     }
     

@@ -4,6 +4,8 @@ namespace ClinicBookingSystem_BusinessObject.Enums;
 
 public enum AppointmentStatus
 {
+    [Description("Rejected")]
+    Rejected = 4,
     [Description("Scheduled")]
     Scheduled = 3,
     [Description("OnGoing")]

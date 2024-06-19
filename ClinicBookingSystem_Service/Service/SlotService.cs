@@ -51,12 +51,14 @@ namespace ClinicBookingSystem_Service.Service
         {
             TimeSpan StartTime = new TimeSpan(request.StartAtHour, request.StartAtMinute, 0);
             TimeSpan EndTime = new TimeSpan(request.EndAtHour, request.EndAtMinute, 0);
+            bool isMorningShift = StartTime.Hours < 12;
             SlotDto slotDto = new SlotDto
             {
                 Name = request.Name,
                 Description = request.Description,
                 StartAt = StartTime,
-                EndAt = EndTime
+                EndAt = EndTime,
+                IsMorningShift = isMorningShift,
             };
             var slot = _mapper.Map<Slot>(slotDto);
             await _unitOfWork.SlotRepository.AddAsync(slot);
@@ -77,6 +79,7 @@ namespace ClinicBookingSystem_Service.Service
         public async Task<BaseResponse<SlotResponse>> UpdateSlot(int id, UpdateSlotRequest request)
         {
             var existSlot = await _unitOfWork.SlotRepository.GetByIdAsync(id);
+            existSlot.IsMorningShift = existSlot.StartAt.Hours < 12;
             _mapper.Map(request,existSlot);
             await _unitOfWork.SlotRepository.UpdateAsync(existSlot);
             await _unitOfWork.SaveChangesAsync();
