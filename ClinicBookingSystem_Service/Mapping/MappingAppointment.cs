@@ -71,7 +71,37 @@ public class MappingAppointment : Profile
                 opt => opt.MapFrom(src => src.DentistTreatmentName))
             .ForMember(dest => dest.ServiceName, opt => opt.MapFrom(src => src.BusinessService.Name))
             .ForMember(dest => dest.ServiceType, opt => opt.MapFrom(src => src.BusinessService.ServiceType))
-            .ForMember(dest => dest.UserTreatmentName, opt => opt.MapFrom(src => src.UserTreatmentName));
+            .ForMember(dest => dest.UserTreatmentName, opt => opt.MapFrom(src => src.UserTreatmentName))
+            .ForMember(dest => dest.PatientAddress, opt =>
+                opt.MapFrom(src =>
+                    src.Users.FirstOrDefault(p =>
+                        p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
+                        p.Id == src.UserTreatmentId).Address))
+            .ForMember(dest => dest.PatientGender, opt =>
+                opt.MapFrom(src =>
+                    src.Users.FirstOrDefault(p =>
+                        p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
+                        p.Id == src.UserTreatmentId).Gender))
+            .ForMember(dest => dest.PatientType, opt =>
+                opt.MapFrom(src =>
+                    src.Users.FirstOrDefault(p =>
+                        p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
+                        p.Id == src.UserTreatmentId).Type))
+            .ForMember(dest => dest.PatientPhoneNumber, opt =>
+                opt.MapFrom(src =>
+                    src.Users.FirstOrDefault(p =>
+                        p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
+                        p.Id == src.UserTreatmentId).PhoneNumber))
+            .ForMember(dest => dest.PatientDateOfBirth, opt =>
+                opt.MapFrom(src =>
+                    src.Users.FirstOrDefault(p =>
+                        p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
+                        p.Id == src.UserTreatmentId).DateOfBirth))
+            .ForMember(dest => dest.PatientCCCD, opt =>
+                opt.MapFrom(src =>
+                    src.Users.FirstOrDefault(p =>
+                        p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
+                        p.Id == src.UserTreatmentId).CCCD));
         //Check-in
         CreateMap<StaffUpdateAppointmentStatusResponse, Appointment>().ReverseMap();
     }

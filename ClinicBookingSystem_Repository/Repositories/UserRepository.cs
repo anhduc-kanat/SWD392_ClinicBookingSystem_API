@@ -13,7 +13,32 @@ public class UserRepository : BaseRepository<User>, IUserRepository
     {
         _userDAO = userDAO;
     }
-    public async Task<IEnumerable<User>> GetAllUser()
+    public async Task<User> GetMyProfile(int userId)
+    {
+        return await _userDAO.GetMyProfile(userId);
+    }
+    
+    public async Task<User> GetUserByPhone(string phone)
+    {
+        return await _userDAO.GetUserByPhone(phone);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /*public async Task<IEnumerable<User>> GetAllUser()
     {
         return await _userDAO.GetAllUser();
     }
@@ -32,10 +57,7 @@ public class UserRepository : BaseRepository<User>, IUserRepository
     public async Task<User> DeleteUser(int id)
     {
         return await _userDAO.DeleteUser(id);
-    }
+    }*/
 
-    public async Task<User> GetUserByPhone(string phone)
-    {
-        return await _userDAO.GetUserByPhone(phone);
-    }
+    
 }

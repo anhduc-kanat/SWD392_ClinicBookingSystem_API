@@ -68,6 +68,17 @@ public class AppointmentController : ControllerBase
         var response = await _appointmentService.DeleteAppointment(id);
         return Ok(response);
     }
+    
+    /// <summary>
+    /// - Người dùng đặt lịch hẹn với bác sĩ, login và truyền Bearer token vào header
+    ///
+    /// - Chỉ có role CUSTOMER mới được phép truy cập
+    /// </summary>
+    /// <remarks>
+    /// - patientId: Id của người thân hoặc bản thân người dùng khi đặt lịch
+    /// </remarks>
+    /// <param name="request"></param>
+    /// <returns></returns>
     // POST: api/appointment/user-booking-appointment
     [HttpPost]
     [Route("user-booking-appointment")]
@@ -79,7 +90,20 @@ public class AppointmentController : ControllerBase
         var response = await _appointmentService.UserBookingAppointment(userId, request);
         return Ok(response);
     }
+    
     //POST: api/appointment/staff-booking-appointment
+    /// <summary>
+    /// - Staff đặt lịch cho customer tại quầy, login và truyền Bearer token vào header
+    ///
+    /// - Chỉ có role STAFF mới được phép truy cập
+    /// </summary>
+    /// <remarks>
+    /// - userAccountId: Id của người dùng khi đặt lịch
+    /// 
+    /// - patientId: Id của người thân hoặc bản thân người dùng khi đặt lịch
+    /// </remarks>
+    /// <param name="request"></param>
+    /// <returns></returns>
     [HttpPost]
     [Route("staff-booking-appointment")]
     [Authorize(Roles = "STAFF")]
@@ -91,6 +115,31 @@ public class AppointmentController : ControllerBase
         return Ok(response);
     }
     
+    /// <summary>
+    /// - User get tất cả các cuộc hẹn của bản thân, login và truyền Bearer token vào header
+    /// </summary>
+    /// <remarks>
+    /// - status:
+    /// 
+    /// + 0: Cancelled (Bị hủy bởi customer)
+    /// 
+    /// + 1: Done (Đã hoàn thành cuộc hẹn => tức là khi sinh ra result)
+    /// 
+    /// + 2: OnGoing (Staff check-in customer, bắt đầu cuộc hẹn)
+    /// 
+    /// + 3: Scheduled (Hệ thống tự động tạo ra khi customer đặt lịch)
+    /// 
+    /// + 4: Rejected (Staff hủy cuộc hẹn của customer)
+    ///
+    /// - serviceType:
+    ///
+    /// + 1: Examination (Khám bệnh)
+    /// 
+    /// + 2: Treatment (Điều trị) 
+    /// </remarks>
+    /// <param name="paginationRequest"></param>
+    /// <param name="userId"></param>
+    /// <returns></returns>
     //GET: api/appointment/user-get-appointment
     [HttpGet]
     [Route("user-get-appointment/{userId}")]
