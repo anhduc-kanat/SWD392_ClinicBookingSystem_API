@@ -6,4 +6,5 @@ public class SlotDto
     public string? Description { get; set; }
     public TimeSpan StartAt { get; set; }
     public TimeSpan EndAt { get; set; }
+    public bool IsMorningShift { get; set; }
 }

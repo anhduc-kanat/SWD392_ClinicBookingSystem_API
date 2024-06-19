@@ -4,6 +4,7 @@ using ClinicBookingSystem_DataAcessObject.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClinicBookingSystem_DataAccessObject.Migrations
 {
     [DbContext(typeof(ClinicBookingSystemContext))]
-    partial class ClinicBookingSystemContextModelSnapshot : ModelSnapshot
+    [Migration("20240618072605_more field into appointment")]
+    partial class morefieldintoappointment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -178,22 +181,19 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.Property<DateTimeOffset>("Date")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("DentistAccountId")
+                    b.Property<int?>("DentistBookingId")
                         .HasColumnType("int");
 
-                    b.Property<string>("DentistAccountName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("DentistTreatmentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DentistTreatmentName")
+                    b.Property<string>("DentistBookingName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FeedBack")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -220,10 +220,10 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.Property<int?>("SlotId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StaffAccountId")
+                    b.Property<int?>("StaffBookingId")
                         .HasColumnType("int");
 
-                    b.Property<string>("StaffAccountName")
+                    b.Property<string>("StaffBookingName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
@@ -232,10 +232,10 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UserAccountId")
+                    b.Property<int?>("UserBookingId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserAccountName")
+                    b.Property<string>("UserBookingName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("UserTreatmentId")

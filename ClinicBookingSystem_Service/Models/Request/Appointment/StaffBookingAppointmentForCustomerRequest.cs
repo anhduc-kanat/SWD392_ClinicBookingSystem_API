@@ -6,5 +6,6 @@ public class StaffBookingAppointmentForCustomerRequest
     public int ServiceId { get; set; }
     public int SlotId { get; set; }
     public int DentistId { get; set; }
+    public int UserAccountId { get; set; }
     public int PatientId { get; set; }
 }
