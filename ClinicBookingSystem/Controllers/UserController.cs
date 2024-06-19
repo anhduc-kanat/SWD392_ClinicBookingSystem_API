@@ -3,6 +3,7 @@ using ClinicBookingSystem_Service.IService;
 using ClinicBookingSystem_Service.Models.BaseResponse;
 using ClinicBookingSystem_Service.Models.Request.User;
 using ClinicBookingSystem_Service.Models.Response.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +18,65 @@ namespace ClinicBookingSystem.Controllers
         {
             _userService = userService;
         }
-        [HttpPost]
+        
+        /// <summary>
+        /// Lấy ra thông tin profile của toàn bộ user trong hệ thống, cần truyền Bearer token vào header
+        /// </summary>
+        /// <remarks>
+        /// - Đối với mọi loại nhân viên (gồm staff và dentist):
+        ///
+        ///     + jobStatus:
+        ///
+        ///         0: Fired (Bị đuổi việc)
+        ///
+        ///         1: Working (Đang làm việc)
+        ///
+        ///     + businessService:
+        /// 
+        ///         + serviceType:
+        ///
+        ///             1: Examination (Khám bệnh)
+        ///
+        ///             2: Treatment (Điều trị)
+        /// </remarks>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("my-profile")]
+        [Authorize]
+        public async Task<ActionResult<BaseResponse<GetMyProfileResponse>>> GetMyProfile()
+        {
+            int userId = int.Parse(User.Claims.First(p => p.Type == "userId").Value);
+            var response = await _userService.GetMyProfile(userId);
+            return Ok(response);
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        /*[HttpPost]
         public async Task<ActionResult<BaseResponse<CreateNewUserResponse>>> CreateUser([FromBody] CreateNewUserRequest request)
         {
             var user = await _userService.CreateUser(request);
@@ -82,7 +141,6 @@ namespace ClinicBookingSystem.Controllers
         public async Task<ActionResult<BaseResponse<UpdateUserResponse>>> UpdateUserFromBase(int id, [FromBody] UpdateUserRequest user)
         {
             return await _userService.UpdateUserFromBase(id, user);
-        }
-        
+        }*/
     }
 }

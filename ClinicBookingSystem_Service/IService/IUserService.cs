@@ -8,7 +8,35 @@ namespace ClinicBookingSystem_Service.IService;
 
 public interface IUserService
 {
-    Task<BaseResponse<IEnumerable<GetAllUserResponse>>> GetAllUser();
+    Task<BaseResponse<GetMyProfileResponse>> GetMyProfile(int userId);
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /*Task<BaseResponse<IEnumerable<GetAllUserResponse>>> GetAllUser();
     Task<BaseResponse<IEnumerable<GetAllUserResponse>>> GetAllUserFromBase();
     Task<BaseResponse<GetUserByIdResponse>> GetUserById(int id);
     Task<BaseResponse<GetUserByIdResponse>> GetUserByIdFromBase(int id);
@@ -17,5 +45,5 @@ public interface IUserService
     Task<BaseResponse<DeleteUserResponse>> DeleteUser(int id);
     Task<BaseResponse<DeleteUserResponse>> DeleteUserFromBase(int id);
     Task<BaseResponse<CreateNewUserResponse>> CreateUser(CreateNewUserRequest request);
-    Task<BaseResponse<CreateNewUserResponse>> CreateUserFromBase(CreateNewUserRequest request);
+    Task<BaseResponse<CreateNewUserResponse>> CreateUserFromBase(CreateNewUserRequest request);*/
 }

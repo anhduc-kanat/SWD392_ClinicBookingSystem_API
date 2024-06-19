@@ -28,11 +28,7 @@ public class MappingProfiles : Profile
 
 
         //
-        CreateMap<CreateSpecificationRequest, Specification>().ReverseMap();
-        CreateMap<Specification, CreateSpecificationRequest>().ReverseMap();
-        CreateMap<Specification, GetSpecificationResponse>();
-        CreateMap<UpdateSpecificationRequest, Specification>().ReverseMap();
-        CreateMap<Specification, UpdateSpecificationRequest>();
+
 
     }
 }
