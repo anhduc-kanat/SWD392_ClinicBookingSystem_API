@@ -37,7 +37,6 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         public JobStatus? JobStatus {  get; set; }
         public DateTime? StartDateOff {  get; set; }
         public DateTime? EndDateOff { get; set;}
-
         //Role
 
         public Role? Role { get; set; }
@@ -68,8 +67,6 @@ namespace ClinicBookingSystem_BusinessObject.Entities
 
         //Appointment
         public ICollection<Appointment>? Appointment { get; set; }
-
-
-
+        
     }
 }
