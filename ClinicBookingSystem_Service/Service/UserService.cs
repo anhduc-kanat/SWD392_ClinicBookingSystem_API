@@ -18,6 +18,88 @@ public class UserService : IUserService
         _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
+
+    public async Task<BaseResponse<GetMyProfileResponse>> GetMyProfile(int userId)
+    {
+        User user = await _unitOfWork.UserRepository.GetMyProfile(userId);
+        var result = _mapper.Map<GetMyProfileResponse>(user);
+        return new BaseResponse<GetMyProfileResponse>("Get my profile success", StatusCodeEnum.OK_200, result);
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     /*
      *  Quan trọng: KHÔNG CẦN THIẾT KHAI BÁO CÁC HÀM THÊM, TẠO, XÓA, SỬA TRONG DAO MÀ CHỈ CẦN EXTEND BASEDAO<>.
@@ -54,7 +136,7 @@ public class UserService : IUserService
     
     
     
-    //--------------------------------------------------------------------------------//
+    /*//--------------------------------------------------------------------------------//
     //Create User
     //Create a new user as repository
     public async Task<BaseResponse<CreateNewUserResponse>> CreateUser(CreateNewUserRequest request)
@@ -170,5 +252,6 @@ public class UserService : IUserService
         return new BaseResponse<UpdateUserResponse>("Update user as base success", StatusCodeEnum.OK_200, result);
     }
     //--------------------------------------------------------------------------------//
+    */
     
 }
