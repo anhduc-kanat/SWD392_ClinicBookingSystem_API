@@ -7,6 +7,7 @@ using ClinicBookingSystem_DataAccessObject.BaseDAO;
 using ClinicBookingSystem_BusinessObject.Entities;
 using ClinicBookingSystem_DataAcessObject.DBContext;
 using Microsoft.EntityFrameworkCore;
+using ClinicBookingSystem_BusinessObject.Enums;
 
 namespace ClinicBookingSystem_DataAccessObject
 {
@@ -58,12 +59,14 @@ namespace ClinicBookingSystem_DataAccessObject
 
         public async Task<IEnumerable<Slot>> CheckAvailableSlot(int dentistId, DateTime dateTime)
         {
+            var targetStatus = AppointmentStatus.Scheduled;
             var slots = GetQueryableAsync()
                                   .Where(s => !_context.Appointments
                                       .Include(b => b.Users) // Bao gồm bảng liên kết AppointmentUser
                                       .Any(b => b.Slot.Id == s.Id &&
                                                 b.Date.Date == dateTime.Date &&
-                                                b.Users.Any(c => c.Id == dentistId)))
+                                                b.Users.Any(c => c.Id == dentistId)
+                                                && b.Status == targetStatus))
                                   .ToList();
             return slots;
         }
