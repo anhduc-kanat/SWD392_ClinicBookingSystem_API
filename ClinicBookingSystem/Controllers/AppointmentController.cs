@@ -138,11 +138,10 @@ public class AppointmentController : ControllerBase
     /// + 2: Treatment (Điều trị) 
     /// </remarks>
     /// <param name="paginationRequest"></param>
-    /// <param name="userId"></param>
     /// <returns></returns>
     //GET: api/appointment/user-get-appointment
     [HttpGet]
-    [Route("user-get-appointment/{userId}")]
+    [Route("user-get-appointment")]
     //[Authorize(Roles="CUSTOMER")]
     public async Task<ActionResult<PaginationResponse<UserGetAppointmentResponse>>> UserGetAppointment([FromQuery] PaginationRequest paginationRequest)
     {
