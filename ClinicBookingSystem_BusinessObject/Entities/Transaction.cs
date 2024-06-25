@@ -18,8 +18,8 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         public string? QrLink {get; set; }
         public string? BankName { get; set; }
 
-        //Order
-        public ICollection<Order>? Orders { get; set; }
+        //Appointment
+        public Appointment Appointment { get; set; }
         //Billing
         public Billing? Billing { get; set; }
     }

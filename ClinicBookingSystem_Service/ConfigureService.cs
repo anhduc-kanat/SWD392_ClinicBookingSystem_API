@@ -30,7 +30,6 @@ public static class ConfigureService
         services.AddScoped<ISlotService, SlotService>();
         services.AddScoped<IMedicalRecordService, MedicalRecordService>();
         services.AddScoped<IAppointmentService, AppointmentService>();
-        services.AddScoped<IOrderService, OrderService>();
         services.AddScoped<ITransactionService, TransactionService>();
         services.AddScoped<IMedicineService, MedicineService>();
         services.AddScoped<IResultService, ResultService>();
