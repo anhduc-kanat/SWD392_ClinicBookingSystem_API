@@ -29,4 +29,7 @@ public interface IAppointmentService
         AppointmentStatus appointmentStatus);
 
     Task UpdateCurrentAppointmentStatusToDone(int currentAppointmentId);
+
+    Task<PaginationResponse<StaffGetAppointmentByDay>> StaffGetAllAppointmentByDay(int pageNumber, int pageSize,
+        DateOnly date);
 }

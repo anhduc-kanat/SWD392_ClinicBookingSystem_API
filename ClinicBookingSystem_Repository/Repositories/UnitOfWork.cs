@@ -22,7 +22,6 @@ public class UnitOfWork : BaseUnitOfWork, IUnitOfWork
     private readonly IClinicRepository _clinicRepository;
     private readonly IMedicalRecordRepository _medicalRecordRepository;
     private readonly IMedicineRepository _medicineRepository;
-    private readonly IOrderRepository _orderRepository;
     private readonly IUserProfileRepository _userProfileRepository;
     private readonly IResultRepository _resultRepository;
     private readonly IServiceRepository _serviceRepository;
@@ -40,7 +39,6 @@ public class UnitOfWork : BaseUnitOfWork, IUnitOfWork
         IDentistRepository dentistRepository,
         IMedicalRecordRepository medicalRecordRepository,
         IMedicineRepository medicineRepository,
-        IOrderRepository orderRepository,
         IUserProfileRepository userProfileRepository,
         IResultRepository resultRepository,
         IRoleRepository roleRepository,
@@ -70,7 +68,6 @@ public class UnitOfWork : BaseUnitOfWork, IUnitOfWork
         _clinicRepository = clinicRepository;
         _medicalRecordRepository = medicalRecordRepository;
         _medicineRepository = medicineRepository;
-        _orderRepository = orderRepository;
         _userProfileRepository = userProfileRepository;
         _resultRepository = resultRepository;
         _serviceRepository = serviceRepository;
@@ -88,7 +85,6 @@ public class UnitOfWork : BaseUnitOfWork, IUnitOfWork
     public IDentistRepository DentistRepository => _dentistRepository;
     public IMedicalRecordRepository MedicalRecordRepository => _medicalRecordRepository;
     public IMedicineRepository MedicineRepository => _medicineRepository;
-    public IOrderRepository OrderRepository => _orderRepository;
     public IUserProfileRepository UserProfileRepository => _userProfileRepository;
     public IResultRepository ResultRepository => _resultRepository;
     public IRoleRepository RoleRepository => _roleRepository;

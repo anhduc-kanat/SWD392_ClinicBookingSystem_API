@@ -20,15 +20,12 @@ public class MappingAppointment : Profile
         CreateMap<Appointment, UpdateAppointmentResponse>().ReverseMap();
         CreateMap<Appointment, DeleteAppointmentResponse>().ReverseMap();
         CreateMap<Appointment, GetAppointmentResponse>()
-            .ForMember(dest => dest.Date, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.Date.DateTime)))
-            .ForMember(dest => dest.ServiceName, opt => opt.MapFrom(src => src.BusinessService.Name))
-            .ForMember(dest => dest.ServiceType, opt => opt.MapFrom(src => src.BusinessService.ServiceType))
+            .ForMember(dest => dest.Date, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.Date)))
             .ForMember(dest => dest.SlotName, opt => opt.MapFrom(src => src.Slot.Name))
             .ForMember(dest => dest.StartAt, opt => opt.MapFrom(src => src.Slot.StartAt))
             .ForMember(dest => dest.EndAt, opt => opt.MapFrom(src => src.Slot.EndAt))
             .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.UserTreatmentName))
             .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.UserTreatmentId))
-            .ForMember(dest => dest.ServiceId, opt => opt.MapFrom(src => src.BusinessService.Id))
             .ForMember(dest => dest.PatientAddress, opt =>
                 opt.MapFrom(src =>
                     src.Users.FirstOrDefault(p =>
@@ -64,15 +61,11 @@ public class MappingAppointment : Profile
         CreateMap<Appointment, CustomerBookingAppointmentRequest>();
         //Get appointment by user id
         CreateMap<Appointment, UserGetAppointmentResponse>()
-            .ForMember(dest => dest.Date, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.Date.DateTime)))
+            .ForMember(dest => dest.Date, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.Date)))
             .ForMember(dest => dest.SlotName, opt => opt.MapFrom(src => src.Slot.Name))
             .ForMember(dest => dest.StartAt, opt => opt.MapFrom(src => src.Slot.StartAt))
             .ForMember(dest => dest.EndAt, opt => opt.MapFrom(src => src.Slot.EndAt))
 
-            .ForMember(dest => dest.DentistTreatmentName,
-                opt => opt.MapFrom(src => src.DentistTreatmentName))
-            .ForMember(dest => dest.ServiceName, opt => opt.MapFrom(src => src.BusinessService.Name))
-            .ForMember(dest => dest.ServiceType, opt => opt.MapFrom(src => src.BusinessService.ServiceType))
             .ForMember(dest => dest.UserTreatmentName, opt => opt.MapFrom(src => src.UserTreatmentName))
             .ForMember(dest => dest.PatientAddress, opt =>
                 opt.MapFrom(src =>

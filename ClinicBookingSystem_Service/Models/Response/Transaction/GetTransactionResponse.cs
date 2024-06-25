@@ -1,5 +1,4 @@
 ﻿using ClinicBookingSystem_BusinessObject.Enums;
-using ClinicBookingSystem_Service.Models.Response.Order;
 
 namespace ClinicBookingSystem_Service.Models.Response.Transaction;
 
@@ -13,5 +12,4 @@ public class GetTransactionResponse
     public string QrLink { get; set; }
     public string BankName { get; set; }
     public DateTime PayAt { get; set; }
-    public ICollection<GetOrderResponse> Orders { get; set; }
 }

@@ -29,7 +29,7 @@ namespace ClinicBookingSystem_DataAcessObject.DBContext
         public DbSet<Medicine> Medicines => Set<Medicine>();
         public DbSet<Transaction> Transactions => Set<Transaction>();
         public DbSet<Billing> Billings => Set<Billing>();
-        public DbSet<Order> Orders => Set<Order>();
+        public DbSet<AppointmentBusinessService> AppointmentBusinessServices => Set<AppointmentBusinessService>();
 
         public DbSet<Token> Tokens => Set<Token>();
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -39,14 +39,6 @@ namespace ClinicBookingSystem_DataAcessObject.DBContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Order>()
-            .HasOne(o => o.User)
-            .WithMany(u => u.Orders)
-            .HasForeignKey(o => o.Id)
-            .OnDelete(DeleteBehavior.NoAction);
-            base.OnModelCreating(modelBuilder);
-
-
 
         }
     }
