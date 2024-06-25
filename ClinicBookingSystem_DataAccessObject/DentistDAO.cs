@@ -1,4 +1,5 @@
 ﻿using ClinicBookingSystem_BusinessObject.Entities;
+using ClinicBookingSystem_BusinessObject.Enums;
 using ClinicBookingSystem_DataAccessObject.BaseDAO;
 using ClinicBookingSystem_DataAcessObject.DBContext;
 using Microsoft.EntityFrameworkCore;
@@ -46,6 +47,7 @@ namespace ClinicBookingSystem_DataAccessObject
         }
         public async Task<IEnumerable<DateTime>> GetAllFreeDaysOfDentist(int id)
         {
+            var targetStatus = AppointmentStatus.Scheduled;
             var today = DateTime.Today;
             var endDay = today.AddMonths(2);
 
@@ -55,7 +57,7 @@ namespace ClinicBookingSystem_DataAccessObject
             int slot = await _context.Slots.CountAsync();
 
             var bookedDates = await _context.Appointments
-                .Where(a => a.Users.Any(u => u.Id == id) && a.Date >= today && a.Date <= endDay)
+                .Where(a => a.Users.Any(u => u.Id == id) && a.Date >= today && a.Date <= endDay && a.Status == targetStatus )
                 .GroupBy(a => a.Date.Date)
                 .Where(g => g.Count() >= slot)
                 .Select(a => a.Key)
