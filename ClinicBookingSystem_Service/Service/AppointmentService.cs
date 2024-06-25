@@ -2,6 +2,7 @@
 using ClinicBookingSystem_BusinessObject.Entities;
 using ClinicBookingSystem_BusinessObject.Enums;
 using ClinicBookingSystem_Repository.IRepositories;
+using ClinicBookingSystem_Service.CustomException;
 using ClinicBookingSystem_Service.IService;
 using ClinicBookingSystem_Service.Models.BaseResponse;
 using ClinicBookingSystem_Service.Models.DTOs.Appointment;
@@ -62,9 +63,7 @@ public class AppointmentService : IAppointmentService
         AppointmentDto appointmentDto = new AppointmentDto
         {  
             Date = date,
-            IsPeriod = request.IsPeriod,
-            ReExamUnit = request.ReExamUnit,
-            ReExamNumber = request.ReExamNumber,
+            IsReExam = request.IsReExam,
             IsTreatment = request.IsTreatment,
             BusinessService = businessService,
             Slot = slot,
@@ -97,9 +96,6 @@ public class AppointmentService : IAppointmentService
         AppointmentDto appointmentDto = new AppointmentDto
         {
             Date = date,
-            IsPeriod = false,
-            ReExamUnit = 0,
-            ReExamNumber = 0,
             IsTreatment = false,
             BusinessService = businessService,
             UserTreatmentId = patient.Id,
@@ -143,7 +139,7 @@ public class AppointmentService : IAppointmentService
         IEnumerable<Slot> dentistAvailableSlot = await _unitOfWork.SlotRepository.CheckAvailableSlot(dentistTreatment.Id, date);
         
         //Validate if dentist free at this slot
-        if (!dentistAvailableSlot.Any(a => a.Id == slot.Id)) throw new Exception("This slot is unavailable");
+        if (!dentistAvailableSlot.Any(a => a.Id == slot.Id)) throw new CoreException("This slot is unavailable", StatusCodeEnum.BadRequest_400);
         BusinessService businessService = await _unitOfWork.ServiceRepository.GetByIdAsync(request.ServiceId);
         //Add user into list of users
         ICollection<User> users = new List<User>();
@@ -152,10 +148,7 @@ public class AppointmentService : IAppointmentService
         AppointmentDto appointmentDto = new AppointmentDto
         {
             Date = date,
-            IsPeriod = false,
-            ReExamUnit = 0,
-            ReExamNumber = 0,
-            IsTreatment = false,
+            IsReExam = request.IsReExam,
             BusinessService = businessService,
             Slot = slot,
             Users = users
@@ -173,11 +166,19 @@ public class AppointmentService : IAppointmentService
 
         appointment.DentistTreatmentId = dentistTreatment.Id;
         appointment.DentistAccountName = dentistTreatment.FirstName + dentistTreatment.LastName;
+        
         //Set default status for appointment
         appointment.Status = AppointmentStatus.Scheduled;
+        
+        //assign IsTreatment base on service types
+        if (businessService.ServiceType == ServiceType.Examination)
+            appointment.IsTreatment = false;
+        else appointment.IsTreatment = true;
+        
         await _unitOfWork.AppointmentRepository.AddAsync(appointment);
         await _unitOfWork.SaveChangesAsync();
         var result = _mapper.Map<CustomerBookingAppointmentResponse>(appointment);
+        
         return new BaseResponse<CustomerBookingAppointmentResponse>("User booking appointment successfully", StatusCodeEnum.Created_201, result);
     }
     public async Task<BaseResponse<UpdateAppointmentResponse>> UpdateAppointment(int id, UpdateAppointmentRequest request)
@@ -216,8 +217,8 @@ public class AppointmentService : IAppointmentService
     public async Task<BaseResponse<StaffUpdateAppointmentStatusResponse>> StaffUpdateAppointmentStatus(int appointmentId, AppointmentStatus appointmentStatus)
     {
         Appointment appointment = await _unitOfWork.AppointmentRepository.GetByIdAsync(appointmentId);
-        if (appointment.Status != AppointmentStatus.Scheduled) throw new Exception("Can not perform this action !");
-        if (appointmentStatus == AppointmentStatus.Rejected || appointmentStatus == AppointmentStatus.OnGoing) 
+        // if (appointment.Status != AppointmentStatus.Scheduled) throw new Exception("Can not perform this action !");
+        if (appointmentStatus == AppointmentStatus.Rejected || appointmentStatus == AppointmentStatus.OnGoing || appointmentStatus == AppointmentStatus.Scheduled) 
         appointment.Status = appointmentStatus;
         else throw new Exception("Can not perform this action !");
         await _unitOfWork.AppointmentRepository.UpdateAsync(appointment);
@@ -225,5 +226,14 @@ public class AppointmentService : IAppointmentService
         var result = _mapper.Map<StaffUpdateAppointmentStatusResponse>(appointment);
         return new BaseResponse<StaffUpdateAppointmentStatusResponse>("Staff update customer appointment successfully", StatusCodeEnum.OK_200, result);
     }
-    
+
+    public async Task UpdateCurrentAppointmentStatusToDone(int currentAppointmentId)
+    {
+        Appointment currentAppointment =
+            await _unitOfWork.AppointmentRepository.GetAppointmentById(currentAppointmentId);
+        if(currentAppointment == null) throw new CoreException("Appointment not found", StatusCodeEnum.BadRequest_400);
+        currentAppointment.Status = AppointmentStatus.Done;
+        await _unitOfWork.AppointmentRepository.UpdateAsync(currentAppointment);
+        await _unitOfWork.SaveChangesAsync();
+    }
 }

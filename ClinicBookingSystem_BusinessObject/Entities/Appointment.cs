@@ -19,6 +19,7 @@ public class Appointment : BaseEntities
     public string? DentistAccountName { get; set; }
     public string? DentistTreatmentName { get; set; }
     public string? StaffAccountName { get; set; }
+    public bool? IsReExam { get; set; }
     public bool? IsTreatment { get; set; }
     //User
     public ICollection<User>? Users { get; set; }

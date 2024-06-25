@@ -3,9 +3,7 @@ using ClinicBookingSystem_BusinessObject.Entities;
 public class AppointmentDto
 {
     public DateTime Date { get; set; }
-    public bool? IsPeriod { get; set; }
-    public int? ReExamUnit { get; set; }
-    public int? ReExamNumber { get; set; }
+    public bool? IsReExam { get; set; }
     public bool? IsTreatment { get; set; }
     public int? UserTreatmentId { get; set; }
     public string? UserTreatmentName { get; set; }
