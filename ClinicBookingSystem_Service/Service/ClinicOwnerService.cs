@@ -7,7 +7,6 @@ using ClinicBookingSystem_Service.Models.BaseResponse;
 using ClinicBookingSystem_Service.Models.Enums;
 using ClinicBookingSystem_Service.Models.Request.Clinic_Owner;
 using ClinicBookingSystem_Service.Models.Response.Clinic_Owner;
-
 namespace ClinicBookingSystem_Service.Service;
 
 public class ClinicOwnerService : IClinicOwnerService
