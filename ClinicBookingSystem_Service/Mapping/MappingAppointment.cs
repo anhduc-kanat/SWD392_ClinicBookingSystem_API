@@ -27,6 +27,8 @@ public class MappingAppointment : Profile
             .ForMember(dest => dest.StartAt, opt => opt.MapFrom(src => src.Slot.StartAt))
             .ForMember(dest => dest.EndAt, opt => opt.MapFrom(src => src.Slot.EndAt))
             .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.UserTreatmentName))
+            .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.UserTreatmentId))
+            .ForMember(dest => dest.ServiceId, opt => opt.MapFrom(src => src.BusinessService.Id))
             .ForMember(dest => dest.PatientAddress, opt =>
                 opt.MapFrom(src =>
                     src.Users.FirstOrDefault(p =>
