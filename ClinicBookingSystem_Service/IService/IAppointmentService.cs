@@ -27,4 +27,6 @@ public interface IAppointmentService
 
     Task<BaseResponse<StaffUpdateAppointmentStatusResponse>> StaffUpdateAppointmentStatus(int appointmentId,
         AppointmentStatus appointmentStatus);
+
+    Task UpdateCurrentAppointmentStatusToDone(int currentAppointmentId);
 }

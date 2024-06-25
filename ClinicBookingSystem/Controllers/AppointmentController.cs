@@ -144,9 +144,9 @@ public class AppointmentController : ControllerBase
     [HttpGet]
     [Route("user-get-appointment/{userId}")]
     //[Authorize(Roles="CUSTOMER")]
-    public async Task<ActionResult<PaginationResponse<UserGetAppointmentResponse>>> UserGetAppointment([FromQuery] PaginationRequest paginationRequest, int userId)
+    public async Task<ActionResult<PaginationResponse<UserGetAppointmentResponse>>> UserGetAppointment([FromQuery] PaginationRequest paginationRequest)
     {
-        //var userId = int.Parse(User.Claims.First(c => c.Type == "userId").Value);
+        var userId = int.Parse(User.Claims.First(c => c.Type == "userId").Value);
         var response = await _appointmentService.GetAppointmentByUserId(userId, paginationRequest.PageNumber, paginationRequest.PageSize);
         return Ok(response);
     }
@@ -179,5 +179,6 @@ public class AppointmentController : ControllerBase
         var response = await _appointmentService.StaffUpdateAppointmentStatus(appointmentId, appointmentStatus); 
         return Ok(response);
     }
+    
     
 }
