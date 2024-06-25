@@ -6,9 +6,7 @@ public class UserGetAppointmentResponse
 {
     public int Id { get; set; }
     public DateOnly Date { get; set; }
-    public bool IsPeriod { get; set; }
-    public int ReExamUnit { get; set; }
-    public int ReExamNumber { get; set; }
+    public bool? IsReExam { get; set; }
     public AppointmentStatus Status { get; set; }
     public string Description { get; set; }
     public string FeedBack { get; set; }

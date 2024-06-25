@@ -42,7 +42,7 @@ namespace ClinicBookingSystem_API.Controllers
             return user;
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("get-all-customers")]
         public async Task<ActionResult<BaseResponse<IEnumerable< GetCustomerResponse>>>> GetAll()
         {
