@@ -58,8 +58,6 @@ namespace ClinicBookingSystem_BusinessObject.Entities
       
         //Billing
         public ICollection<Billing>? Billings { get; set; }
-        //Order
-        public ICollection<Order>? Orders { get; set; }
         //Token
         public ICollection<Token>? Tokens { get; set; }
         //Service

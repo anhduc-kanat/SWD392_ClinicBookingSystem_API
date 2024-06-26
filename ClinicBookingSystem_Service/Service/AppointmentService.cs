@@ -6,6 +6,7 @@ using ClinicBookingSystem_Service.CustomException;
 using ClinicBookingSystem_Service.IService;
 using ClinicBookingSystem_Service.Models.BaseResponse;
 using ClinicBookingSystem_Service.Models.DTOs.Appointment;
+using ClinicBookingSystem_Service.Models.DTOs.AppointmentBusinessService;
 using ClinicBookingSystem_Service.Models.Enums;
 using ClinicBookingSystem_Service.Models.Pagination;
 using ClinicBookingSystem_Service.Models.Request.Appointment;
@@ -56,7 +57,6 @@ public class AppointmentService : IAppointmentService
         User patient = await _unitOfWork.UserRepository.GetByIdAsync(request.PatientId);
         User dentist = await _unitOfWork.DentistRepository.GetByIdAsync(request.DentistId);
         Slot slot = await _unitOfWork.SlotRepository.GetByIdAsync(request.SlotId);
-        BusinessService businessService = await _unitOfWork.ServiceRepository.GetByIdAsync(request.ServiceId);
         ICollection<User> users = new List<User>();
         users.Add(patient);
         users.Add(dentist);
@@ -64,8 +64,6 @@ public class AppointmentService : IAppointmentService
         {  
             Date = date,
             IsReExam = request.IsReExam,
-            IsTreatment = request.IsTreatment,
-            BusinessService = businessService,
             Slot = slot,
             Users = users
         };
@@ -81,7 +79,9 @@ public class AppointmentService : IAppointmentService
     {
         Slot slot = await _unitOfWork.SlotRepository.GetByIdAsync(request.SlotId);
         DateTime date = new DateTime(request.Date.Year, request.Date.Month, request.Date.Day, slot.StartAt.Hours, slot.StartAt.Minutes, slot.StartAt.Seconds);
+        //Account cua nguoi dat
         User userAccount = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+        //Nguoi duoc kham
         UserProfile patient = await _unitOfWork.UserProfileRepository.GetByIdAsync(request.PatientId);
         User dentist = await _unitOfWork.DentistRepository.GetByIdAsync(request.DentistId);
         IEnumerable<Slot> dentistAvailableSlot = await _unitOfWork.SlotRepository.CheckAvailableSlot(dentist.Id, date);
@@ -96,14 +96,10 @@ public class AppointmentService : IAppointmentService
         AppointmentDto appointmentDto = new AppointmentDto
         {
             Date = date,
-            IsTreatment = false,
-            BusinessService = businessService,
             UserTreatmentId = patient.Id,
             UserTreatmentName = patient.FirstName + patient.LastName,
             UserAccountId = userAccount.Id,
             UserAccountName = userAccount.FirstName + userAccount.LastName,
-            DentistTreatmentId = dentist.Id,
-            DentistTreatmentName = dentist.FirstName + dentist.LastName,
             Slot = slot,
             Users = users
         };
@@ -120,6 +116,20 @@ public class AppointmentService : IAppointmentService
         appointment.Status = AppointmentStatus.Scheduled;
         
         await _unitOfWork.AppointmentRepository.AddAsync(appointment);
+        
+        //Create appointmentBusinessService
+        var appointmentBusinessServiceDto = _mapper.Map<AppointmentBusinessServiceDto>(appointment);
+        appointmentBusinessServiceDto.Status = AppointmentBusinessServiceStatus.Undone;
+        appointmentBusinessServiceDto.DentistId = dentist.Id;
+        appointmentBusinessServiceDto.DentistName = dentist.FirstName + dentist.LastName;
+        appointmentBusinessServiceDto.ServiceName = businessService.Name;
+        appointmentBusinessServiceDto.ServiceType = businessService.ServiceType;
+        appointmentBusinessServiceDto.BusinessService = businessService;
+        appointmentBusinessServiceDto.Appointment = appointment;
+        
+        var appointmentBusinessService = _mapper.Map<AppointmentBusinessService>(appointmentBusinessServiceDto);
+        await _unitOfWork.AppointmentBusinessServiceRepository.AddAsync(appointmentBusinessService);
+   
         await _unitOfWork.SaveChangesAsync();
         var result = _mapper.Map<CustomerBookingAppointmentResponse>(appointment);
         return new BaseResponse<CustomerBookingAppointmentResponse>("User booking appointment successfully", StatusCodeEnum.Created_201, result);
@@ -149,7 +159,6 @@ public class AppointmentService : IAppointmentService
         {
             Date = date,
             IsReExam = request.IsReExam,
-            BusinessService = businessService,
             Slot = slot,
             Users = users
         };
@@ -164,16 +173,9 @@ public class AppointmentService : IAppointmentService
         appointment.StaffAccountId = staff.Id;
         appointment.StaffAccountName = staff.FirstName + staff.LastName;
 
-        appointment.DentistTreatmentId = dentistTreatment.Id;
-        appointment.DentistAccountName = dentistTreatment.FirstName + dentistTreatment.LastName;
         
         //Set default status for appointment
         appointment.Status = AppointmentStatus.Scheduled;
-        
-        //assign IsTreatment base on service types
-        if (businessService.ServiceType == ServiceType.Examination)
-            appointment.IsTreatment = false;
-        else appointment.IsTreatment = true;
         
         await _unitOfWork.AppointmentRepository.AddAsync(appointment);
         await _unitOfWork.SaveChangesAsync();
@@ -235,5 +237,20 @@ public class AppointmentService : IAppointmentService
         currentAppointment.Status = AppointmentStatus.Done;
         await _unitOfWork.AppointmentRepository.UpdateAsync(currentAppointment);
         await _unitOfWork.SaveChangesAsync();
+    }
+    public async Task<PaginationResponse<StaffGetAppointmentByDay>> StaffGetAllAppointmentByDay(int pageNumber, int pageSize, DateOnly date)
+    {
+        
+        var appointments = await _unitOfWork.AppointmentRepository.GetAppointmentByDatePagination(pageNumber, pageSize, date);
+        int count = await _unitOfWork.AppointmentRepository.CountAllAsync();
+        var result = _mapper.Map<IList<StaffGetAppointmentByDay>>(appointments);
+        return new PaginationResponse<StaffGetAppointmentByDay>(
+            "Get all appointments successfully",
+            StatusCodeEnum.OK_200,
+            result,
+            pageNumber,
+            pageSize,
+            count
+        );
     }
 }

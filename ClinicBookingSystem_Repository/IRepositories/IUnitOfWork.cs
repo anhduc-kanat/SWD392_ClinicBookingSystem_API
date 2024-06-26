@@ -18,7 +18,6 @@ public interface IUnitOfWork : IBaseUnitOfWork
     IClinicRepository ClinicRepository { get; }
     IMedicalRecordRepository MedicalRecordRepository { get; }
     IMedicineRepository MedicineRepository { get; }
-    IOrderRepository OrderRepository { get; }
     IUserProfileRepository UserProfileRepository { get; }
     IResultRepository ResultRepository { get; }
     IServiceRepository ServiceRepository { get; }
@@ -26,4 +25,5 @@ public interface IUnitOfWork : IBaseUnitOfWork
     ITransactionRepository TransactionRepository { get; }
     ISalaryRepository SalaryRepository { get; }
     IClinicOwnerRepository ClinicOwnerRepository { get; }
+    IAppointmentBusinessServiceRepository AppointmentBusinessServiceRepository { get; }
 }

@@ -4,13 +4,14 @@ using ClinicBookingSystem_Service;
 using ClinicBookingSystem_Service.IService;
 using ClinicBookingSystem_Service.IServices;
 using ClinicBookingSystem_Service.Mapping;
+using ClinicBookingSystem_Service.Models.DTOs.VNPAY;
 using ClinicBookingSystem_Service.Models.Utils;
 using ClinicBookingSystem_Service.Service;
 using ClinicBookingSystem_Service.Services;
+using ClinicBookingSystem_Service.ThirdParties.VnPay;
 using global::System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
 public static class ConfigureService
 {
     public static IServiceCollection ConfigureServiceService(this IServiceCollection services, IConfiguration configuration)
@@ -30,7 +31,6 @@ public static class ConfigureService
         services.AddScoped<ISlotService, SlotService>();
         services.AddScoped<IMedicalRecordService, MedicalRecordService>();
         services.AddScoped<IAppointmentService, AppointmentService>();
-        services.AddScoped<IOrderService, OrderService>();
         services.AddScoped<ITransactionService, TransactionService>();
         services.AddScoped<IMedicineService, MedicineService>();
         services.AddScoped<IResultService, ResultService>();
@@ -39,6 +39,8 @@ public static class ConfigureService
         services.AddScoped<ISpecificationService, SpecificationService>();
         services.AddScoped<IBillingService, BillingService>();
         services.AddScoped<IClinicOwnerService, ClinicOwnerService>();
+        services.AddScoped<IVnPayService, VnPayService>();
+        services.AddScoped<IPaymentService, PaymentService>();
         return services;
     }
 }

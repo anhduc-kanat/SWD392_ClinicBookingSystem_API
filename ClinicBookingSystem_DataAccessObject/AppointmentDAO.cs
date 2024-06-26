@@ -21,7 +21,6 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .ThenInclude(p => p.Role)
             .Include(p => p.Users)
             .ThenInclude(p => p.UserProfiles)
-            .Include(p => p.BusinessService)
             .ToListAsync();
     }
     public async Task<Appointment> GetAppointmentById(int Id)
@@ -32,7 +31,6 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .ThenInclude(p => p.Role)
             .Include(p => p.Users)
             .ThenInclude(p => p.UserProfiles)
-            .Include(p => p.BusinessService)
             .FirstOrDefaultAsync(p => p.Id == Id);
     }
     public async Task<IEnumerable<Appointment>> GetAllAppointmentPagination(int pageNumber, int pageSize)
@@ -43,7 +41,6 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .ThenInclude(p => p.Role)
             .Include(p => p.Users)
             .ThenInclude(p => p.UserProfiles)
-            .Include(p => p.BusinessService)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
@@ -56,7 +53,6 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .ThenInclude(p => p.Role)
             .Include(p => p.Users)
             .ThenInclude(p => p.UserProfiles)
-            .Include(p => p.BusinessService)
             .Where(p => p.Users.Any(p => p.Id == userId))
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
@@ -69,8 +65,21 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .Include(p => p.Slot)
             .Include(p => p.Users)
             .ThenInclude(p => p.Role)
-            .Include(p => p.BusinessService)
             .Where(p => p.Users.Any(p => p.Id == userId))
             .CountAsync();
+    }
+
+    public async Task<IEnumerable<Appointment>> GetAppointmentByDayPagination(int pageNumber, int pageSize, DateOnly date)
+    {
+        return await GetQueryableAsync()
+            .Include(p => p.Slot)
+            .Include(p => p.Users)
+            .ThenInclude(p => p.Role)
+            .Include(p => p.Users)
+            .ThenInclude(p => p.UserProfiles)
+            .Where(p => DateOnly.FromDateTime(p.Date) == date)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
     }
 }
