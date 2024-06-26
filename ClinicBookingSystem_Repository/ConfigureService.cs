@@ -22,7 +22,6 @@ public static class ConfigureService
         services.AddScoped<IDentistRepository, DentistRepository>();
         services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
         services.AddScoped<IMedicineRepository, MedicineRepository>();
-        services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IUserProfileRepository, UserProfileRepository>();
         services.AddScoped<IResultRepository, ResultRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
@@ -35,6 +34,7 @@ public static class ConfigureService
         services.AddScoped<ITransactionRepository, TransactionRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IClinicOwnerRepository, ClinicOwnerRepository>();
+        services.AddScoped<IAppointmentBusinessServiceRepository, AppointmentBusinessServiceRepository>();
         services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
         return services;

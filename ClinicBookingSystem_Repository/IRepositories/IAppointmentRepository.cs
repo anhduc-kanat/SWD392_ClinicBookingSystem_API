@@ -10,4 +10,5 @@ public interface IAppointmentRepository : IBaseRepository<Appointment>
     Task<IEnumerable<Appointment>> GetAllAppointmentPagination(int pageNumber, int pageSize);
     Task<IEnumerable<Appointment>> GetAppointmentByUserId(int userId, int pageNumber, int pageSize);
     Task<int> CountUserAppointment(int userId);
+    Task<IEnumerable<Appointment>> GetAppointmentByDatePagination(int pageNumber, int pageSize, DateOnly date);
 }

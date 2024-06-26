@@ -9,13 +9,11 @@ public class BusinessService : BaseEntities
     public string? Description { get; set; }
     public int? ExpectedDurationInMinute { get; set; }
     
-    public ServiceType ServiceType { get; set; } = ServiceType.Examination;
+    public ServiceType ServiceType { get; set; }
 
-    public long Price { get; set; } = 0;
+    public long Price { get; set; }
     //Appointment
-    public ICollection<Appointment>? Appointments { get; set; }
-    //Order
-    public ICollection<Order>? Orders { get; set; }
+    public ICollection<AppointmentBusinessService>? AppointmentBusinessServices { get; set; }
     //User
     public ICollection<User>? Users { get; set; }
 

@@ -10,8 +10,6 @@ public class UserGetAppointmentResponse
     public AppointmentStatus Status { get; set; }
     public string Description { get; set; }
     public string FeedBack { get; set; }
-    public bool IsTreatment { get; set; }
-    public string DentistTreatmentName { get; set; }
     public string UserAccountName { get; set; }
     public string UserTreatmentName { get; set; }
     public string? PatientGender { get; set; }
@@ -20,8 +18,6 @@ public class UserGetAppointmentResponse
     public string? PatientDateOfBirth { get; set; }
     public string? PatientCCCD { get; set; }
     public string? PatientType { get; set; }
-    public string ServiceName { get; set; }
-    public ServiceType ServiceType { get; set; }
     public string SlotName { get; set; }
     public TimeSpan StartAt { get; set; }
     public TimeSpan EndAt { get; set; }

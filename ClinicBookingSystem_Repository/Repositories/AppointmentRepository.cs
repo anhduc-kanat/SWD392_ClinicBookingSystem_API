@@ -33,4 +33,8 @@ public class AppointmentRepository : BaseRepository<Appointment>, IAppointmentRe
     {
         return await _appointmentDAO.CountUserAppointment(userId);
     }
+    public async Task<IEnumerable<Appointment>> GetAppointmentByDatePagination(int pageNumber, int pageSize, DateOnly date)
+    {
+        return await _appointmentDAO.GetAppointmentByDayPagination(pageNumber, pageSize, date);
+    }
 }

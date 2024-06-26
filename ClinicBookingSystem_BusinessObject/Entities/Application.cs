@@ -9,9 +9,9 @@ public class Application : BaseEntities
     public string Description { get; set; }
     public string type { get; set; }
     public string? Reason { get; set; }
-    public ApplicationStatus? Status { get; set; } = ApplicationStatus.Pending;
+    public ApplicationStatus? Status { get; set; }
     public string? ImageUrl { get; set; }
-    public bool? IsApproved { get; set; } = false;
+    public bool? IsApproved { get; set; }
     
     //User
     public ICollection<User>? User { get; set; }

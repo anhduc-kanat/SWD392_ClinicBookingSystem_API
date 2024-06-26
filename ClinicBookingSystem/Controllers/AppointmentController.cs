@@ -142,7 +142,7 @@ public class AppointmentController : ControllerBase
     //GET: api/appointment/user-get-appointment
     [HttpGet]
     [Route("user-get-appointment")]
-    //[Authorize(Roles="CUSTOMER")]
+    [Authorize(Roles="CUSTOMER")]
     public async Task<ActionResult<PaginationResponse<UserGetAppointmentResponse>>> UserGetAppointment([FromQuery] PaginationRequest paginationRequest)
     {
         var userId = int.Parse(User.Claims.First(c => c.Type == "userId").Value);
@@ -172,12 +172,44 @@ public class AppointmentController : ControllerBase
     //UPDATE: api/appointment/staff-checkin-customer-appointment
     [HttpPut]
     [Route("staff-update-customer-appointment/{appointmentId}")]
-    //[Authorize(Roles = "STAFF")]
+    [Authorize(Roles = "STAFF")]
     public async Task<ActionResult<BaseResponse<StaffUpdateAppointmentStatusResponse>>> StaffCheckinCustomer(int appointmentId, AppointmentStatus appointmentStatus)
     {
         var response = await _appointmentService.StaffUpdateAppointmentStatus(appointmentId, appointmentStatus); 
         return Ok(response);
     }
     
+    /// <summary>
+    /// - Staff get tất cả appointments theo ngày, login và truyền Bearer token vào header
+    /// </summary>
+    /// <remarks>
+    /// - status:
+    /// 
+    /// + 0: Cancelled (Bị hủy bởi customer)
+    /// 
+    /// + 1: Done (Đã hoàn thành cuộc hẹn => tức là khi sinh ra result)
+    /// 
+    /// + 2: OnGoing (Staff check-in customer, bắt đầu cuộc hẹn)
+    /// 
+    /// + 3: Scheduled (Hệ thống tự động tạo ra khi customer đặt lịch)
+    /// 
+    /// + 4: Rejected (Staff hủy cuộc hẹn của customer)
+    ///
+    /// - serviceType:
+    ///
+    /// + 1: Examination (Khám bệnh)
+    /// 
+    /// + 2: Treatment (Điều trị) 
+    /// </remarks>
+    /// <param name="paginationRequest"></param>
+    /// <returns></returns>
+    [HttpGet]
+    [Route("staff-get-appointment-by-date")]
+    [Authorize(Roles = "STAFF")]
+    public async Task<ActionResult<BaseResponse<IEnumerable<StaffGetAppointmentByDay>>>> StaffGetAppointmentByDate([FromQuery] PaginationRequest paginationRequest, [FromQuery] StaffGetAppointmentByDayRequest dateRequest)
+    {
+        var response = await _appointmentService.StaffGetAllAppointmentByDay(paginationRequest.PageNumber, paginationRequest.PageSize, dateRequest.Date);
+        return Ok(response);
+    }
     
 }
