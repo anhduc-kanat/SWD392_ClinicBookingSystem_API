@@ -18,9 +18,13 @@ public class PaymentController : ControllerBase
     {
         string ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
 
+        // Check if the request was forwarded by a proxy
+        if (HttpContext.Request.Headers.ContainsKey("X-Forwarded-For"))
+        {
+            ipAddress = HttpContext.Request.Headers["X-Forwarded-For"].ToString().Split(',')[0];
+        }
+
         return ipAddress;
-        /*
-        return _paymentService.CreateVnPayPaymentUrl(1);
-    */
+        /*return _paymentService.CreateVnPayPaymentUrl(1);*/
     }
 }
