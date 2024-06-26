@@ -47,6 +47,10 @@ public class PaymentController : ControllerBase
         {
             // Get remote IP address
             ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
+            if (HttpContext.Request.Headers.ContainsKey("X-Forwarded-For"))
+            {
+                ipAddress = HttpContext.Request.Headers["X-Forwarded-For"].ToString().Split(',')[0];
+            }
         }
 
         return ipAddress;
