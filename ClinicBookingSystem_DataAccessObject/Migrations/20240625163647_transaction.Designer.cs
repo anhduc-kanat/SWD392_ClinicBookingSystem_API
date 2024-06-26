@@ -4,6 +4,7 @@ using ClinicBookingSystem_DataAcessObject.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClinicBookingSystem_DataAccessObject.Migrations
 {
     [DbContext(typeof(ClinicBookingSystemContext))]
-    partial class ClinicBookingSystemContextModelSnapshot : ModelSnapshot
+    [Migration("20240625163647_transaction")]
+    partial class transaction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -220,27 +223,40 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AppointmentId")
+                    b.Property<int?>("AppointmentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("BusinessServiceId")
+                    b.Property<int?>("BusinessServiceId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("CustomerAccountId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CustomerAccountName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("DentistId")
                         .HasColumnType("int");
 
-                    b.Property<string>("DentistName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("DentistName")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PatientName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ServiceName")
                         .IsRequired()
@@ -257,20 +273,6 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("UserAccountId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserAccountName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserTreatmentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserTreatmentName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -1112,21 +1114,13 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
 
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.AppointmentBusinessService", b =>
                 {
-                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Appointment", "Appointment")
+                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Appointment", null)
                         .WithMany("AppointmentBusinessServices")
-                        .HasForeignKey("AppointmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AppointmentId");
 
-                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.BusinessService", "BusinessService")
+                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.BusinessService", null)
                         .WithMany("AppointmentBusinessServices")
-                        .HasForeignKey("BusinessServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Appointment");
-
-                    b.Navigation("BusinessService");
+                        .HasForeignKey("BusinessServiceId");
                 });
 
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Billing", b =>

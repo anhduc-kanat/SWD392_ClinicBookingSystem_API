@@ -6,6 +6,7 @@ using ClinicBookingSystem_Service.CustomException;
 using ClinicBookingSystem_Service.IService;
 using ClinicBookingSystem_Service.Models.BaseResponse;
 using ClinicBookingSystem_Service.Models.DTOs.Appointment;
+using ClinicBookingSystem_Service.Models.DTOs.AppointmentBusinessService;
 using ClinicBookingSystem_Service.Models.Enums;
 using ClinicBookingSystem_Service.Models.Pagination;
 using ClinicBookingSystem_Service.Models.Request.Appointment;
@@ -78,7 +79,9 @@ public class AppointmentService : IAppointmentService
     {
         Slot slot = await _unitOfWork.SlotRepository.GetByIdAsync(request.SlotId);
         DateTime date = new DateTime(request.Date.Year, request.Date.Month, request.Date.Day, slot.StartAt.Hours, slot.StartAt.Minutes, slot.StartAt.Seconds);
+        //Account cua nguoi dat
         User userAccount = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+        //Nguoi duoc kham
         UserProfile patient = await _unitOfWork.UserProfileRepository.GetByIdAsync(request.PatientId);
         User dentist = await _unitOfWork.DentistRepository.GetByIdAsync(request.DentistId);
         IEnumerable<Slot> dentistAvailableSlot = await _unitOfWork.SlotRepository.CheckAvailableSlot(dentist.Id, date);
@@ -113,6 +116,20 @@ public class AppointmentService : IAppointmentService
         appointment.Status = AppointmentStatus.Scheduled;
         
         await _unitOfWork.AppointmentRepository.AddAsync(appointment);
+        
+        //Create appointmentBusinessService
+        var appointmentBusinessServiceDto = _mapper.Map<AppointmentBusinessServiceDto>(appointment);
+        appointmentBusinessServiceDto.Status = AppointmentBusinessServiceStatus.Undone;
+        appointmentBusinessServiceDto.DentistId = dentist.Id;
+        appointmentBusinessServiceDto.DentistName = dentist.FirstName + dentist.LastName;
+        appointmentBusinessServiceDto.ServiceName = businessService.Name;
+        appointmentBusinessServiceDto.ServiceType = businessService.ServiceType;
+        appointmentBusinessServiceDto.BusinessService = businessService;
+        appointmentBusinessServiceDto.Appointment = appointment;
+        
+        var appointmentBusinessService = _mapper.Map<AppointmentBusinessService>(appointmentBusinessServiceDto);
+        await _unitOfWork.AppointmentBusinessServiceRepository.AddAsync(appointmentBusinessService);
+   
         await _unitOfWork.SaveChangesAsync();
         var result = _mapper.Map<CustomerBookingAppointmentResponse>(appointment);
         return new BaseResponse<CustomerBookingAppointmentResponse>("User booking appointment successfully", StatusCodeEnum.Created_201, result);
