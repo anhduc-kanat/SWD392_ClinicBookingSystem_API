@@ -1,4 +1,5 @@
-﻿using ClinicBookingSystem_DataAccessObject.BaseDAO;
+﻿using ClinicBookingSystem_BusinessObject.Entities;
+using ClinicBookingSystem_DataAccessObject.BaseDAO;
 using ClinicBookingSystem_DataAccessObject.IBaseDAO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,7 +33,9 @@ public static class ConfigureService
         services.AddScoped<ServiceDAO>();
         services.AddScoped<ClinicOwnerDAO>();
         services.AddScoped<AppointmentBusinessServiceDAO>();
+        
         services.AddScoped(typeof(IBaseDAO<>), typeof(BaseDAO<>));
+
         return services;
     }
 }

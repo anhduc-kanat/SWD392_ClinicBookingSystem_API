@@ -15,6 +15,8 @@ public class Appointment : BaseEntities
     public string? UserAccountName { get; set; }
     public string? StaffAccountName { get; set; }
     public bool? IsReExam { get; set; }
+    public bool? IsClinicalExamPaid { get; set; }
+    public bool? IsFullyPaid { get; set; }
     //User
     public ICollection<User>? Users { get; set; }
     public int? UserAccountId { get; set; }

@@ -2,5 +2,8 @@
 
 public class StaffBookingAppointmentResponse
 {
-    
+    public int AppointmentId { get; set; }
+    public string UserAccountId { get; set; }
+    public string UserAccountName { get; set; }
+    public string UserAccountPhone { get; set; }
 }

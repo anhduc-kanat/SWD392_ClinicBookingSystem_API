@@ -58,7 +58,12 @@ public class MappingAppointment : Profile
                         p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
                         p.Id == src.UserTreatmentId).CCCD));
         //Customer booking appointment
-        CreateMap<Appointment, CustomerBookingAppointmentResponse>().ReverseMap();
+        CreateMap<CustomerBookingAppointmentResponse, Appointment>().ReverseMap()
+            .ForMember(dest => dest.AppointmentId, opt => opt.MapFrom(src => src.Id));
+        
+        CreateMap<StaffBookingAppointmentResponse, Appointment>().ReverseMap()
+            .ForMember(dest => dest.AppointmentId, opt => opt.MapFrom(src => src.Id));
+        
         CreateMap<Appointment, CustomerBookingAppointmentRequest>();
         //Get appointment by user id
         CreateMap<Appointment, UserGetAppointmentResponse>()
@@ -66,8 +71,8 @@ public class MappingAppointment : Profile
             .ForMember(dest => dest.SlotName, opt => opt.MapFrom(src => src.Slot.Name))
             .ForMember(dest => dest.StartAt, opt => opt.MapFrom(src => src.Slot.StartAt))
             .ForMember(dest => dest.EndAt, opt => opt.MapFrom(src => src.Slot.EndAt))
-
-            .ForMember(dest => dest.UserTreatmentName, opt => opt.MapFrom(src => src.UserTreatmentName))
+            .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.UserTreatmentName))
+            .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.UserTreatmentId))
             .ForMember(dest => dest.PatientAddress, opt =>
                 opt.MapFrom(src =>
                     src.Users.FirstOrDefault(p =>
