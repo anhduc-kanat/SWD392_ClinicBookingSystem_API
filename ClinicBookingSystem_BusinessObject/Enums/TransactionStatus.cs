@@ -14,6 +14,8 @@ namespace ClinicBookingSystem_BusinessObject.Enums
         [Description("Paid")]
         Paid = 1,
         [Description("Cancelled")]
-        Cancelled = 0
+        Cancelled = 0,
+        [Description("Overdue")]
+        Overdue = 3
     }
 }

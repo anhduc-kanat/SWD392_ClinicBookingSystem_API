@@ -10,15 +10,29 @@ namespace ClinicBookingSystem_BusinessObject.Entities
 {
     public class Transaction : BaseEntities
     {
+        /*
         public string Name { get; set; }
-        public string? Description { get; set; }
+        */
         public TransactionStatus Status { get; set; }
+        /*
+        public string? Description { get; set; }
+        */
         public bool? IsPay { get; set; }
-        public DateTime? PayAt { get; set; }
-        public string? QrLink {get; set; }
-        public string? BankName { get; set; }
+        /*public string? PaymentLink {get; set; }*/
+        
+        public long? Amount { get; set; }
+        public string? BankCode { get; set; }
+        public string? BankTranNo { get; set; }
+        public string? CardType { get; set; }
+        public string? OrderInfo { get; set; }
+        public DateTime? PayDate { get; set; }
+        public string? ResponseCode { get; set; }
+        public string? TransactionNo { get; set; }
+        public string? TransactionStatus { get; set; }
+        public string? OrderId { get; set; }
+        
         //Appointment
-        public Appointment Appointment { get; set; }
+        public Appointment? Appointment { get; set; }
         //Billing
         public Billing? Billing { get; set; }
     }

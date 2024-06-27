@@ -5,5 +5,5 @@ namespace ClinicBookingSystem_Repository.IRepositories;
 
 public interface ITransactionRepository : IBaseRepository<Transaction>
 {
-    
+    Task<Transaction> GetTransactionByAppointmentId(int appointmentId);
 }

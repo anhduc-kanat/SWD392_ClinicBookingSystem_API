@@ -13,6 +13,8 @@ public class GetAppointmentResponse
     public AppointmentStatus? Status { get; set; }
     public string? Description { get; set; }
     public string? FeedBack { get; set; }
+    public int? StaffAccountId { get; set; }
+    public string? StaffAccountName { get; set; }
     public int? UserAccountId { get; set; }
     public string? UserAccountName { get; set; }
     public int? PatientId { get; set; }
@@ -25,6 +27,8 @@ public class GetAppointmentResponse
     public string? PatientType { get; set; }
     public int? SlotId { get; set; }
     public string? SlotName { get; set; }
+    public bool? IsClinicalExamPaid { get; set; }
+    public bool? IsFullyPaid { get; set; }
     public TimeSpan? StartAt { get; set; }
     public TimeSpan? EndAt { get; set; }
 }

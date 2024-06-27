@@ -3,7 +3,10 @@ using ClinicBookingSystem_Service.IService;
 using ClinicBookingSystem_Service.Models.BaseResponse;
 using ClinicBookingSystem_Service.Models.Pagination;
 using ClinicBookingSystem_Service.Models.Request.Appointment;
+using ClinicBookingSystem_Service.Models.Request.Payment;
 using ClinicBookingSystem_Service.Models.Response.Appointment;
+using ClinicBookingSystem_Service.ThirdParties.VnPay;
+using ClinicBookingSystem.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,9 +17,17 @@ namespace ClinicBookingSystem_API.Controllers;
 public class AppointmentController : ControllerBase
 {
     private readonly IAppointmentService _appointmentService;
-    public AppointmentController(IAppointmentService appointmentService)
+    private readonly IPaymentService _paymentService;
+    private readonly GetUserIpAddress _getUserIpAddress;
+
+
+    public AppointmentController(IAppointmentService appointmentService,
+        IPaymentService paymentService,
+        GetUserIpAddress getUserIpAddress)
     {
         _appointmentService = appointmentService;
+        _paymentService = paymentService;
+        _getUserIpAddress = getUserIpAddress;
     }
     // GET: api/appointment
     [HttpGet]
@@ -86,8 +97,15 @@ public class AppointmentController : ControllerBase
     public async Task<ActionResult<BaseResponse<CustomerBookingAppointmentResponse>>>
         UserBookingAppointment([FromBody] CustomerBookingAppointmentRequest request)
     {
+        string userIpAddress = _getUserIpAddress.GetIpAddress();
         var userId = int.Parse(User.Claims.First(c => c.Type == "userId").Value);
-        var response = await _appointmentService.UserBookingAppointment(userId, request);
+        var appointmentResponse = await _appointmentService.UserBookingAppointment(userId, request);
+        UserInfoRequest userInfoRequest = new UserInfoRequest
+        {
+            UserIpAddress = userIpAddress,
+        };
+        
+        var response = await _paymentService.CreateVnPayPaymentUrl(appointmentResponse.Data.AppointmentId, userInfoRequest);
         return Ok(response);
     }
     
@@ -110,8 +128,15 @@ public class AppointmentController : ControllerBase
     public async Task<ActionResult<BaseResponse<StaffBookingAppointmentResponse>>>
         StaffBookingAppointment([FromBody] StaffBookingAppointmentForCustomerRequest request)
     {
+        string userIpAddress = _getUserIpAddress.GetIpAddress();
         int staffId = int.Parse(User.Claims.First(c => c.Type == "userId").Value);
-        var response = await _appointmentService.StaffBookingAppointmentForUser(staffId, request);
+        var appointmentResponse = await _appointmentService.StaffBookingAppointmentForUser(staffId, request);
+        UserInfoRequest userInfoRequest = new UserInfoRequest
+        {
+            UserIpAddress = userIpAddress,
+        };
+        var response = await _paymentService.CreateVnPayPaymentUrl(appointmentResponse.Data.AppointmentId, userInfoRequest);
+
         return Ok(response);
     }
     
