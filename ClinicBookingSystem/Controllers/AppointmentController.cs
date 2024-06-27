@@ -231,9 +231,9 @@ public class AppointmentController : ControllerBase
     [HttpGet]
     [Route("staff-get-appointment-by-date")]
     [Authorize(Roles = "STAFF")]
-    public async Task<ActionResult<BaseResponse<IEnumerable<StaffGetAppointmentByDay>>>> StaffGetAppointmentByDate([FromQuery] PaginationRequest paginationRequest, [FromQuery] StaffGetAppointmentByDayRequest dateRequest)
+    public async Task<ActionResult<PaginationResponse<StaffGetAppointmentByDay>>> StaffGetAppointmentByDate([FromQuery] PaginationRequest paginationRequest, [FromQuery] DateOnly dateRequest)
     {
-        var response = await _appointmentService.StaffGetAllAppointmentByDay(paginationRequest.PageNumber, paginationRequest.PageSize, dateRequest.Date);
+        var response = await _appointmentService.StaffGetAllAppointmentByDay(paginationRequest.PageNumber, paginationRequest.PageSize, dateRequest);
         return Ok(response);
     }
     
