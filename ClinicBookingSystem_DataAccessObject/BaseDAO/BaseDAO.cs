@@ -7,8 +7,8 @@ namespace ClinicBookingSystem_DataAccessObject.BaseDAO;
 
 public class BaseDAO<T> : IBaseDAO<T> where T : class, IBaseEntities
 {
-    private readonly DbContext _dbContext;
-    public BaseDAO(DbContext dbContext)
+    private readonly ClinicBookingSystemContext _dbContext;
+    public BaseDAO(ClinicBookingSystemContext dbContext)
     {
         _dbContext = dbContext;
     }

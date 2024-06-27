@@ -8,16 +8,19 @@ using ClinicBookingSystem_BusinessObject.Entities;
 using ClinicBookingSystem_DataAcessObject.DBContext;
 using Microsoft.EntityFrameworkCore;
 using ClinicBookingSystem_BusinessObject.Enums;
+using ClinicBookingSystem_DataAccessObject.IBaseDAO;
 
 namespace ClinicBookingSystem_DataAccessObject
 {
     public class SlotDAO : BaseDAO<Slot>
     {
         private readonly ClinicBookingSystemContext _context;
+        private readonly IBaseDAO<Appointment> _appointmentDao;
 
-        public SlotDAO(ClinicBookingSystemContext context) : base(context)
+        public SlotDAO(ClinicBookingSystemContext context, IBaseDAO<Appointment> appointmentDao) : base(context)
         {
             _context = context;
+            _appointmentDao = appointmentDao;
         }
 
         public async Task<IEnumerable<Slot>> GetAllSlots()
@@ -61,7 +64,7 @@ namespace ClinicBookingSystem_DataAccessObject
         {
             var targetStatus = AppointmentStatus.Scheduled;
             var slots = GetQueryableAsync()
-                                  .Where(s => !_context.Appointments
+                                  .Where(s => !_appointmentDao.GetQueryableAsync()
                                       .Include(b => b.Users) // Bao gồm bảng liên kết AppointmentUser
                                       .Any(b => b.Slot.Id == s.Id &&
                                                 b.Date.Date == dateTime.Date &&

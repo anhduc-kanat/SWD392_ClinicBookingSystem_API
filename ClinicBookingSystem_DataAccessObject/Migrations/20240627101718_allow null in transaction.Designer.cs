@@ -4,6 +4,7 @@ using ClinicBookingSystem_DataAcessObject.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClinicBookingSystem_DataAccessObject.Migrations
 {
     [DbContext(typeof(ClinicBookingSystemContext))]
-    partial class ClinicBookingSystemContextModelSnapshot : ModelSnapshot
+    [Migration("20240627101718_allow null in transaction")]
+    partial class allownullintransaction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,13 +175,7 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.Property<bool?>("IsApproved")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsClinicalExamPaid")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsFullyPaid")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("IsReExam")

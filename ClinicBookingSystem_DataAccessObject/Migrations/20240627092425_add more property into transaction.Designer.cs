@@ -4,6 +4,7 @@ using ClinicBookingSystem_DataAcessObject.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClinicBookingSystem_DataAccessObject.Migrations
 {
     [DbContext(typeof(ClinicBookingSystemContext))]
-    partial class ClinicBookingSystemContextModelSnapshot : ModelSnapshot
+    [Migration("20240627092425_add more property into transaction")]
+    partial class addmorepropertyintotransaction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,13 +175,7 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.Property<bool?>("IsApproved")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsClinicalExamPaid")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsFullyPaid")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("IsReExam")
@@ -789,22 +786,25 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<long?>("Amount")
+                    b.Property<long>("Amount")
                         .HasColumnType("bigint");
 
-                    b.Property<int?>("AppointmentId")
+                    b.Property<int>("AppointmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("BankCode")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BankTranNo")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("BillingId")
                         .HasColumnType("int");
 
                     b.Property<string>("CardType")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
@@ -820,24 +820,29 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("OrderId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OrderInfo")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("PayDate")
+                    b.Property<DateTime>("PayDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ResponseCode")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<string>("TransactionNo")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TransactionStatus")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -1206,7 +1211,9 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                 {
                     b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Appointment", "Appointment")
                         .WithMany()
-                        .HasForeignKey("AppointmentId");
+                        .HasForeignKey("AppointmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Billing", "Billing")
                         .WithMany()

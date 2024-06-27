@@ -13,5 +13,7 @@ public enum AppointmentStatus
     [Description("Done")]
     Done = 1,
     [Description("Cancelled")]
-    Cancelled = 0
+    Cancelled = 0,
+    [Description("Pending")]
+    Pending = 5
 }
