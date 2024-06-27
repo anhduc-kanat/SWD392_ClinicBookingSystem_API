@@ -77,7 +77,7 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .ThenInclude(p => p.Role)
             .Include(p => p.Users)
             .ThenInclude(p => p.UserProfiles)
-            .Where(p => DateOnly.FromDateTime(p.Date) == date)
+            .Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month && p.Date.Day == date.Day)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();

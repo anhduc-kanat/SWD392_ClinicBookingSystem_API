@@ -57,6 +57,44 @@ public class MappingAppointment : Profile
                     src.Users.FirstOrDefault(p =>
                         p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
                         p.Id == src.UserTreatmentId).CCCD));
+        CreateMap<StaffGetAppointmentByDay, Appointment>().ReverseMap()
+            .ForMember(dest => dest.Date, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.Date)))
+            .ForMember(dest => dest.SlotName, opt => opt.MapFrom(src => src.Slot.Name))
+            .ForMember(dest => dest.StartAt, opt => opt.MapFrom(src => src.Slot.StartAt))
+            .ForMember(dest => dest.EndAt, opt => opt.MapFrom(src => src.Slot.EndAt))
+            .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.UserTreatmentName))
+            .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.UserTreatmentId))
+            .ForMember(dest => dest.PatientAddress, opt =>
+                opt.MapFrom(src =>
+                    src.Users.FirstOrDefault(p =>
+                        p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
+                        p.Id == src.UserTreatmentId).Address))
+            .ForMember(dest => dest.PatientGender, opt =>
+                opt.MapFrom(src =>
+                    src.Users.FirstOrDefault(p =>
+                        p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
+                        p.Id == src.UserTreatmentId).Gender))
+            .ForMember(dest => dest.PatientType, opt =>
+                opt.MapFrom(src =>
+                    src.Users.FirstOrDefault(p =>
+                        p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
+                        p.Id == src.UserTreatmentId).Type))
+            .ForMember(dest => dest.PatientPhoneNumber, opt =>
+                opt.MapFrom(src =>
+                    src.Users.FirstOrDefault(p =>
+                        p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
+                        p.Id == src.UserTreatmentId).PhoneNumber))
+            .ForMember(dest => dest.PatientDateOfBirth, opt =>
+                opt.MapFrom(src =>
+                    src.Users.FirstOrDefault(p =>
+                        p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
+                        p.Id == src.UserTreatmentId).DateOfBirth))
+            .ForMember(dest => dest.PatientCCCD, opt =>
+                opt.MapFrom(src =>
+                    src.Users.FirstOrDefault(p =>
+                        p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
+                        p.Id == src.UserTreatmentId).CCCD)); 
+
         //Customer booking appointment
         CreateMap<CustomerBookingAppointmentResponse, Appointment>().ReverseMap()
             .ForMember(dest => dest.AppointmentId, opt => opt.MapFrom(src => src.Id));
@@ -108,5 +146,6 @@ public class MappingAppointment : Profile
         CreateMap<AppointmentBusinessService, Appointment>().ReverseMap();
         CreateMap<AppointmentBusinessServiceDto, Appointment>().ReverseMap();
         CreateMap<AppointmentBusinessService, AppointmentBusinessServiceDto>().ReverseMap();
+
     }
 }
