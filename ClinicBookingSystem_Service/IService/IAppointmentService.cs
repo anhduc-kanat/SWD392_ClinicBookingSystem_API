@@ -32,4 +32,7 @@ public interface IAppointmentService
 
     Task<PaginationResponse<StaffGetAppointmentByDay>> StaffGetAllAppointmentByDay(int pageNumber, int pageSize,
         DateOnly date);
+
+    Task<PaginationResponse<DentistGetTodayAppointments>> DentistGetAppointmentByDay(int pageNumber,
+        int pageSize, int dentistId, DateOnly date);
 }

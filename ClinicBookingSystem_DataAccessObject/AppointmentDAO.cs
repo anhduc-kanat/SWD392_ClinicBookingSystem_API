@@ -1,5 +1,6 @@
 ﻿using ClinicBookingSystem_BusinessObject.Entities;
 using ClinicBookingSystem_DataAccessObject.BaseDAO;
+using ClinicBookingSystem_DataAccessObject.IBaseDAO;
 using ClinicBookingSystem_DataAcessObject.DBContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,9 +9,12 @@ namespace ClinicBookingSystem_DataAccessObject;
 public class AppointmentDAO : BaseDAO<Appointment>
 {
     private readonly ClinicBookingSystemContext _dbContext;
-    public AppointmentDAO(ClinicBookingSystemContext dbContext) : base(dbContext)
+    private readonly IBaseDAO<AppointmentBusinessService> _appointmentBusinessServiceDao;
+
+    public AppointmentDAO(ClinicBookingSystemContext dbContext, IBaseDAO<AppointmentBusinessService> appointmentBusinessServiceDao) : base(dbContext)
     {
         _dbContext = dbContext;
+        _appointmentBusinessServiceDao = appointmentBusinessServiceDao;
     }
 
     public async Task<IEnumerable<Appointment>> GetAllAppointment()
@@ -23,6 +27,7 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .ThenInclude(p => p.UserProfiles)
             .ToListAsync();
     }
+
     public async Task<Appointment> GetAppointmentById(int Id)
     {
         return await GetQueryableAsync()
@@ -33,6 +38,7 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .ThenInclude(p => p.UserProfiles)
             .FirstOrDefaultAsync(p => p.Id == Id);
     }
+
     public async Task<IEnumerable<Appointment>> GetAllAppointmentPagination(int pageNumber, int pageSize)
     {
         return await GetQueryableAsync()
@@ -45,6 +51,7 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .Take(pageSize)
             .ToListAsync();
     }
+
     public async Task<IEnumerable<Appointment>> GetAppointmentByUserId(int userId, int pageNumber, int pageSize)
     {
         return await GetQueryableAsync()
@@ -69,7 +76,8 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .CountAsync();
     }
 
-    public async Task<IEnumerable<Appointment>> GetAppointmentByDayPagination(int pageNumber, int pageSize, DateOnly date)
+    public async Task<IEnumerable<Appointment>> GetAppointmentByDayPagination(int pageNumber, int pageSize,
+        DateOnly date)
     {
         return await GetQueryableAsync()
             .Include(p => p.Slot)
@@ -81,5 +89,33 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Appointment>> DentistGetTodayAppointment(int pageNumber, int pageSize, int dentistId, DateOnly date)
+    {
+        return await GetQueryableAsync()
+            .Include(p => p.Slot)
+            .Include(p => p.Users)
+            .ThenInclude(p => p.Role)
+            .Include(p => p.Users)
+            .ThenInclude(p => p.UserProfiles)
+            .Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month &&
+                        p.Date.Day == date.Day)
+            .Include(p => p.AppointmentBusinessServices)
+            .Where(p => p.Users.Any(p => p.Id == dentistId))
+            .Where(p => p.IsClinicalExamPaid == true)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+    }
+    public async Task<int> CountDentistAppointment(int userId)
+    {
+        return await GetQueryableAsync()
+            .Include(p => p.Slot)
+            .Include(p => p.Users)
+            .ThenInclude(p => p.Role)
+            .Where(p => p.Users.Any(p => p.Id == userId))
+            .Where(p => p.IsClinicalExamPaid == true)
+            .CountAsync();
     }
 }

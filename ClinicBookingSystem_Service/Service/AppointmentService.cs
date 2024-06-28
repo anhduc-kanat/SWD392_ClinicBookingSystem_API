@@ -268,4 +268,21 @@ public class AppointmentService : IAppointmentService
             count
         );
     }
+
+    public async Task<PaginationResponse<DentistGetTodayAppointments>> DentistGetAppointmentByDay(int pageNumber,
+        int pageSize, int dentistId, DateOnly date)
+    {
+        var appointments = await _unitOfWork.AppointmentRepository.DentistGetTodayAppointment(pageNumber, pageSize, dentistId, date);
+        int count = await _unitOfWork.AppointmentRepository.CountDentistAppointment(dentistId);
+        var result = _mapper.Map<IList<DentistGetTodayAppointments>>(appointments);
+        return new PaginationResponse<DentistGetTodayAppointments>(
+            "Dentist get all today appointments successfully",
+            StatusCodeEnum.OK_200,
+            result,
+            pageNumber,
+            pageSize,
+            count
+        );
+        
+    }
 }

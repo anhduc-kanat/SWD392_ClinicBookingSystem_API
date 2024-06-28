@@ -237,4 +237,13 @@ public class AppointmentController : ControllerBase
         return Ok(response);
     }
     
+    [HttpGet]
+    [Route("dentist-get-appointment-by-date")]
+    [Authorize(Roles = "DENTIST")]
+    public async Task<ActionResult<PaginationResponse<DentistGetTodayAppointments>>> DentistGetAppointmentByDay([FromQuery] PaginationRequest paginationRequest, DateOnly date)
+    {
+        var dentistId = int.Parse(User.Claims.First(c => c.Type == "userId").Value);
+        var response = await _appointmentService.DentistGetAppointmentByDay(paginationRequest.PageNumber, paginationRequest.PageSize, dentistId, date);
+        return Ok(response);
+    }
 }
