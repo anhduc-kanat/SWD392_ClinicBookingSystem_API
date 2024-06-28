@@ -253,13 +253,13 @@ public class AppointmentService : IAppointmentService
         await _unitOfWork.AppointmentRepository.UpdateAsync(currentAppointment);
         await _unitOfWork.SaveChangesAsync();
     }
-    public async Task<PaginationResponse<StaffGetAppointmentByDay>> StaffGetAllAppointmentByDay(int pageNumber, int pageSize, DateOnly date)
+    public async Task<PaginationResponse<StaffGetAppointmentByDayResponse>> StaffGetAllAppointmentByDay(int pageNumber, int pageSize, DateOnly date)
     {
         
         var appointments = await _unitOfWork.AppointmentRepository.GetAppointmentByDatePagination(pageNumber, pageSize, date);
-        int count = await _unitOfWork.AppointmentRepository.CountAllAsync();
-        var result = _mapper.Map<IList<StaffGetAppointmentByDay>>(appointments);
-        return new PaginationResponse<StaffGetAppointmentByDay>(
+        int count = await _unitOfWork.AppointmentRepository.CountWhenStaffGetAppointmentByDate(date);
+        var result = _mapper.Map<IList<StaffGetAppointmentByDayResponse>>(appointments);
+        return new PaginationResponse<StaffGetAppointmentByDayResponse>(
             "Get all appointments successfully",
             StatusCodeEnum.OK_200,
             result,
@@ -269,13 +269,13 @@ public class AppointmentService : IAppointmentService
         );
     }
 
-    public async Task<PaginationResponse<DentistGetTodayAppointments>> DentistGetAppointmentByDay(int pageNumber,
+    public async Task<PaginationResponse<DentistGetTodayAppointmentsResponse>> DentistGetAppointmentByDay(int pageNumber,
         int pageSize, int dentistId, DateOnly date)
     {
         var appointments = await _unitOfWork.AppointmentRepository.DentistGetTodayAppointment(pageNumber, pageSize, dentistId, date);
-        int count = await _unitOfWork.AppointmentRepository.CountDentistAppointment(dentistId);
-        var result = _mapper.Map<IList<DentistGetTodayAppointments>>(appointments);
-        return new PaginationResponse<DentistGetTodayAppointments>(
+        int count = await _unitOfWork.AppointmentRepository.CountDentistAppointment(dentistId, date);
+        var result = _mapper.Map<IList<DentistGetTodayAppointmentsResponse>>(appointments);
+        return new PaginationResponse<DentistGetTodayAppointmentsResponse>(
             "Dentist get all today appointments successfully",
             StatusCodeEnum.OK_200,
             result,
@@ -283,6 +283,9 @@ public class AppointmentService : IAppointmentService
             pageSize,
             count
         );
-        
     }
+    
+    /*
+    public async Task<BaseResponse<>
+*/
 }

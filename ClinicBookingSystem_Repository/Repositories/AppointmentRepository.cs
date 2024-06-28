@@ -41,8 +41,13 @@ public class AppointmentRepository : BaseRepository<Appointment>, IAppointmentRe
     {
         return await _appointmentDAO.DentistGetTodayAppointment(pageNumber, pageSize, dentistId, date);
     }
-    public async Task<int> CountDentistAppointment(int dentistId)
+    public async Task<int> CountDentistAppointment(int dentistId, DateOnly date)
     {
-        return await _appointmentDAO.CountDentistAppointment(dentistId);
+        return await _appointmentDAO.CountDentistAppointment(dentistId, date);
+    }
+
+    public async Task<int> CountWhenStaffGetAppointmentByDate(DateOnly date)
+    {
+        return await _appointmentDAO.CountWhenStaffGetAppointmentByDate(date);
     }
 }

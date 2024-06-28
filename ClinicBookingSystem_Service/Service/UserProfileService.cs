@@ -14,6 +14,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClinicBookingSystem_Service.CustomException;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ClinicBookingSystem_Service.Service
 {
@@ -148,6 +150,14 @@ namespace ClinicBookingSystem_Service.Service
                 var response = _mapper.Map<IEnumerable<GetUserProfileResponse>>(userProfile);
                 return new BaseResponse<IEnumerable<GetUserProfileResponse>>("Successfully", StatusCodeEnum.OK_200,
                     response);
+        }
+        public async Task<BaseResponse<IEnumerable<GetUserProfileResponse>>> GetUserProfileByUserAccountId(int userId)
+        {
+            IEnumerable<UserProfile> userProfile = await _unitOfWork.UserProfileRepository.GetUserProfileById(userId);
+            if(userProfile.IsNullOrEmpty()) throw new CoreException("This user has no profiles", StatusCodeEnum.BadRequest_400);
+            var response = _mapper.Map<IEnumerable<GetUserProfileResponse>>(userProfile);
+            return new BaseResponse<IEnumerable<GetUserProfileResponse>>("Successfully", StatusCodeEnum.OK_200,
+                response);
         }
     }
 }

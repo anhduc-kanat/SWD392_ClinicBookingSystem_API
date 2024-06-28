@@ -38,7 +38,7 @@ public class PaymentController : ControllerBase
 
     [HttpGet]
     [Route("save-payment")]
-    public async Task<OkResult> SavePayment([FromQuery] VnPayDataRequest request)
+    public async Task<RedirectResult> SavePayment([FromQuery] VnPayDataRequest request)
     {
         var query = HttpContext.Request.Query;
         
@@ -56,6 +56,6 @@ public class PaymentController : ControllerBase
             vnp_TxnRef = query["vnp_TxnRef"]
         };
         await _paymentService.SaveVnPayPayment(request);
-        return Ok();
+        return Redirect("https://api-prn.zouzoumanagement.xyz/api/appointment/get-all-appointment");
     }
 }

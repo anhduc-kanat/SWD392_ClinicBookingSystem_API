@@ -231,16 +231,40 @@ public class AppointmentController : ControllerBase
     [HttpGet]
     [Route("staff-get-appointment-by-date")]
     [Authorize(Roles = "STAFF")]
-    public async Task<ActionResult<PaginationResponse<StaffGetAppointmentByDay>>> StaffGetAppointmentByDate([FromQuery] PaginationRequest paginationRequest, [FromQuery] DateOnly dateRequest)
+    public async Task<ActionResult<PaginationResponse<StaffGetAppointmentByDayResponse>>> StaffGetAppointmentByDate([FromQuery] PaginationRequest paginationRequest, [FromQuery] DateOnly date)
     {
-        var response = await _appointmentService.StaffGetAllAppointmentByDay(paginationRequest.PageNumber, paginationRequest.PageSize, dateRequest);
+        var response = await _appointmentService.StaffGetAllAppointmentByDay(paginationRequest.PageNumber, paginationRequest.PageSize, date);
         return Ok(response);
     }
     
+    /// <summary>
+    /// - Dentist get tất cả appointments theo ngày, khi staff checkin appointment thì dentist mới nhận được appointment, login và truyền Bearer token vào header
+    /// </summary>
+    /// <remarks>
+    /// - status:
+    /// 
+    /// + 0: Cancelled (Bị hủy bởi customer)
+    /// 
+    /// + 1: Done (Đã hoàn thành cuộc hẹn => tức là khi sinh ra result)
+    /// 
+    /// + 2: OnGoing (Staff check-in customer, bắt đầu cuộc hẹn)
+    /// 
+    /// + 3: Scheduled (Hệ thống tự động tạo ra khi customer đặt lịch)
+    /// 
+    /// + 4: Rejected (Staff hủy cuộc hẹn của customer)
+    ///
+    /// - serviceType:
+    ///
+    /// + 1: Examination (Khám bệnh)
+    /// 
+    /// + 2: Treatment (Điều trị) 
+    /// </remarks>
+    /// <param name="paginationRequest"></param>
+    /// <returns></returns>
     [HttpGet]
     [Route("dentist-get-appointment-by-date")]
     [Authorize(Roles = "DENTIST")]
-    public async Task<ActionResult<PaginationResponse<DentistGetTodayAppointments>>> DentistGetAppointmentByDay([FromQuery] PaginationRequest paginationRequest, DateOnly date)
+    public async Task<ActionResult<PaginationResponse<DentistGetTodayAppointmentsResponse>>> DentistGetAppointmentByDay([FromQuery] PaginationRequest paginationRequest, DateOnly date)
     {
         var dentistId = int.Parse(User.Claims.First(c => c.Type == "userId").Value);
         var response = await _appointmentService.DentistGetAppointmentByDay(paginationRequest.PageNumber, paginationRequest.PageSize, dentistId, date);

@@ -27,5 +27,11 @@ public class UserProfileDAO : BaseDAO<UserProfile>
             .Where(u => u.User.Id == userId)
             .ToListAsync();
     }
-    
+    public async Task<IEnumerable<UserProfile>> GetUserProfileByUserAccountId(int userId)
+    {
+        return await GetQueryableAsync()
+            .Where(p => p.User.Id == userId)
+            .Where(p => p.User.Role.Name == "CUSTOMER")
+            .ToListAsync();
+    }
 }

@@ -1,4 +1,5 @@
 ﻿using ClinicBookingSystem_BusinessObject.Entities;
+using ClinicBookingSystem_BusinessObject.Enums;
 using ClinicBookingSystem_DataAccessObject.BaseDAO;
 using ClinicBookingSystem_DataAccessObject.IBaseDAO;
 using ClinicBookingSystem_DataAcessObject.DBContext;
@@ -86,6 +87,7 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .Include(p => p.Users)
             .ThenInclude(p => p.UserProfiles)
             .Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month && p.Date.Day == date.Day)
+            .Where(p => p.IsClinicalExamPaid == true)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
@@ -104,17 +106,31 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .Include(p => p.AppointmentBusinessServices)
             .Where(p => p.Users.Any(p => p.Id == dentistId))
             .Where(p => p.IsClinicalExamPaid == true)
+            .Where(p => p.Status == AppointmentStatus.OnGoing)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
     }
-    public async Task<int> CountDentistAppointment(int userId)
+    public async Task<int> CountDentistAppointment(int userId, DateOnly date)
     {
         return await GetQueryableAsync()
             .Include(p => p.Slot)
             .Include(p => p.Users)
             .ThenInclude(p => p.Role)
             .Where(p => p.Users.Any(p => p.Id == userId))
+            .Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month &&
+                        p.Date.Day == date.Day)
+            .Where(p => p.Status == AppointmentStatus.OnGoing && p.IsClinicalExamPaid == true)
+            .CountAsync();
+    }
+    public async Task<int> CountWhenStaffGetAppointmentByDate(DateOnly date)
+    {
+        return await GetQueryableAsync()
+            .Include(p => p.Slot)
+            .Include(p => p.Users)
+            .ThenInclude(p => p.Role)
+            .Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month &&
+                        p.Date.Day == date.Day)
             .Where(p => p.IsClinicalExamPaid == true)
             .CountAsync();
     }

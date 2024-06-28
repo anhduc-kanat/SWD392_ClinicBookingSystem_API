@@ -30,9 +30,9 @@ public interface IAppointmentService
 
     Task UpdateCurrentAppointmentStatusToDone(int currentAppointmentId);
 
-    Task<PaginationResponse<StaffGetAppointmentByDay>> StaffGetAllAppointmentByDay(int pageNumber, int pageSize,
+    Task<PaginationResponse<StaffGetAppointmentByDayResponse>> StaffGetAllAppointmentByDay(int pageNumber, int pageSize,
         DateOnly date);
 
-    Task<PaginationResponse<DentistGetTodayAppointments>> DentistGetAppointmentByDay(int pageNumber,
+    Task<PaginationResponse<DentistGetTodayAppointmentsResponse>> DentistGetAppointmentByDay(int pageNumber,
         int pageSize, int dentistId, DateOnly date);
 }
