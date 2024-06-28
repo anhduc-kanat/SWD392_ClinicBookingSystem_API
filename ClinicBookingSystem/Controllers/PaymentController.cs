@@ -38,7 +38,7 @@ public class PaymentController : ControllerBase
 
     [HttpGet]
     [Route("save-payment")]
-    public async Task<BaseResponse<SaveVnPayPaymentResponse>> SavePayment([FromQuery] VnPayDataRequest request)
+    public async Task<OkResult> SavePayment([FromQuery] VnPayDataRequest request)
     {
         var query = HttpContext.Request.Query;
         
@@ -55,6 +55,7 @@ public class PaymentController : ControllerBase
             vnp_TransactionStatus = query["vnp_TransactionStatus"],
             vnp_TxnRef = query["vnp_TxnRef"]
         };
-        return await _paymentService.SaveVnPayPayment(request);
+        await _paymentService.SaveVnPayPayment(request);
+        return Ok();
     }
 }
