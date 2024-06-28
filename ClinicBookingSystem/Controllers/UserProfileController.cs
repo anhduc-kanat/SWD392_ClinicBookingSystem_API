@@ -75,5 +75,13 @@ namespace ClinicBookingSystem_API.Controllers
             var userId = int.Parse(User.Claims.First(c => c.Type == "userId").Value);
             return await _userProfileService.GetUserProfileByUserId(userId);
         }
+        
+        [HttpGet]
+        [Route("get-profile-by-user-account-id")]
+        [Authorize(Roles = "STAFF, DENTIST")]
+        public async Task<ActionResult<BaseResponse<IEnumerable<GetUserProfileResponse>>>> GetUserProfileByInputUserAccountId(int userId)
+        {
+            return await _userProfileService.GetUserProfileByUserAccountId(userId);
+        }
     }
 }

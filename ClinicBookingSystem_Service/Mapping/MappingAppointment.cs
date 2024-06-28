@@ -57,7 +57,7 @@ public class MappingAppointment : Profile
                     src.Users.FirstOrDefault(p =>
                         p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
                         p.Id == src.UserTreatmentId).CCCD));
-        CreateMap<StaffGetAppointmentByDay, Appointment>().ReverseMap()
+        CreateMap<StaffGetAppointmentByDayResponse, Appointment>().ReverseMap()
             .ForMember(dest => dest.Date, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.Date)))
             .ForMember(dest => dest.SlotName, opt => opt.MapFrom(src => src.Slot.Name))
             .ForMember(dest => dest.StartAt, opt => opt.MapFrom(src => src.Slot.StartAt))
@@ -142,7 +142,7 @@ public class MappingAppointment : Profile
                         p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
                         p.Id == src.UserTreatmentId).CCCD));
         
-        CreateMap<DentistGetTodayAppointments, Appointment>().ReverseMap()
+        CreateMap<DentistGetTodayAppointmentsResponse, Appointment>().ReverseMap()
             .ForMember(dest => dest.Date, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.Date)))
             .ForMember(dest => dest.SlotName, opt => opt.MapFrom(src => src.Slot.Name))
             .ForMember(dest => dest.StartAt, opt => opt.MapFrom(src => src.Slot.StartAt))

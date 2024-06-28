@@ -24,5 +24,6 @@ namespace ClinicBookingSystem_Service.IService
         Task<BaseResponse<IEnumerable<GetUserProfileResponse>>> GetUserProfiles();
         Task<BaseResponse<GetUserProfileResponse>> GetUserProfile(int id);
         Task<BaseResponse<IEnumerable<GetUserProfileResponse>>> GetUserProfileByUserId(int userId);
+        Task<BaseResponse<IEnumerable<GetUserProfileResponse>>> GetUserProfileByUserAccountId(int userId);
     }
 }

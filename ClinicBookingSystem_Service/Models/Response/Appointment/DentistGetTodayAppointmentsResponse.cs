@@ -2,7 +2,7 @@
 
 namespace ClinicBookingSystem_Service.Models.Response.Appointment;
 
-public class DentistGetTodayAppointments
+public class DentistGetTodayAppointmentsResponse
 {
 public int? Id { get; set; }
 public DateOnly? Date { get; set; }
