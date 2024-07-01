@@ -226,20 +226,19 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AppointmentId")
+                    b.Property<int?>("AppointmentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("BusinessServiceId")
+                    b.Property<int?>("BusinessServiceId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DentistId")
+                    b.Property<int?>("DentistId")
                         .HasColumnType("int");
 
                     b.Property<string>("DentistName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -248,8 +247,10 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("MeetingCount")
+                        .HasColumnType("int");
+
                     b.Property<string>("ServiceName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("ServicePrice")
@@ -261,21 +262,22 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.Property<int?>("Status")
                         .HasColumnType("int");
 
+                    b.Property<int?>("TotalMeetingDate")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserAccountId")
+                    b.Property<int?>("UserAccountId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserAccountName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserTreatmentId")
+                    b.Property<int?>("UserTreatmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserTreatmentName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -528,6 +530,45 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Medicines");
+                });
+
+            modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Meeting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("AppointmentBusinessServiceId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("MeetingAttempt")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppointmentBusinessServiceId");
+
+                    b.ToTable("Meetings");
                 });
 
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Result", b =>
@@ -1134,15 +1175,11 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                 {
                     b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Appointment", "Appointment")
                         .WithMany("AppointmentBusinessServices")
-                        .HasForeignKey("AppointmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AppointmentId");
 
                     b.HasOne("ClinicBookingSystem_BusinessObject.Entities.BusinessService", "BusinessService")
                         .WithMany("AppointmentBusinessServices")
-                        .HasForeignKey("BusinessServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BusinessServiceId");
 
                     b.Navigation("Appointment");
 
@@ -1165,6 +1202,15 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                         .HasForeignKey("UserProfileId");
 
                     b.Navigation("UserProfile");
+                });
+
+            modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Meeting", b =>
+                {
+                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.AppointmentBusinessService", "AppointmentBusinessService")
+                        .WithMany("Meetings")
+                        .HasForeignKey("AppointmentBusinessServiceId");
+
+                    b.Navigation("AppointmentBusinessService");
                 });
 
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Result", b =>
@@ -1274,6 +1320,11 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Appointment", b =>
                 {
                     b.Navigation("AppointmentBusinessServices");
+                });
+
+            modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.AppointmentBusinessService", b =>
+                {
+                    b.Navigation("Meetings");
                 });
 
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.BusinessService", b =>

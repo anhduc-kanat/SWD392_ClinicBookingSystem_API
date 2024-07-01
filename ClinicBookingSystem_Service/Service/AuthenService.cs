@@ -49,6 +49,7 @@ namespace ClinicBookingSystem_Service.Service
                 if( user!=null &&  user.Password == request.Password)
                 {
                     var response = await GetJwtTokenAsync(user);
+                    response.Role = user.Role.Name;
                     return new BaseResponse<LoginResponse>("Succesfully", StatusCodeEnum.OK_200, response);
 
                 }

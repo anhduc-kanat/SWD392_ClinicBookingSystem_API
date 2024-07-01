@@ -30,7 +30,7 @@ namespace ClinicBookingSystem_DataAcessObject.DBContext
         public DbSet<Transaction> Transactions => Set<Transaction>();
         public DbSet<Billing> Billings => Set<Billing>();
         public DbSet<AppointmentBusinessService> AppointmentBusinessServices => Set<AppointmentBusinessService>();
-
+        public DbSet<Meeting> Meetings => Set<Meeting>();
         public DbSet<Token> Tokens => Set<Token>();
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
