@@ -30,6 +30,7 @@ public class BaseDAO<T> : IBaseDAO<T> where T : class, IBaseEntities
     }
     public async Task<T> UpdateAsync(T entity)
     {
+        entity.UpdatedAt = DateTime.Now;
         _dbContext.Entry(entity).State = EntityState.Modified;
         return entity;
     }
