@@ -19,4 +19,11 @@ public class TransactionDAO : BaseDAO<Transaction>
             .Where(p => p.Appointment.Id == appointmentId)
             .FirstOrDefaultAsync();
     }
+    
+    public async Task<IEnumerable<Transaction>> GetListTransactionByAppointmentId(int appointmentId)
+    {
+        return await GetQueryableAsync()
+            .Where(p => p.Appointment.Id == appointmentId)
+            .ToListAsync();
+    }
 }

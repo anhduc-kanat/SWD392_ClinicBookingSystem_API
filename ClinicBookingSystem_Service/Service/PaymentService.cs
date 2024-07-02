@@ -8,6 +8,7 @@ using ClinicBookingSystem_Service.Models.BaseResponse;
 using ClinicBookingSystem_Service.Models.Enums;
 using ClinicBookingSystem_Service.Models.Request.Payment;
 using ClinicBookingSystem_Service.Models.Response.Payment;
+using ClinicBookingSystem_Service.Models.Response.Transaction;
 using ClinicBookingSystem_Service.ThirdParties.VnPay;
 using ClinicBookingSystem_Service.ThirdParties.VnPay.Model.Request;
 
@@ -18,47 +19,126 @@ public class PaymentService : IPaymentService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IVnPayService _vnPayService;
     private readonly IMapper _mapper;
+
     public PaymentService(IUnitOfWork unitOfWork, IVnPayService vnPayService, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
         _vnPayService = vnPayService;
         _mapper = mapper;
     }
-    public async Task<BaseResponse<CreatePaymentResponse>> CreateVnPayPaymentUrl(int appointmentId, UserInfoRequest request)
+
+    public async Task<BaseResponse<CreateTransactionResponse>> CreateTransaction(
+        CreatePaymentTransactionRequest request)
+    {
+        var appointment = await _unitOfWork.AppointmentRepository.GetAppointmentById(request.AppointmentId);
+        if (appointment == null) throw new CoreException("Appointment not found", StatusCodeEnum.BadRequest_400);
+
+        /*IEnumerable<AppointmentBusinessService> appointmentBusinessServices =
+            await _unitOfWork.AppointmentBusinessServiceRepository
+                .GetAppointmentBusinessServiceByAppointmentId(appointmentId);
+
+        if(!appointmentBusinessServices.Any()) throw new CoreException("Appointment business service not found", StatusCodeEnum.BadRequest_400);
+        */
+        List<AppointmentBusinessService>? appointmentBusinessServices = request.AppointmentBusinessServices;
+        foreach (var abs in appointmentBusinessServices)
+        {
+            AppointmentBusinessService availableAbs =
+                await _unitOfWork.AppointmentBusinessServiceRepository.GetByIdAsync(abs.Id);
+            if (availableAbs == null)
+                throw new CoreException("Appointment business service not found", StatusCodeEnum.BadRequest_400);
+        }
+
+        IEnumerable<Transaction> transactions = await
+            _unitOfWork.TransactionRepository.GetListTransactionByAppointmentId(request.AppointmentId);
+        //check if the previous transaction is paid or not
+        if (transactions.Any(trans => trans.IsPay == false))
+        {
+            throw new CoreException("Please pay the previous transaction first", StatusCodeEnum.Conflict_409);
+        }
+
+        var transaction = new Transaction
+        {
+            Appointment = appointment,
+            IsPay = false,
+            Status = TransactionStatus.Pending,
+        };
+
+        //Create transaction if this is the first time booking (only pay for booking fee)
+        if (request.Type == TransactionType.BookingType)
+        {
+            transaction.Type = TransactionType.BookingType;
+            transaction.Amount = appointmentBusinessServices
+                .FirstOrDefault(p => p.BusinessService?.IsPreBooking == true)?.ServicePrice;
+        }
+        //Create transaction if this is the second time booking (pay for service fee)
+        else if (request.Type == TransactionType.ServiceType)
+        {
+            transaction.Type = TransactionType.ServiceType;
+            long totalPrice = 0;
+            //Calculate total price of all services
+            foreach (var abs in appointmentBusinessServices)
+            {
+                totalPrice += abs.ServicePrice;
+            }
+
+            transaction.Amount = totalPrice;
+        }
+
+        //Add transaction to database
+        await _unitOfWork.TransactionRepository.AddAsync(transaction);
+        await _unitOfWork.SaveChangesAsync();
+
+        var result = _mapper.Map<CreateTransactionResponse>(transaction);
+        var userAccount = await _unitOfWork.UserRepository.GetByIdAsync(appointment.UserAccountId.Value);
+        result.UserAccountName = userAccount.FirstName + " " + userAccount.LastName;
+        result.UserAccountPhone = userAccount.PhoneNumber;
+        return new BaseResponse<CreateTransactionResponse>("Create transaction successfully", StatusCodeEnum.OK_200,
+            result);
+    }
+
+    public async Task<BaseResponse<CreatePaymentResponse>> CreateVnPayPaymentUrl(CreatePaymentRequest request)
     {
         //nhan vo appointment => list ra appointmentservice => tinh tong tien cua cac appointmentservice
-        var transaction = await _unitOfWork.TransactionRepository.GetTransactionByAppointmentId(appointmentId);
-        if (transaction != null)
+        var transactions =
+            await _unitOfWork.TransactionRepository.GetListTransactionByAppointmentId(request.AppointmentId);
+        foreach (var transaction in transactions)
         {
-            if(transaction.Status == TransactionStatus.Paid) 
+            if (transaction.Status == TransactionStatus.Paid)
                 throw new CoreException("Appointment has been paid", StatusCodeEnum.BadRequest_400);
         }
-        
-        
-        var appointment = await _unitOfWork.AppointmentRepository.GetAppointmentById(appointmentId);
+
+        /*var appointment = await _unitOfWork.AppointmentRepository.GetAppointmentById(appointmentId);
         if(appointment == null) throw new CoreException("Appointment not found", StatusCodeEnum.BadRequest_400);
         var userAccount = await _unitOfWork.UserRepository.GetByIdAsync(appointment.UserAccountId.Value);
-        if (userAccount == null) throw new CoreException("User not found", StatusCodeEnum.BadRequest_400);
-        
-        var appointmentBusinessServices =
+        if (userAccount == null) throw new CoreException("User not found", StatusCodeEnum.BadRequest_400);*/
+
+        /*var appointmentBusinessServices =
             await _unitOfWork.AppointmentBusinessServiceRepository
                 .GetAppointmentBusinessServiceByAppointmentId(appointmentId);
         long totalPrice = 0;
         foreach (var abs in appointmentBusinessServices)
         {
             totalPrice += abs.ServicePrice;
-        }
+        }*/
 
         OrderRequest order = new OrderRequest
         {
-            OrderId = appointment.Id.ToString(),
-            TotalPrice = totalPrice,
+            OrderId = request.AppointmentId.ToString(),
+            TotalPrice = request.ServicePrice,
         };
+
+        if (request.UserAccountName == null)
+            throw new CoreException("UserAccountName is null", StatusCodeEnum.BadRequest_400);
+        if (request.UserAccountPhone == null)
+            throw new CoreException("UserAccountPhone is null", StatusCodeEnum.BadRequest_400);
+        if (request.UserIpAddress == null)
+            throw new CoreException("UserIpAddress is null", StatusCodeEnum.BadRequest_400);
+
         UserInfoRequest userInfo = new UserInfoRequest
         {
             UserIpAddress = request.UserIpAddress,
-            UserAccountName = userAccount.FirstName + " " +  userAccount.LastName,
-            UserAccountPhone = userAccount.PhoneNumber
+            UserAccountName = request.UserAccountName,
+            UserAccountPhone = request.UserAccountPhone
         };
         string url = _vnPayService.CreatePaymentUrl(order, userInfo);
         return new BaseResponse<CreatePaymentResponse>("Create payment url sucessfully", StatusCodeEnum.OK_200,
@@ -68,68 +148,172 @@ public class PaymentService : IPaymentService
             });
     }
 
-    public async Task<BaseResponse<SaveVnPayPaymentResponse>> SaveVnPayPayment(VnPayDataRequest request)
+    public async Task<BaseResponse<IEnumerable<SaveVnPayPaymentResponse>>> SaveVnPayPayment(VnPayDataRequest request)
     {
-        var existingTransaction = await _unitOfWork.TransactionRepository.GetTransactionByAppointmentId(int.Parse(request.vnp_TxnRef));
-        
-        var transaction = _mapper.Map<Transaction>(request);
-        int appointmentId = int.Parse(transaction.OrderId);
+        int appointmentId = int.Parse(request.vnp_TxnRef);
+        var transactions = await _unitOfWork.TransactionRepository.GetListTransactionByAppointmentId(appointmentId);
+        foreach (var transaction in transactions)
+        {
+        _mapper.Map(request, transaction);
+        }
+
         var appointment = await _unitOfWork.AppointmentRepository.GetAppointmentById(appointmentId);
-        transaction.Appointment = appointment;
-        
-        //Thanh toan service lan dau tien (phi giu cho, phi kham benh)
-        if (existingTransaction == null)
-        {
-            if (request.vnp_TransactionStatus == "00")
-            {
-                appointment.IsClinicalExamPaid = true;
-                appointment.Status = AppointmentStatus.Scheduled;
-                transaction.Status = TransactionStatus.Paid;
-            }
 
-            if (request.vnp_TransactionStatus == "02" && request.vnp_ResponseCode == "24")
+        foreach (var transaction in transactions)
+        {
+            if (transaction.IsPay == false)
             {
-                appointment.IsClinicalExamPaid = false;
-                appointment.IsActive = false;
-                appointment.Status = AppointmentStatus.Cancelled;
-                transaction.Status = TransactionStatus.Cancelled;
-            }
-            //setup job (chua hoan thien)
-            else if (request.vnp_TransactionStatus == "02" && request.vnp_ResponseCode == "15")
-            {
-                transaction.Status = TransactionStatus.Overdue;
+                transaction.Appointment = appointment;
+                var appointmentBusinessServices =
+                    await _unitOfWork.AppointmentBusinessServiceRepository
+                        .GetAppointmentBusinessServiceByAppointmentId(appointmentId);
+                switch (transaction.Type)
+                {
+                    //Thanh toan phi giu cho, phi kham benh khi dat lich
+                    case TransactionType.BookingType:
+                        switch (request.vnp_TransactionStatus)
+                        {
+                            //---------------------------------------------------------------------------//
+                            //Thanh toan thanh cong (dat lich kham giu cho)
+                            case "00":
+                            {
+                                //appointment
+                                appointment.IsClinicalExamPaid = true;
+                                appointment.Status = AppointmentStatus.Scheduled;
+                                //appointmentBusinessService
+                                foreach (var abs in appointmentBusinessServices)
+                                {
+                                    abs.IsPaid = true;
+                                }
+
+                                //Transaction
+                                transaction.Status = TransactionStatus.Paid;
+                                transaction.IsPay = true;
+                                break;
+                            }
+                            //---------------------------------------------------------------------------//
+                            //---------------------------------------------------------------------------//
+                            //Thanh toan that bai do cancel (dat lich kham giu cho)
+                            case "02" when request.vnp_ResponseCode == "24":
+                            {
+                                //appointment
+                                appointment.IsClinicalExamPaid = false;
+                                appointment.IsActive = false;
+                                appointment.Status = AppointmentStatus.Cancelled;
+                                //appointmentBusinessService
+                                foreach (var abs in appointmentBusinessServices)
+                                {
+                                    abs.IsActive = false;
+                                    abs.IsPaid = false;
+                                }
+
+                                //Transaction
+                                transaction.Status = TransactionStatus.Cancelled;
+                                transaction.IsPay = false;
+                                break;
+                            }
+                            //---------------------------------------------------------------------------//
+                            //---------------------------------------------------------------------------//
+                            //setup job (chua hoan thien)
+                            //Thanh toan that bai do het thoi gian (dat lich kham giu cho)
+                            case "02" when request.vnp_ResponseCode == "15":
+                            {
+                                //appointment
+                                appointment.IsClinicalExamPaid = false;
+                                appointment.IsActive = false;
+                                appointment.Status = AppointmentStatus.Cancelled;
+                                //appointmentBusinessService
+                                foreach (var abs in appointmentBusinessServices)
+                                {
+                                    abs.IsActive = false;
+                                    abs.IsPaid = false;
+                                }
+
+                                //Transaction
+                                transaction.Status = TransactionStatus.Overdue;
+                                transaction.IsPay = false;
+                                break;
+                            }
+                        }
+
+                        //---------------------------------------------------------------------------//
+                        break;
+                    //Thanh toan phi dich vu 
+                    case TransactionType.ServiceType:
+                        switch (request.vnp_TransactionStatus)
+                        {
+                            //---------------------------------------------------------------------------//
+                            //Thanh toan thanh cong (dich vu dieu tri)
+                            case "00":
+                            {
+                                //appointment
+                                appointment.IsFullyPaid = true;
+                                appointment.Status = AppointmentStatus.Done;
+                                //appointmentBusinessService
+                                foreach (var abs in appointmentBusinessServices)
+                                {
+                                    abs.IsPaid = true;
+                                }
+
+                                //Transaction
+                                transaction.Status = TransactionStatus.Paid;
+                                transaction.IsPay = true;
+                                break;
+                            }
+                            //---------------------------------------------------------------------------//
+                            //---------------------------------------------------------------------------//
+                            //Thanh toan that bai do cancel (dich vu dieu tri)
+                            case "02" when request.vnp_ResponseCode == "24":
+                            {
+                                //appointment
+                                appointment.IsFullyPaid = false;
+                                //appointmentBusinessService
+                                foreach (var abs in appointmentBusinessServices)
+                                {
+                                    abs.IsPaid = false;
+                                }
+
+                                //Transaction
+                                transaction.Status = TransactionStatus.Cancelled;
+                                transaction.IsPay = false;
+                                break;
+                            }
+                            //---------------------------------------------------------------------------//
+                            //---------------------------------------------------------------------------//
+                            //Thanh toan that bai do het thoi gian (dich vu dieu tri)
+                            //setup job (chua hoan thien)
+                            case "02" when request.vnp_ResponseCode == "15":
+                            {
+                                //appointment
+                                appointment.IsFullyPaid = false;
+                                //appointmentBusinessService
+                                foreach (var abs in appointmentBusinessServices)
+                                {
+                                    abs.IsPaid = false;
+                                }
+
+                                //Transaction
+                                transaction.Status = TransactionStatus.Overdue;
+                                transaction.IsPay = false;
+                                break;
+                            }
+                        }
+
+                        break;
+                }
+
+                //---------------------------------------------------------------------------//
+                foreach (var abs in appointmentBusinessServices)
+                {
+                    await _unitOfWork.AppointmentBusinessServiceRepository.UpdateAsync(abs);
+                }
+                await _unitOfWork.AppointmentRepository.UpdateAsync(appointment);
+                await _unitOfWork.TransactionRepository.UpdateAsync(transaction);
             }
         }
-        //Thanh toan service lan thu 2 (phi dich vu)
-        else
-        {
-            if (request.vnp_TransactionStatus == "00")
-            {
-                appointment.IsFullyPaid = true;
-                appointment.Status = AppointmentStatus.Done;
-                transaction.Status = TransactionStatus.Paid;
-            }
 
-            if (request.vnp_TransactionStatus == "02" && request.vnp_ResponseCode == "24")
-            {
-                appointment.IsFullyPaid = false;
-                transaction.Status = TransactionStatus.Cancelled;
-            }
-            //setup job (chua hoan thien)
-            else if (request.vnp_TransactionStatus == "02" && request.vnp_ResponseCode == "15")
-            {
-                transaction.Status = TransactionStatus.Overdue;
-            }
-        }
-       
-
-        if (transaction.Status == TransactionStatus.Paid)
-            transaction.IsPay = true;
-        else transaction.IsPay = false;
-        
-        await _unitOfWork.TransactionRepository.AddAsync(transaction);
         await _unitOfWork.SaveChangesAsync();
-        var result = _mapper.Map<SaveVnPayPaymentResponse>(transaction);
-        return new BaseResponse<SaveVnPayPaymentResponse>("Save payment successfully", StatusCodeEnum.OK_200, result);
+        var result = _mapper.Map<IEnumerable<SaveVnPayPaymentResponse>>(transactions);
+        return new BaseResponse<IEnumerable<SaveVnPayPaymentResponse>>("Save payment successfully", StatusCodeEnum.OK_200, result);
     }
 }

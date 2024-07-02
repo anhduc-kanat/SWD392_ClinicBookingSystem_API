@@ -100,12 +100,24 @@ public class AppointmentController : ControllerBase
         string userIpAddress = _getUserIpAddress.GetIpAddress();
         var userId = int.Parse(User.Claims.First(c => c.Type == "userId").Value);
         var appointmentResponse = await _appointmentService.UserBookingAppointment(userId, request);
-        UserInfoRequest userInfoRequest = new UserInfoRequest
-        {
-            UserIpAddress = userIpAddress,
-        };
         
-        var response = await _paymentService.CreateVnPayPaymentUrl(appointmentResponse.Data.AppointmentId, userInfoRequest);
+        var createTransactionResponse = await _paymentService.CreateTransaction(new CreatePaymentTransactionRequest
+        {
+            AppointmentId = appointmentResponse.Data.AppointmentId,
+            Type = TransactionType.BookingType,
+            AppointmentBusinessServices = appointmentResponse.Data.AppointmentBusinessServices
+        });
+        
+        CreatePaymentRequest createPaymentRequest = new CreatePaymentRequest
+        {
+            Type = TransactionType.BookingType,
+            ServicePrice = createTransactionResponse.Data.ServicePrice,
+            AppointmentId = appointmentResponse.Data.AppointmentId,
+            UserIpAddress = userIpAddress,
+            UserAccountName = createTransactionResponse.Data.UserAccountName,
+            UserAccountPhone = createTransactionResponse.Data.UserAccountPhone
+        };
+        var response = await _paymentService.CreateVnPayPaymentUrl(createPaymentRequest);
         return Ok(response);
     }
     
@@ -131,11 +143,24 @@ public class AppointmentController : ControllerBase
         string userIpAddress = _getUserIpAddress.GetIpAddress();
         int staffId = int.Parse(User.Claims.First(c => c.Type == "userId").Value);
         var appointmentResponse = await _appointmentService.StaffBookingAppointmentForUser(staffId, request);
-        UserInfoRequest userInfoRequest = new UserInfoRequest
+
+        var createTransactionResponse = await _paymentService.CreateTransaction(new CreatePaymentTransactionRequest
         {
+            AppointmentId = appointmentResponse.Data.AppointmentId,
+            Type = TransactionType.BookingType,
+            AppointmentBusinessServices = appointmentResponse.Data.AppointmentBusinessServices,
+        });
+        
+        CreatePaymentRequest createPaymentRequest = new CreatePaymentRequest
+        {
+            Type = TransactionType.BookingType,
+            ServicePrice = createTransactionResponse.Data.ServicePrice,
+            AppointmentId = appointmentResponse.Data.AppointmentId,
             UserIpAddress = userIpAddress,
+            UserAccountName = createTransactionResponse.Data.UserAccountName,
+            UserAccountPhone = createTransactionResponse.Data.UserAccountPhone
         };
-        var response = await _paymentService.CreateVnPayPaymentUrl(appointmentResponse.Data.AppointmentId, userInfoRequest);
+        var response = await _paymentService.CreateVnPayPaymentUrl(createPaymentRequest);
 
         return Ok(response);
     }
@@ -289,5 +314,22 @@ public class AppointmentController : ControllerBase
         var response = await _appointmentService.DentistAddServiceIntoAppointment(appointmentId, businessService);
         return Ok(response);
     }
+    
+    /*[HttpPost]
+    [Route("staff-process-treatment-appointment/{appointmentId}")]
+    [Authorize(Roles = "STAFF")]
+    public async Task<ActionResult<BaseResponse<StaffBookingAppointmentResponse>>>
+        StaffBookingAppointment([FromBody] StaffBookingAppointmentForCustomerRequest request)
+    {
+        string userIpAddress = _getUserIpAddress.GetIpAddress();
+        int staffId = int.Parse(User.Claims.First(c => c.Type == "userId").Value);
+        var appointmentResponse = await _appointmentService.StaffBookingAppointmentForUser(staffId, request);
+        UserInfoRequest userInfoRequest = new UserInfoRequest
+        {
+            UserIpAddress = userIpAddress,
+        };
+        var response = await _paymentService.CreateVnPayPaymentUrl(appointmentResponse.Data.AppointmentId, userInfoRequest);
 
+        return Ok(response);
+    }*/
 }

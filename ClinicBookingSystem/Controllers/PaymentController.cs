@@ -29,17 +29,20 @@ public class PaymentController : ControllerBase
         _paymentConfig = paymentConfig.Value;
     }
     
-    [HttpGet]
+    /*[HttpGet]
     [Route("get-vnpay-payment-url")]
     public async Task<BaseResponse<CreatePaymentResponse>> GetVnPayUrl(int appointmentId)
     {
+        var createTransactionResponse = await _paymentService.CreateTransaction(appointmentId);
         string ipAddress = _getUserIpAddress.GetIpAddress();
+        createTransactionResponse.Data.UserIpAddress = ipAddress;
         UserInfoRequest userInfoRequest = new UserInfoRequest
         {
             UserIpAddress = ipAddress
         };
+        await _paymentService.CreateTransaction(appointmentId);
         return await _paymentService.CreateVnPayPaymentUrl(appointmentId, userInfoRequest);
-    }
+    }*/
 
     [HttpGet]
     [Route("save-payment")]
