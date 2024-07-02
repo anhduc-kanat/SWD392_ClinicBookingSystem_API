@@ -82,14 +82,19 @@ public class AppointmentService : IAppointmentService
         DateTime date = new DateTime(request.Date.Year, request.Date.Month, request.Date.Day, slot.StartAt.Hours, slot.StartAt.Minutes, slot.StartAt.Seconds);
         //Account cua nguoi dat
         User userAccount = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+        if(userAccount == null) throw new CoreException("User Account not found", StatusCodeEnum.BadRequest_400);
         //Nguoi duoc kham
         UserProfile patient = await _unitOfWork.UserProfileRepository.GetByIdAsync(request.PatientId);
+        if(patient == null) throw new CoreException("Patient not found", StatusCodeEnum.BadRequest_400);
+        //Nha si
         User dentist = await _unitOfWork.DentistRepository.GetByIdAsync(request.DentistId);
+        if(dentist == null) throw new CoreException("Dentist not found", StatusCodeEnum.BadRequest_400);
         IEnumerable<Slot> dentistAvailableSlot = await _unitOfWork.SlotRepository.CheckAvailableSlot(dentist.Id, date);
         
         //Validate if dentist free at this slot
-        if (!dentistAvailableSlot.Any(a => a.Id == slot.Id)) throw new Exception("This slot is unavailable");
+        if (!dentistAvailableSlot.Any(a => a.Id == slot.Id)) throw new CoreException("This slot is unavailable", StatusCodeEnum.BadRequest_400);
         BusinessService businessService = await _unitOfWork.ServiceRepository.GetByIdAsync(request.ServiceId);
+        if(businessService == null) throw new CoreException("Service not found", StatusCodeEnum.BadRequest_400);
         //Add user into list of users
         ICollection<User> users = new List<User>();
         users.Add(userAccount);
@@ -143,8 +148,11 @@ public class AppointmentService : IAppointmentService
         
         //save change
         await _unitOfWork.SaveChangesAsync();
+        
         var result = _mapper.Map<CustomerBookingAppointmentResponse>(appointment);
         result.UserAccountPhone = userAccount.PhoneNumber;
+        result.AppointmentBusinessServices.Add(appointmentBusinessService);
+        
         return new BaseResponse<CustomerBookingAppointmentResponse>("User booking appointment successfully", StatusCodeEnum.Created_201, result);
     }
 
@@ -214,6 +222,7 @@ public class AppointmentService : IAppointmentService
         await _unitOfWork.SaveChangesAsync();
         var result = _mapper.Map<StaffBookingAppointmentResponse>(appointment);
         result.UserAccountPhone = userAccount.PhoneNumber;
+        result.AppointmentBusinessServices.Add(appointmentBusinessService);
         return new BaseResponse<StaffBookingAppointmentResponse>("User booking appointment successfully", StatusCodeEnum.Created_201, result);
     }
     public async Task<BaseResponse<UpdateAppointmentResponse>> UpdateAppointment(int id, UpdateAppointmentRequest request)
@@ -315,7 +324,7 @@ public class AppointmentService : IAppointmentService
             if(appointment.AppointmentBusinessServices.Any(abs => abs.BusinessService.Id == bs.BusinessServiceId))
                 throw new CoreException("Service already existed in appointment", StatusCodeEnum.Conflict_409);
         }
-        
+
         foreach (var bs in requests)
         {
             BusinessService businessService = await _unitOfWork.ServiceRepository.GetServiceById(bs.BusinessServiceId);
@@ -332,6 +341,7 @@ public class AppointmentService : IAppointmentService
             appointmentBusinessServiceDto.MeetingCount = 0;
             
             var appointmentBusinessService = _mapper.Map<AppointmentBusinessService>(appointmentBusinessServiceDto);
+            appointmentBusinessService.IsPaid = false;
             await _unitOfWork.AppointmentBusinessServiceRepository.AddAsync(appointmentBusinessService);
             foreach(var metting in bs.Meetings)
             {
@@ -342,7 +352,7 @@ public class AppointmentService : IAppointmentService
                     Status = MeetingStatus.Undone,
                 };
                 await _unitOfWork.MeetingRepository.AddAsync(meeting);
-            }
+            } 
         }
         await _unitOfWork.SaveChangesAsync();
         

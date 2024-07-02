@@ -4,6 +4,7 @@ using ClinicBookingSystem_DataAcessObject.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClinicBookingSystem_DataAccessObject.Migrations
 {
     [DbContext(typeof(ClinicBookingSystemContext))]
-    partial class ClinicBookingSystemContextModelSnapshot : ModelSnapshot
+    [Migration("20240702064831_ispaid in abs")]
+    partial class ispaidinabs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -247,8 +250,8 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsPaid")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsPaid")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("MeetingCount")
                         .HasColumnType("int");
@@ -352,9 +355,6 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsPreBooking")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -887,9 +887,6 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.Property<string>("TransactionStatus")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -1260,7 +1257,7 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Transaction", b =>
                 {
                     b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Appointment", "Appointment")
-                        .WithMany("Transactions")
+                        .WithMany()
                         .HasForeignKey("AppointmentId");
 
                     b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Billing", "Billing")
@@ -1329,8 +1326,6 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Appointment", b =>
                 {
                     b.Navigation("AppointmentBusinessServices");
-
-                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.AppointmentBusinessService", b =>

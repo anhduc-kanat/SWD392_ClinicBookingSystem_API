@@ -31,5 +31,9 @@ public class MappingTransaction : Profile
             .ForMember(dest => dest.TransactionStatus, opt => opt.MapFrom(src => src.vnp_TransactionStatus))
             .ForMember(dest => dest.OrderId, opt => opt.MapFrom(src => src.vnp_TxnRef));
         CreateMap<Transaction, SaveVnPayPaymentResponse>().ReverseMap();
+        CreateMap<CreateTransactionResponse, Transaction>().ReverseMap()
+            .ForMember(dest => dest.ServicePrice, opt => opt.MapFrom(src => src.Amount))
+            .ForMember(dest => dest.AppointmentId, opt => opt.MapFrom(src => src.Appointment.Id));
+        
     }
 }
