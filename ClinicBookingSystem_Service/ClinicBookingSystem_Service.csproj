@@ -12,10 +12,9 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Scheduler\" />
+    <PackageReference Include="Quartz" Version="3.10.0" />
+    <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.10.0" />
+    <PackageReference Include="Quartz.Extensions.Hosting" Version="3.10.0" />
   </ItemGroup>
 
 </Project>
