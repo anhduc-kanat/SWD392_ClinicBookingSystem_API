@@ -6,12 +6,15 @@ using ClinicBookingSystem_Service.IServices;
 using ClinicBookingSystem_Service.Mapping;
 using ClinicBookingSystem_Service.Models.DTOs.VNPAY;
 using ClinicBookingSystem_Service.Models.Utils;
+using ClinicBookingSystem_Service.Scheduler;
 using ClinicBookingSystem_Service.Service;
 using ClinicBookingSystem_Service.Services;
 using ClinicBookingSystem_Service.ThirdParties.VnPay;
 using global::System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Quartz;
+
 public static class ConfigureService
 {
     public static IServiceCollection ConfigureServiceService(this IServiceCollection services, IConfiguration configuration)
@@ -41,6 +44,16 @@ public static class ConfigureService
         services.AddScoped<IClinicOwnerService, ClinicOwnerService>();
         services.AddScoped<IVnPayService, VnPayService>();
         services.AddScoped<IPaymentService, PaymentService>();
+        
+        //quartz
+        services.AddQuartz(p =>
+        {
+            p.UseMicrosoftDependencyInjectionJobFactory();
+            var jobKey = new JobKey("PaymentTimeOutJob");
+            p.AddJob<PaymentTimeOutJob>(opt => opt.WithIdentity(jobKey).StoreDurably());
+            services.AddQuartzHostedService(q =>
+                q.WaitForJobsToComplete = true);
+        });
         return services;
     }
 }
