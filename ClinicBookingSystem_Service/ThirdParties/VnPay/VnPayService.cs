@@ -38,7 +38,7 @@ public class VnPayService : IVnPayService
         vnpay.AddRequestData("vnp_Locale", "vn"); //ngon ngu (tieng viet)
         vnpay.AddRequestData("vnp_CurrCode", "VND");  //chi ho tro vnd
         vnpay.AddRequestData("vnp_TxnRef", order.OrderId); //orderId (appointmentId)
-        vnpay.AddRequestData("vnp_OrderInfo", $"Thanh toan don hang: {order.OrderId}\nKhach hang: {user.UserAccountName}\nSDT: {user.UserAccountPhone}"); //orderDescription
+        vnpay.AddRequestData("vnp_OrderInfo", $"Thanh toan don hang: {order.OrderId}. Khach hang: {user.UserAccountName}. SDT: {user.UserAccountPhone}"); //orderDescription
         vnpay.AddRequestData("vnp_OrderType", "other"); //orderType (nay dua theo mat hang vnpay quy dinh)
         vnpay.AddRequestData("vnp_Amount", (order.TotalPrice * 100).ToString()); //Gia tien tong cong (x100 de ra tien thanh toan. Vi du 10k = 10,000 * 100 = 1,000,000)
         vnpay.AddRequestData("vnp_ReturnUrl", vnp_Returnurl); //Return url de get param tu vnpay
