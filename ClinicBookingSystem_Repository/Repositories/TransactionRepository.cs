@@ -21,4 +21,9 @@ public class TransactionRepository : BaseRepository<Transaction>, ITransactionRe
     {
         return await _transactionDAO.GetListTransactionByAppointmentId(appointmentId);
     }
+
+    public async Task<Transaction> GetTransactionByTransactionId(int transactionId)
+    {
+        return await _transactionDAO.GetTransactionByTransactionId(transactionId);
+    }
 }
