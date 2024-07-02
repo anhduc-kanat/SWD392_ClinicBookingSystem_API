@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClinicBookingSystem_BusinessObject.Enums;
 
 namespace ClinicBookingSystem_Service.Service
 {
@@ -29,6 +30,11 @@ namespace ClinicBookingSystem_Service.Service
         public async Task<BaseResponse<CreateServiceResponse>> CreateService(CreateServiceRequest request)
         {
             var service = _mapper.Map<BusinessService>(request);
+            service.IsPreBooking = service.IsPreBooking ?? false;
+            if (service.IsPreBooking.Value)
+            {
+                service.ServiceType = ServiceType.Examination;
+            }
             await _unitOfWork.ServiceRepository.AddAsync(service);
             await _unitOfWork.SaveChangesAsync();
             var newServiceDto = _mapper.Map<CreateServiceResponse>(service);

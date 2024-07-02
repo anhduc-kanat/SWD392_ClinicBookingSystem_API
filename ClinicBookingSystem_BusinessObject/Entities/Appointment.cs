@@ -26,5 +26,6 @@ public class Appointment : BaseEntities
     public ICollection<AppointmentBusinessService>? AppointmentBusinessServices { get; set; }
     //Slot
     public Slot? Slot { get; set; }
-
+    //Trnasaction
+    public IEnumerable<Transaction>? Transactions { get; set; }
 }

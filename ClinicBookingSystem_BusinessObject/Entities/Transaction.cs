@@ -30,6 +30,7 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         public string? TransactionNo { get; set; }
         public string? TransactionStatus { get; set; }
         public string? OrderId { get; set; }
+        public TransactionType Type { get; set; }
         
         //Appointment
         public Appointment? Appointment { get; set; }
