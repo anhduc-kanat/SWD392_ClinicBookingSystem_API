@@ -9,8 +9,10 @@ using ClinicBookingSystem_Service.Models.Enums;
 using ClinicBookingSystem_Service.Models.Request.Payment;
 using ClinicBookingSystem_Service.Models.Response.Payment;
 using ClinicBookingSystem_Service.Models.Response.Transaction;
+using ClinicBookingSystem_Service.Scheduler;
 using ClinicBookingSystem_Service.ThirdParties.VnPay;
 using ClinicBookingSystem_Service.ThirdParties.VnPay.Model.Request;
+using Quartz;
 
 namespace ClinicBookingSystem_Service.Service;
 
@@ -19,12 +21,14 @@ public class PaymentService : IPaymentService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IVnPayService _vnPayService;
     private readonly IMapper _mapper;
-
-    public PaymentService(IUnitOfWork unitOfWork, IVnPayService vnPayService, IMapper mapper)
+    private readonly ISchedulerFactory _schedulerFactory;
+    public PaymentService(IUnitOfWork unitOfWork, IVnPayService vnPayService, 
+        IMapper mapper, ISchedulerFactory schedulerFactory)
     {
         _unitOfWork = unitOfWork;
         _vnPayService = vnPayService;
         _mapper = mapper;
+        _schedulerFactory = schedulerFactory;
     }
 
     public async Task<BaseResponse<CreateTransactionResponse>> CreateTransaction(
@@ -87,7 +91,10 @@ public class PaymentService : IPaymentService
         //Add transaction to database
         await _unitOfWork.TransactionRepository.AddAsync(transaction);
         await _unitOfWork.SaveChangesAsync();
-
+        
+        //set payment time out
+        await SetPaymentTimeOut(transaction.Id);
+        
         var result = _mapper.Map<CreateTransactionResponse>(transaction);
         var userAccount = await _unitOfWork.UserRepository.GetByIdAsync(appointment.UserAccountId.Value);
         result.UserAccountName = userAccount.FirstName + " " + userAccount.LastName;
@@ -315,5 +322,22 @@ public class PaymentService : IPaymentService
         await _unitOfWork.SaveChangesAsync();
         var result = _mapper.Map<IEnumerable<SaveVnPayPaymentResponse>>(transactions);
         return new BaseResponse<IEnumerable<SaveVnPayPaymentResponse>>("Save payment successfully", StatusCodeEnum.OK_200, result);
+    }
+
+    public async Task SetPaymentTimeOut(int transactionId)
+    {
+        var scheduler = await _schedulerFactory.GetScheduler();
+        await scheduler.Start();
+        
+        JobDataMap jobDataMap = new JobDataMap();
+        jobDataMap.Put("TransactionId", transactionId);
+        IJobDetail job = JobBuilder.Create<PaymentTimeOutJob>()
+            .UsingJobData(jobDataMap)
+            .Build();
+        ITrigger trigger = TriggerBuilder.Create()
+            .StartAt(DateTime.Now.AddMinutes(10).AddSeconds(5))
+            .Build();
+        
+        await scheduler.ScheduleJob(job, trigger);
     }
 }
