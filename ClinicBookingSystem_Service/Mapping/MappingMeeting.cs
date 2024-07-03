@@ -8,6 +8,7 @@ public class MappingMeeting : Profile
 {
     public MappingMeeting()
     {
-        CreateMap<GetMeetingResponse, Meeting>().ReverseMap();
+        CreateMap<GetMeetingResponse, Meeting>().ReverseMap()
+            .ForMember(dest => dest.Date, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.Date.Value)));
     }
 }

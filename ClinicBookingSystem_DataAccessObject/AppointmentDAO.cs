@@ -33,14 +33,17 @@ public class AppointmentDAO : BaseDAO<Appointment>
     {
         return await GetQueryableAsync()
             .Include(p => p.Slot)
+            //result
             .Include(p => p.Result)
             .ThenInclude(p => p.Notes)
             .Include(p => p.Result)
             .ThenInclude(p => p.Medicines)
+            //user
             .Include(p => p.Users)
             .ThenInclude(p => p.Role)
             .Include(p => p.Users)
             .ThenInclude(p => p.UserProfiles)
+            //appointment service
             .Include(p => p.AppointmentBusinessServices)
             .ThenInclude(p => p.BusinessService)
             .Include(p => p.AppointmentBusinessServices)
@@ -52,18 +55,22 @@ public class AppointmentDAO : BaseDAO<Appointment>
     {
         return await GetQueryableAsync()
             .Include(p => p.Slot)
+            //user
             .Include(p => p.Users)
             .ThenInclude(p => p.Role)
             .Include(p => p.Users)
             .ThenInclude(p => p.UserProfiles)
+            //result
             .Include(p => p.Result)
             .ThenInclude(p => p.Notes)
             .Include(p => p.Result)
             .ThenInclude(p => p.Medicines)
-            .Include(p => p.Result)
-            .ThenInclude(p => p.Medicines)
+            //appointment service            
             .Include(p => p.AppointmentBusinessServices)
             .ThenInclude(p => p.Meetings)
+            .Include(p => p.AppointmentBusinessServices)
+            .ThenInclude(p => p.BusinessService)
+            
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
@@ -73,14 +80,17 @@ public class AppointmentDAO : BaseDAO<Appointment>
     {
         return await GetQueryableAsync()
             .Include(p => p.Slot)
+            //user
             .Include(p => p.Users)
             .ThenInclude(p => p.Role)
             .Include(p => p.Users)
             .ThenInclude(p => p.UserProfiles)
+            //result
             .Include(p => p.Result)
             .ThenInclude(p => p.Medicines)
             .Include(p => p.Result)
-            .ThenInclude(p => p.Medicines)
+            .ThenInclude(p => p.Notes)
+            //appointment service
             .Include(p => p.AppointmentBusinessServices)
             .ThenInclude(p => p.Meetings)
             .Where(p => p.Users.Any(p => p.Id == userId))
@@ -104,12 +114,15 @@ public class AppointmentDAO : BaseDAO<Appointment>
     {
         return await GetQueryableAsync()
             .Include(p => p.Slot)
+            //user
             .Include(p => p.Users)
             .ThenInclude(p => p.Role)
             .Include(p => p.Users)
             .ThenInclude(p => p.UserProfiles)
+            //appointment service
             .Include(p => p.AppointmentBusinessServices)
             .ThenInclude(p => p.Meetings)
+            
             .Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month && p.Date.Day == date.Day)
             .Where(p => p.IsClinicalExamPaid == true)
             .Skip((pageNumber - 1) * pageSize)
@@ -121,19 +134,22 @@ public class AppointmentDAO : BaseDAO<Appointment>
     {
         return await GetQueryableAsync()
             .Include(p => p.Slot)
+            //user
             .Include(p => p.Users)
             .ThenInclude(p => p.Role)
             .Include(p => p.Users)
             .ThenInclude(p => p.UserProfiles)
             .Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month &&
                         p.Date.Day == date.Day)
-            .Include(p => p.AppointmentBusinessServices)
-            .Include(p => p.Result)
-            .ThenInclude(p => p.Medicines)
-            .Include(p => p.Result)
-            .ThenInclude(p => p.Medicines)
+            //appointment service
             .Include(p => p.AppointmentBusinessServices)
             .ThenInclude(p => p.Meetings)
+            //result
+            .Include(p => p.Result)
+            .ThenInclude(p => p.Medicines)
+            .Include(p => p.Result)
+            .ThenInclude(p => p.Notes)
+            
             .Where(p => p.Users.Any(p => p.Id == dentistId))
             .Where(p => p.IsClinicalExamPaid == true)
             .Where(p => p.Status == AppointmentStatus.OnGoing)

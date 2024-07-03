@@ -5,6 +5,7 @@ namespace ClinicBookingSystem_Service.Models.Response.AppointmentService;
 
 public class GetAppointmentServiceResponse
 {
+    public int Id { get; set; }
     public AppointmentBusinessServiceStatus Status { get; set; }
     public int DentistId { get; set; }
     public string DentistName { get; set; }
