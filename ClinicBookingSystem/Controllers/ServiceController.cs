@@ -30,6 +30,14 @@ public class ServiceController : ControllerBase
     }
 
     [HttpGet]
+    [Route("get-all-exam-services")]
+    public async Task<ActionResult<BaseResponse<IEnumerable<GetServiceResponse>>>> GetExamServices()
+    {
+        var services = await _serviceService.GetAllExamServices();
+        return Ok(services);
+    }
+
+    [HttpGet]
     [Route("get-service-by-id/{id}")]
     public async Task<ActionResult<BaseResponse<GetServiceResponse>>> GetService(int id)
     {

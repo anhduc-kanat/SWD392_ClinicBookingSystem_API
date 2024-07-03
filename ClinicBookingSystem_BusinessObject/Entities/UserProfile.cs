@@ -23,7 +23,7 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         public User? User { get; set; }
 
         //Medical Record
-        public ICollection<MedicalRecord>? MedicalRecords { get; set; }
+        public ICollection<Result>? Results { get; set; }
 
      
     }

@@ -28,4 +28,6 @@ public class Appointment : BaseEntities
     public Slot? Slot { get; set; }
     //Trnasaction
     public IEnumerable<Transaction>? Transactions { get; set; }
+    //Result
+    public Result? Result { get; set; }
 }

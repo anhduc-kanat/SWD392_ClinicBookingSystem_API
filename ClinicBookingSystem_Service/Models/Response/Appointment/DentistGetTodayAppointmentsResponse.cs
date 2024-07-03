@@ -1,4 +1,6 @@
 ﻿using ClinicBookingSystem_BusinessObject.Enums;
+using ClinicBookingSystem_Service.Models.Response.Meeting;
+using ClinicBookingSystem_Service.Models.Response.Result;
 
 namespace ClinicBookingSystem_Service.Models.Response.Appointment;
 
@@ -24,4 +26,6 @@ public int? SlotId { get; set; }
 public string? SlotName { get; set; }
 public TimeSpan? StartAt { get; set; }
 public TimeSpan? EndAt { get; set; }
+public GetResultResponse? Result { get; set; }
+public ICollection<GetMeetingResponse>? Meetings { get; set; }
 }

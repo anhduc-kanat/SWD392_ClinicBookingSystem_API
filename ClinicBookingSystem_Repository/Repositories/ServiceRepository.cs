@@ -23,6 +23,11 @@ public class ServiceRepository : BaseRepository<BusinessService>, IServiceReposi
         return await _serviceDAO.DeleteService(id);
     }
 
+    public async Task<IEnumerable<BusinessService>> GetAllExamServices()
+    {
+        return await _serviceDAO.GetAllExamServices();
+    }
+
     public async Task<IEnumerable<BusinessService>> GetAllServices()
     {
         return await _serviceDAO.GetAllServices();

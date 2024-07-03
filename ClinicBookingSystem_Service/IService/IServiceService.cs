@@ -14,6 +14,7 @@ namespace ClinicBookingSystem_Service.IService
     public interface IServiceService
     {
         public Task<BaseResponse<IEnumerable<GetServiceResponse>>> GetAllServices();
+        public Task<BaseResponse<IEnumerable<GetServiceResponse>>> GetAllExamServices();
         public Task<BaseResponse<GetServiceResponse>> GetServiceById(int id);
         public Task<BaseResponse<CreateServiceResponse>> CreateService(CreateServiceRequest request);
         public Task<BaseResponse<DeleteServiceResponse>> DeleteService(int id);

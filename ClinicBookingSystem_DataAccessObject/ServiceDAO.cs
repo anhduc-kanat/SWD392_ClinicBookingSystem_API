@@ -1,4 +1,5 @@
 ﻿using ClinicBookingSystem_BusinessObject.Entities;
+using ClinicBookingSystem_BusinessObject.Enums;
 using ClinicBookingSystem_DataAccessObject.BaseDAO;
 using ClinicBookingSystem_DataAcessObject.DBContext;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,11 @@ public class ServiceDAO : BaseDAO<BusinessService>
     public ServiceDAO(ClinicBookingSystemContext context) : base(context)
     {
         _context = context;
+    }
+
+    public async Task<IEnumerable<BusinessService>> GetAllExamServices()
+    {
+        return await _context.BusinessServices.Where(s => s.ServiceType == ServiceType.Examination && s.IsPreBooking == true).ToListAsync();
     }
 
     public async Task<IEnumerable<BusinessService>> GetAllServices()

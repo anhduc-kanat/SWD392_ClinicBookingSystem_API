@@ -121,7 +121,6 @@ public class AppointmentService : IAppointmentService
         //Set default status for appointment
         appointment.Status = AppointmentStatus.Pending;
         
-        await _unitOfWork.AppointmentRepository.AddAsync(appointment);
         
         //Create appointmentBusinessService
         var appointmentBusinessServiceDto = _mapper.Map<AppointmentBusinessServiceDto>(appointment);
@@ -145,6 +144,15 @@ public class AppointmentService : IAppointmentService
             Status = MeetingStatus.Undone,
         };
         await _unitOfWork.MeetingRepository.AddAsync(meeting);
+        
+        //Create result
+        Result appointmentResult = _mapper.Map<Result>(appointment);
+        appointmentResult.UserProfile = patient;
+        await _unitOfWork.ResultRepository.AddAsync(appointmentResult);
+        
+        appointment.Result = appointmentResult;
+        await _unitOfWork.AppointmentRepository.AddAsync(appointment);
+
         
         //save change
         await _unitOfWork.SaveChangesAsync();
