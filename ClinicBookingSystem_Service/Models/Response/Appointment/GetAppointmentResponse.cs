@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using ClinicBookingSystem_BusinessObject.Enums;
+using ClinicBookingSystem_Service.Models.Response.AppointmentService;
 using ClinicBookingSystem_Service.Models.Response.Meeting;
 using ClinicBookingSystem_Service.Models.Response.Result;
 using ClinicBookingSystem_Service.Models.Response.Service;
@@ -34,6 +35,6 @@ public class GetAppointmentResponse
     public TimeSpan? StartAt { get; set; }
     public TimeSpan? EndAt { get; set; }
     public GetResultResponse? Result { get; set; }
-    public ICollection<GetMeetingResponse>? Meetings { get; set; }
+    public ICollection<GetAppointmentServiceResponse>? AppointmentServices { get; set; }
 
 }
