@@ -12,4 +12,14 @@ public class ResultRepository : BaseRepository<Result>, IResultRepository
     {
         _resultDAO = resultDAO;
     }
+
+    public async Task<Result> GetResultByAppointmentId(int appointmentId)
+    {
+        return await _resultDAO.GetResultByAppointmentId(appointmentId);
+    }
+
+    public async Task<Result> GetResultById(int resultId)
+    {
+        return await _resultDAO.GetResultById(resultId);
+    }
 }
