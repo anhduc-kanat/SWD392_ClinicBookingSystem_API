@@ -5,5 +5,6 @@ namespace ClinicBookingSystem_Repository.IRepositories;
 
 public interface IResultRepository : IBaseRepository<Result>
 {
-    
+    Task<Result> GetResultByAppointmentId(int appointmentId);
+    Task<Result> GetResultById(int resultId);
 }

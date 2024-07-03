@@ -4,6 +4,7 @@ using ClinicBookingSystem_DataAcessObject.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClinicBookingSystem_DataAccessObject.Migrations
 {
     [DbContext(typeof(ClinicBookingSystemContext))]
-    partial class ClinicBookingSystemContextModelSnapshot : ModelSnapshot
+    [Migration("20240703150821_Create note, add more fields into result")]
+    partial class Createnoteaddmorefieldsintoresult
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -608,10 +611,6 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.Property<int>("ResultId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ServiceName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -619,7 +618,7 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
 
                     b.HasIndex("ResultId");
 
-                    b.ToTable("Notes");
+                    b.ToTable("Note");
                 });
 
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Result", b =>
@@ -630,7 +629,7 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AppointmentId")
+                    b.Property<int?>("AppointmentId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
@@ -673,8 +672,7 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppointmentId")
-                        .IsUnique();
+                    b.HasIndex("AppointmentId");
 
                     b.HasIndex("MedicalRecordId");
 
@@ -1294,11 +1292,9 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
 
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Result", b =>
                 {
-                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Appointment", null)
-                        .WithOne("Result")
-                        .HasForeignKey("ClinicBookingSystem_BusinessObject.Entities.Result", "AppointmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Appointment", "Appointment")
+                        .WithMany()
+                        .HasForeignKey("AppointmentId");
 
                     b.HasOne("ClinicBookingSystem_BusinessObject.Entities.MedicalRecord", null)
                         .WithMany("Results")
@@ -1307,6 +1303,8 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.HasOne("ClinicBookingSystem_BusinessObject.Entities.UserProfile", "UserProfile")
                         .WithMany("Results")
                         .HasForeignKey("UserProfileId");
+
+                    b.Navigation("Appointment");
 
                     b.Navigation("UserProfile");
                 });
@@ -1403,8 +1401,6 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Appointment", b =>
                 {
                     b.Navigation("AppointmentBusinessServices");
-
-                    b.Navigation("Result");
 
                     b.Navigation("Transactions");
                 });
