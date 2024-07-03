@@ -9,15 +9,19 @@ namespace ClinicBookingSystem_BusinessObject.Entities
 {
     public class Result : BaseEntities
     {
-        public int DentistId { get; set; }
-        public int PatientId { get; set; }
+        public int UserTreatmentId { get; set; }
+        public string UserTreatmentName { get; set; }
+        public int UserAccountId { get; set; }
+        public string UserAccountName { get; set; }
         public string? PreScriptionName { get; set; }
         public string? PreScriptionDescription { get; set; }
         //Appointment
-        public Appointment? Appointment { get; set; }
-        //Medical Record
-        public MedicalRecord? MedicalRecord { get; set; }
+        public int AppointmentId { get; set; }
+        //UserProfile
+        public UserProfile? UserProfile { get; set; }
         //Medicine
         public ICollection<Medicine>? Medicines { get; set; }
+        //Note
+        public ICollection<Note>? Notes { get; set; }
     }
 }

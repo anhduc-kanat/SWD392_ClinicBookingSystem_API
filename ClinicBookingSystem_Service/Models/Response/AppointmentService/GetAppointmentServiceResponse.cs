@@ -1,14 +1,15 @@
-﻿using ClinicBookingSystem_BusinessObject.Entities;
-using ClinicBookingSystem_BusinessObject.Enums;
+﻿using ClinicBookingSystem_BusinessObject.Enums;
+using ClinicBookingSystem_Service.Models.Response.Meeting;
 
-namespace ClinicBookingSystem_Service.Models.DTOs.AppointmentBusinessService;
+namespace ClinicBookingSystem_Service.Models.Response.AppointmentService;
 
-public class AppointmentBusinessServiceDto
+public class GetAppointmentServiceResponse
 {
+    public int Id { get; set; }
     public AppointmentBusinessServiceStatus Status { get; set; }
     public int DentistId { get; set; }
     public string DentistName { get; set; }
-    public int ServiceId { get; set; }
+    public int BusinessServiceId { get; set; }
     public string ServiceName { get; set; }
     public long ServicePrice { get; set; }
     public ServiceType ServiceType { get; set; }
@@ -18,6 +19,5 @@ public class AppointmentBusinessServiceDto
     public string UserAccountName { get; set; }
     public int TotalMeetingDate { get; set; }
     public int MeetingCount { get; set; }
-    public BusinessService BusinessService { get; set; }
-    public ClinicBookingSystem_BusinessObject.Entities.Appointment Appointment { get; set; }
+    public ICollection<GetMeetingResponse>? Meetings { get; set; }
 }

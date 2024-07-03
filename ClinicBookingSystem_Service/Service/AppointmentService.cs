@@ -121,11 +121,11 @@ public class AppointmentService : IAppointmentService
         //Set default status for appointment
         appointment.Status = AppointmentStatus.Pending;
         
-        await _unitOfWork.AppointmentRepository.AddAsync(appointment);
         
         //Create appointmentBusinessService
         var appointmentBusinessServiceDto = _mapper.Map<AppointmentBusinessServiceDto>(appointment);
         appointmentBusinessServiceDto.Status = AppointmentBusinessServiceStatus.Undone;
+        appointmentBusinessServiceDto.ServiceId = businessService.Id;
         appointmentBusinessServiceDto.DentistId = dentist.Id;
         appointmentBusinessServiceDto.DentistName = dentist.FirstName + dentist.LastName;
         appointmentBusinessServiceDto.ServiceName = businessService.Name;
@@ -146,13 +146,21 @@ public class AppointmentService : IAppointmentService
         };
         await _unitOfWork.MeetingRepository.AddAsync(meeting);
         
+        //Create result
+        Result appointmentResult = _mapper.Map<Result>(appointment);
+        appointmentResult.UserProfile = patient;
+        await _unitOfWork.ResultRepository.AddAsync(appointmentResult);
+        
+        appointment.Result = appointmentResult;
+        await _unitOfWork.AppointmentRepository.AddAsync(appointment);
+
+        
         //save change
         await _unitOfWork.SaveChangesAsync();
         
         var result = _mapper.Map<CustomerBookingAppointmentResponse>(appointment);
         result.UserAccountPhone = userAccount.PhoneNumber;
         result.AppointmentBusinessServices.Add(appointmentBusinessService);
-        
         return new BaseResponse<CustomerBookingAppointmentResponse>("User booking appointment successfully", StatusCodeEnum.Created_201, result);
     }
 

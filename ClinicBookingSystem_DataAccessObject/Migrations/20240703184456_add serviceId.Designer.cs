@@ -4,6 +4,7 @@ using ClinicBookingSystem_DataAcessObject.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClinicBookingSystem_DataAccessObject.Migrations
 {
     [DbContext(typeof(ClinicBookingSystemContext))]
-    partial class ClinicBookingSystemContextModelSnapshot : ModelSnapshot
+    [Migration("20240703184456_add serviceId")]
+    partial class addserviceId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -251,6 +254,9 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                         .HasColumnType("bit");
 
                     b.Property<int?>("MeetingCount")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ServiceId")
                         .HasColumnType("int");
 
                     b.Property<string>("ServiceName")
