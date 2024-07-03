@@ -8,6 +8,7 @@ public class AppointmentBusinessServiceDto
     public AppointmentBusinessServiceStatus Status { get; set; }
     public int DentistId { get; set; }
     public string DentistName { get; set; }
+    public int ServiceId { get; set; }
     public string ServiceName { get; set; }
     public long ServicePrice { get; set; }
     public ServiceType ServiceType { get; set; }

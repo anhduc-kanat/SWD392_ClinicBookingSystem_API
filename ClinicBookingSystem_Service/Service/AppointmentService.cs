@@ -125,6 +125,7 @@ public class AppointmentService : IAppointmentService
         //Create appointmentBusinessService
         var appointmentBusinessServiceDto = _mapper.Map<AppointmentBusinessServiceDto>(appointment);
         appointmentBusinessServiceDto.Status = AppointmentBusinessServiceStatus.Undone;
+        appointmentBusinessServiceDto.ServiceId = businessService.Id;
         appointmentBusinessServiceDto.DentistId = dentist.Id;
         appointmentBusinessServiceDto.DentistName = dentist.FirstName + dentist.LastName;
         appointmentBusinessServiceDto.ServiceName = businessService.Name;
@@ -160,7 +161,6 @@ public class AppointmentService : IAppointmentService
         var result = _mapper.Map<CustomerBookingAppointmentResponse>(appointment);
         result.UserAccountPhone = userAccount.PhoneNumber;
         result.AppointmentBusinessServices.Add(appointmentBusinessService);
-        
         return new BaseResponse<CustomerBookingAppointmentResponse>("User booking appointment successfully", StatusCodeEnum.Created_201, result);
     }
 
