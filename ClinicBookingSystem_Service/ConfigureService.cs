@@ -44,6 +44,7 @@ public static class ConfigureService
         services.AddScoped<IClinicOwnerService, ClinicOwnerService>();
         services.AddScoped<IVnPayService, VnPayService>();
         services.AddScoped<IPaymentService, PaymentService>();
+        services.AddScoped<INoteService, NoteService>();
         
         //quartz
         services.AddQuartz(p =>

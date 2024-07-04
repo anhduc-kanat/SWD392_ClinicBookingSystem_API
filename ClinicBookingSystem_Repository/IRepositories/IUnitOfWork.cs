@@ -27,4 +27,5 @@ public interface IUnitOfWork : IBaseUnitOfWork
     IClinicOwnerRepository ClinicOwnerRepository { get; }
     IAppointmentBusinessServiceRepository AppointmentBusinessServiceRepository { get; }
     IMeetingRepository MeetingRepository { get; }
+    INoteRepository NoteRepository { get; }
 }
