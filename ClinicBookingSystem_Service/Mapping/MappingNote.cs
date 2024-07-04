@@ -13,5 +13,6 @@ public class MappingNote : Profile
         CreateMap<DentistAddNoteRequest, Note>();
         CreateMap<Note, AppointmentBusinessService>().ReverseMap()
             .ForMember(dest => dest.Id, opt => opt.Ignore());
+        CreateMap<Note, GetNoteResponse>().ReverseMap();
     }
 }

@@ -202,5 +202,6 @@ public class MappingAppointment : Profile
         CreateMap<AppointmentBusinessService, AppointmentBusinessServiceDto>().ReverseMap();
         //
         CreateMap<AppointmentBusinessServiceDto, Appointment>().ReverseMap();
+        
     }
 }
