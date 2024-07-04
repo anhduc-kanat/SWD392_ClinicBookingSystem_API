@@ -36,6 +36,7 @@ public static class ConfigureService
         services.AddScoped<IClinicOwnerRepository, ClinicOwnerRepository>();
         services.AddScoped<IAppointmentBusinessServiceRepository, AppointmentBusinessServiceRepository>();
         services.AddScoped<IMeetingRepository, MeetingRepository>();
+        services.AddScoped<INoteRepository, NoteRepository>();
         services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
         return services;
