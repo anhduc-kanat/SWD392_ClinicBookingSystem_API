@@ -103,9 +103,9 @@ public class AppointmentService : IAppointmentService
         {
             Date = date,
             UserTreatmentId = patient.Id,
-            UserTreatmentName = patient.FirstName + patient.LastName,
+            UserTreatmentName = patient.FirstName + " " + patient.LastName,
             UserAccountId = userAccount.Id,
-            UserAccountName = userAccount.FirstName + userAccount.LastName,
+            UserAccountName = userAccount.FirstName + " " + userAccount.LastName,
             Slot = slot,
             Users = users
         };
@@ -127,7 +127,7 @@ public class AppointmentService : IAppointmentService
         appointmentBusinessServiceDto.Status = AppointmentBusinessServiceStatus.Undone;
         appointmentBusinessServiceDto.ServiceId = businessService.Id;
         appointmentBusinessServiceDto.DentistId = dentist.Id;
-        appointmentBusinessServiceDto.DentistName = dentist.FirstName + dentist.LastName;
+        appointmentBusinessServiceDto.DentistName = dentist.FirstName + " " + dentist.LastName;
         appointmentBusinessServiceDto.ServiceName = businessService.Name;
         appointmentBusinessServiceDto.ServiceType = businessService.ServiceType;
         appointmentBusinessServiceDto.ServicePrice = businessService.Price;
@@ -191,13 +191,13 @@ public class AppointmentService : IAppointmentService
         {
             Date = date,
             UserTreatmentId = patient.Id,
-            UserTreatmentName = patient.FirstName + patient.LastName,
+            UserTreatmentName = patient.FirstName + " " + patient.LastName,
             UserAccountId = userAccount.Id,
-            UserAccountName = userAccount.FirstName + userAccount.LastName,
+            UserAccountName = userAccount.FirstName + " " + userAccount.LastName,
             Slot = slot,
             Users = users,
             StaffAccountId = staff.Id,
-            StaffAccountName = staff.FirstName + staff.LastName,
+            StaffAccountName = staff.FirstName + " " + staff.LastName,
         };
         var appointment = _mapper.Map<Appointment>(appointmentDto);
         
@@ -209,7 +209,7 @@ public class AppointmentService : IAppointmentService
         var appointmentBusinessServiceDto = _mapper.Map<AppointmentBusinessServiceDto>(appointment);
         appointmentBusinessServiceDto.Status = AppointmentBusinessServiceStatus.Undone;
         appointmentBusinessServiceDto.DentistId = dentist.Id;
-        appointmentBusinessServiceDto.DentistName = dentist.FirstName + dentist.LastName;
+        appointmentBusinessServiceDto.DentistName = dentist.FirstName + " " + dentist.LastName;
         appointmentBusinessServiceDto.ServiceName = businessService.Name;
         appointmentBusinessServiceDto.ServiceType = businessService.ServiceType;
         appointmentBusinessServiceDto.ServicePrice = businessService.Price;
