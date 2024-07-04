@@ -1,4 +1,5 @@
-﻿using ClinicBookingSystem_BusinessObject.Entities;
+﻿using System.Collections;
+using ClinicBookingSystem_BusinessObject.Entities;
 using ClinicBookingSystem_DataAccessObject.BaseDAO;
 using ClinicBookingSystem_DataAcessObject.DBContext;
 using Microsoft.EntityFrameworkCore;
@@ -19,5 +20,13 @@ public class AppointmentBusinessServiceDAO : BaseDAO<AppointmentBusinessService>
             .Include(p => p.Meetings)
             .Where(p => p.Appointment.Id == appointmentId)
             .ToListAsync();
+    }
+    public async Task<AppointmentBusinessService> GetAppointmentBusinessServiceByDentistInThatTask(int dentistId, int appointmentBusinessServiceId)
+    {
+        return await GetQueryableAsync()
+            .Include(p => p.BusinessService)
+            .Include(p => p.Meetings)
+            .Where(p => p.DentistId == dentistId && p.Id == appointmentBusinessServiceId)
+            .FirstOrDefaultAsync();
     }
 }
