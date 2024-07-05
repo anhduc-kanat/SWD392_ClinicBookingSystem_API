@@ -29,4 +29,15 @@ public class AppointmentBusinessServiceDAO : BaseDAO<AppointmentBusinessService>
             .Where(p => p.DentistId == dentistId && p.Id == appointmentBusinessServiceId)
             .FirstOrDefaultAsync();
     }
+
+    public async Task<IEnumerable<AppointmentBusinessService>> GetUnPaidAppointmentBusiness(int appointmentId)
+    {
+        return await GetQueryableAsync()
+            .Include(p => p.Meetings)
+            .Include(p => p.Appointment)
+            .Where(p => p.Appointment.Id == appointmentId && p.Appointment.IsClinicalExamPaid == true)
+            .Where(p => p.IsPaid == false)
+            .Where(p => p.Appointment.IsFullyPaid == false || p.Appointment.IsFullyPaid == null)
+            .ToListAsync();
+    }
 }

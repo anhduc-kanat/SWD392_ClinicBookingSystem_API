@@ -41,6 +41,7 @@ public class PaymentTimeOutJob : IJob
                     //appointmentBusinessService
                     foreach (var abs in appointmentBusinessServices)
                     {
+                        abs.TransactionStatus = TransactionStatus.Overdue;
                         abs.IsActive = false;
                         abs.IsPaid = false;
                     }
@@ -59,6 +60,7 @@ public class PaymentTimeOutJob : IJob
                     //appointmentBusinessService
                     foreach (var abs in appointmentBusinessServices)
                     {
+                        abs.TransactionStatus = TransactionStatus.Overdue;
                         abs.IsPaid = false;
                     }
 

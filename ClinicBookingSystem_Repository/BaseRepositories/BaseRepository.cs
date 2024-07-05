@@ -21,6 +21,12 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class, IBaseEntiti
     {
         return await Task.FromResult(_baseDao.GetAllAsync());
     }
+
+    public Task<T> GetByIdAsync(int? id)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<T> GetByIdAsync(int id)
     {
         return await _baseDao.GetByIdAsync(id);
