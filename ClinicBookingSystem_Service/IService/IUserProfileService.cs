@@ -16,7 +16,7 @@ namespace ClinicBookingSystem_Service.IService
 {
     public interface IUserProfileService
     {
-        Task<BaseResponse<CreateUserProfileResponse>> AddUserProfile(CreateUserProfileRequest request);
+        Task<BaseResponse<CreateUserProfileResponse>> AddUserProfile(int userId, CreateUserProfileRequest request);
         Task<BaseResponse<UpdateUserProfileResponse>> UpdateUserProfile(int id, UpdateUserProfileRequest request);
         Task<BaseResponse<DeleteUserProfileResponse>> DeleteUserProfile(int id);
         Task<BaseResponse<IEnumerable<GetUserProfileResponse>>> GetUserProfilesByUser(string phone);

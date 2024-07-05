@@ -20,6 +20,7 @@ public class MappingAppointment : Profile
         CreateMap<Appointment, CreateAppointmentResponse>().ReverseMap();
         CreateMap<Appointment, UpdateAppointmentResponse>().ReverseMap();
         CreateMap<Appointment, DeleteAppointmentResponse>().ReverseMap();
+
         CreateMap<Appointment, GetAppointmentResponse>()
             .ForMember(dest => dest.Date, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.Date)))
             .ForMember(dest => dest.SlotName, opt => opt.MapFrom(src => src.Slot.Name))
@@ -56,7 +57,9 @@ public class MappingAppointment : Profile
                 opt.MapFrom(src =>
                     src.Users.FirstOrDefault(p =>
                         p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
-                        p.Id == src.UserTreatmentId).CCCD));
+                        p.Id == src.UserTreatmentId).CCCD))
+            .ForMember(dest => dest.AppointmentServices, opt => opt.MapFrom(src => src.AppointmentBusinessServices));
+
         CreateMap<StaffGetAppointmentByDayResponse, Appointment>().ReverseMap()
             .ForMember(dest => dest.Date, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.Date)))
             .ForMember(dest => dest.SlotName, opt => opt.MapFrom(src => src.Slot.Name))
@@ -93,7 +96,11 @@ public class MappingAppointment : Profile
                 opt.MapFrom(src =>
                     src.Users.FirstOrDefault(p =>
                         p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
-                        p.Id == src.UserTreatmentId).CCCD)); 
+                        p.Id == src.UserTreatmentId).CCCD))
+            .ForMember(dest => dest.AppointmentServices, opt => opt.MapFrom(src => src.AppointmentBusinessServices));
+        
+        
+        
 
         //Customer booking appointment
         CreateMap<CustomerBookingAppointmentResponse, Appointment>().ReverseMap()
@@ -103,6 +110,9 @@ public class MappingAppointment : Profile
             .ForMember(dest => dest.AppointmentId, opt => opt.MapFrom(src => src.Id));
         
         CreateMap<Appointment, CustomerBookingAppointmentRequest>();
+        
+        
+        
         //Get appointment by user id
         CreateMap<Appointment, UserGetAppointmentResponse>()
             .ForMember(dest => dest.Date, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.Date)))
@@ -140,8 +150,11 @@ public class MappingAppointment : Profile
                 opt.MapFrom(src =>
                     src.Users.FirstOrDefault(p =>
                         p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
-                        p.Id == src.UserTreatmentId).CCCD));
-        
+                        p.Id == src.UserTreatmentId).CCCD))
+            .ForMember(dest => dest.AppointmentServices, opt => opt.MapFrom(src => src.AppointmentBusinessServices));
+
+
+
         CreateMap<DentistGetTodayAppointmentsResponse, Appointment>().ReverseMap()
             .ForMember(dest => dest.Date, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.Date)))
             .ForMember(dest => dest.SlotName, opt => opt.MapFrom(src => src.Slot.Name))
@@ -178,14 +191,19 @@ public class MappingAppointment : Profile
                 opt.MapFrom(src =>
                     src.Users.FirstOrDefault(p =>
                         p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
-                        p.Id == src.UserTreatmentId).CCCD)); 
+                        p.Id == src.UserTreatmentId).CCCD))
+            .ForMember(dest => dest.AppointmentServices, opt => opt.MapFrom(src => src.AppointmentBusinessServices));
 
         //Check-in
         CreateMap<StaffUpdateAppointmentStatusResponse, Appointment>().ReverseMap();
+        
         CreateMap<AppointmentBusinessService, Appointment>().ReverseMap();
         CreateMap<AppointmentBusinessServiceDto, Appointment>().ReverseMap();
         CreateMap<AppointmentBusinessService, AppointmentBusinessServiceDto>().ReverseMap();
         //
         CreateMap<AppointmentBusinessServiceDto, Appointment>().ReverseMap();
+
+        CreateMap<StaffCreateTreatmentPaymentResponse, Appointment>().ReverseMap()
+            .ForMember(dest => dest.AppointmentId, opt => opt.MapFrom(src => src.Id));
     }
 }

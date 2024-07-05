@@ -14,6 +14,6 @@ namespace ClinicBookingSystem_Repository.IRepositories
         Task<IEnumerable<User>> GetDentistsByService(string serviceName);
         Task<IEnumerable<DateTime>> GetAvailableDate(int id);
         Task<User> CreateNewDentist(User user, List<BusinessService> services);
-
+        Task<IEnumerable<User>> GetDentistsByServiceId(int serviceId);
     }
 }

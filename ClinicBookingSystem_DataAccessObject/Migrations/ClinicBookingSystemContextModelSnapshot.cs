@@ -268,6 +268,9 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.Property<int?>("TotalMeetingDate")
                         .HasColumnType("int");
 
+                    b.Property<int>("TransactionStatus")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -577,6 +580,49 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.ToTable("Meetings");
                 });
 
+            modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Note", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DentistId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DentistName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("ResultId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ServiceName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ResultId");
+
+                    b.ToTable("Notes");
+                });
+
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Result", b =>
                 {
                     b.Property<int>("Id")
@@ -585,14 +631,11 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AppointmentId")
+                    b.Property<int>("AppointmentId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("DentistId")
-                        .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -601,9 +644,6 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                         .HasColumnType("bit");
 
                     b.Property<int?>("MedicalRecordId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PatientId")
                         .HasColumnType("int");
 
                     b.Property<string>("PreScriptionDescription")
@@ -615,11 +655,31 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("UserAccountId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserAccountName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UserProfileId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserTreatmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserTreatmentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("AppointmentId");
+                    b.HasIndex("AppointmentId")
+                        .IsUnique();
 
                     b.HasIndex("MedicalRecordId");
+
+                    b.HasIndex("UserProfileId");
 
                     b.ToTable("Results");
                 });
@@ -1207,7 +1267,7 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.MedicalRecord", b =>
                 {
                     b.HasOne("ClinicBookingSystem_BusinessObject.Entities.UserProfile", "UserProfile")
-                        .WithMany("MedicalRecords")
+                        .WithMany()
                         .HasForeignKey("UserProfileId");
 
                     b.Navigation("UserProfile");
@@ -1222,19 +1282,32 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                     b.Navigation("AppointmentBusinessService");
                 });
 
+            modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Note", b =>
+                {
+                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Result", "Result")
+                        .WithMany("Notes")
+                        .HasForeignKey("ResultId");
+
+                    b.Navigation("Result");
+                });
+
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Result", b =>
                 {
-                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Appointment", "Appointment")
-                        .WithMany()
-                        .HasForeignKey("AppointmentId");
+                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.Appointment", null)
+                        .WithOne("Result")
+                        .HasForeignKey("ClinicBookingSystem_BusinessObject.Entities.Result", "AppointmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.MedicalRecord", "MedicalRecord")
+                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.MedicalRecord", null)
                         .WithMany("Results")
                         .HasForeignKey("MedicalRecordId");
 
-                    b.Navigation("Appointment");
+                    b.HasOne("ClinicBookingSystem_BusinessObject.Entities.UserProfile", "UserProfile")
+                        .WithMany("Results")
+                        .HasForeignKey("UserProfileId");
 
-                    b.Navigation("MedicalRecord");
+                    b.Navigation("UserProfile");
                 });
 
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Specification", b =>
@@ -1330,6 +1403,8 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
                 {
                     b.Navigation("AppointmentBusinessServices");
 
+                    b.Navigation("Result");
+
                     b.Navigation("Transactions");
                 });
 
@@ -1346,6 +1421,11 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.MedicalRecord", b =>
                 {
                     b.Navigation("Results");
+                });
+
+            modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Result", b =>
+                {
+                    b.Navigation("Notes");
                 });
 
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.Role", b =>
@@ -1376,7 +1456,7 @@ namespace ClinicBookingSystem_DataAccessObject.Migrations
 
             modelBuilder.Entity("ClinicBookingSystem_BusinessObject.Entities.UserProfile", b =>
                 {
-                    b.Navigation("MedicalRecords");
+                    b.Navigation("Results");
                 });
 #pragma warning restore 612, 618
         }

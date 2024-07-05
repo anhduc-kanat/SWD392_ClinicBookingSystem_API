@@ -9,8 +9,11 @@ using ClinicBookingSystem_Service.Models.Enums;
 using ClinicBookingSystem_Service.Models.Request.Payment;
 using ClinicBookingSystem_Service.Models.Response.Payment;
 using ClinicBookingSystem_Service.Models.Response.Transaction;
+using ClinicBookingSystem_Service.Models.Utils;
+using ClinicBookingSystem_Service.Scheduler;
 using ClinicBookingSystem_Service.ThirdParties.VnPay;
 using ClinicBookingSystem_Service.ThirdParties.VnPay.Model.Request;
+using Quartz;
 
 namespace ClinicBookingSystem_Service.Service;
 
@@ -19,12 +22,14 @@ public class PaymentService : IPaymentService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IVnPayService _vnPayService;
     private readonly IMapper _mapper;
-
-    public PaymentService(IUnitOfWork unitOfWork, IVnPayService vnPayService, IMapper mapper)
+    private readonly ISchedulerFactory _schedulerFactory;
+    public PaymentService(IUnitOfWork unitOfWork, IVnPayService vnPayService, 
+        IMapper mapper, ISchedulerFactory schedulerFactory)
     {
         _unitOfWork = unitOfWork;
         _vnPayService = vnPayService;
         _mapper = mapper;
+        _schedulerFactory = schedulerFactory;
     }
 
     public async Task<BaseResponse<CreateTransactionResponse>> CreateTransaction(
@@ -51,10 +56,10 @@ public class PaymentService : IPaymentService
         IEnumerable<Transaction> transactions = await
             _unitOfWork.TransactionRepository.GetListTransactionByAppointmentId(request.AppointmentId);
         //check if the previous transaction is paid or not
-        if (transactions.Any(trans => trans.IsPay == false))
+        /*if (transactions.Any(trans => trans.IsPay == false))
         {
             throw new CoreException("Please pay the previous transaction first", StatusCodeEnum.Conflict_409);
-        }
+        }*/
 
         var transaction = new Transaction
         {
@@ -87,7 +92,10 @@ public class PaymentService : IPaymentService
         //Add transaction to database
         await _unitOfWork.TransactionRepository.AddAsync(transaction);
         await _unitOfWork.SaveChangesAsync();
-
+        
+        //set payment time out
+        await SetPaymentTimeOut(transaction.Id);
+        
         var result = _mapper.Map<CreateTransactionResponse>(transaction);
         var userAccount = await _unitOfWork.UserRepository.GetByIdAsync(appointment.UserAccountId.Value);
         result.UserAccountName = userAccount.FirstName + " " + userAccount.LastName;
@@ -120,10 +128,11 @@ public class PaymentService : IPaymentService
         {
             totalPrice += abs.ServicePrice;
         }*/
-
+        GenerateTimeStamp generateTimeStamp = new GenerateTimeStamp();
         OrderRequest order = new OrderRequest
         {
-            OrderId = request.AppointmentId.ToString(),
+            appointmentId = request.AppointmentId,
+            OrderId = generateTimeStamp.GetUnixTimeStamp() + request.AppointmentId.ToString(),
             TotalPrice = request.ServicePrice,
         };
 
@@ -150,7 +159,7 @@ public class PaymentService : IPaymentService
 
     public async Task<BaseResponse<IEnumerable<SaveVnPayPaymentResponse>>> SaveVnPayPayment(VnPayDataRequest request)
     {
-        int appointmentId = int.Parse(request.vnp_TxnRef);
+        int appointmentId = int.Parse(request.vnp_OrderInfo);
         var transactions = await _unitOfWork.TransactionRepository.GetListTransactionByAppointmentId(appointmentId);
         foreach (var transaction in transactions)
         {
@@ -166,7 +175,7 @@ public class PaymentService : IPaymentService
                 transaction.Appointment = appointment;
                 var appointmentBusinessServices =
                     await _unitOfWork.AppointmentBusinessServiceRepository
-                        .GetAppointmentBusinessServiceByAppointmentId(appointmentId);
+                        .GetUnPaidAppointmentBusinessServiceByAppointmentId(appointmentId);
                 switch (transaction.Type)
                 {
                     //Thanh toan phi giu cho, phi kham benh khi dat lich
@@ -184,6 +193,7 @@ public class PaymentService : IPaymentService
                                 foreach (var abs in appointmentBusinessServices)
                                 {
                                     abs.IsPaid = true;
+                                    abs.TransactionStatus = TransactionStatus.Paid;
                                 }
 
                                 //Transaction
@@ -203,11 +213,12 @@ public class PaymentService : IPaymentService
                                 //appointmentBusinessService
                                 foreach (var abs in appointmentBusinessServices)
                                 {
+                                    abs.TransactionStatus = TransactionStatus.Cancelled;
                                     abs.IsActive = false;
                                     abs.IsPaid = false;
                                 }
 
-                                //Transaction
+                                //Transaction   
                                 transaction.Status = TransactionStatus.Cancelled;
                                 transaction.IsPay = false;
                                 break;
@@ -225,6 +236,7 @@ public class PaymentService : IPaymentService
                                 //appointmentBusinessService
                                 foreach (var abs in appointmentBusinessServices)
                                 {
+                                    abs.TransactionStatus = TransactionStatus.Overdue;
                                     abs.IsActive = false;
                                     abs.IsPaid = false;
                                 }
@@ -248,10 +260,11 @@ public class PaymentService : IPaymentService
                             {
                                 //appointment
                                 appointment.IsFullyPaid = true;
-                                appointment.Status = AppointmentStatus.Done;
+                                appointment.Status = AppointmentStatus.Queued;
                                 //appointmentBusinessService
                                 foreach (var abs in appointmentBusinessServices)
                                 {
+                                    abs.TransactionStatus = TransactionStatus.Paid;
                                     abs.IsPaid = true;
                                 }
 
@@ -270,6 +283,7 @@ public class PaymentService : IPaymentService
                                 //appointmentBusinessService
                                 foreach (var abs in appointmentBusinessServices)
                                 {
+                                    abs.TransactionStatus = TransactionStatus.Cancelled;
                                     abs.IsPaid = false;
                                 }
 
@@ -289,6 +303,7 @@ public class PaymentService : IPaymentService
                                 //appointmentBusinessService
                                 foreach (var abs in appointmentBusinessServices)
                                 {
+                                    abs.TransactionStatus = TransactionStatus.Overdue;
                                     abs.IsPaid = false;
                                 }
 
@@ -315,5 +330,22 @@ public class PaymentService : IPaymentService
         await _unitOfWork.SaveChangesAsync();
         var result = _mapper.Map<IEnumerable<SaveVnPayPaymentResponse>>(transactions);
         return new BaseResponse<IEnumerable<SaveVnPayPaymentResponse>>("Save payment successfully", StatusCodeEnum.OK_200, result);
+    }
+
+    public async Task SetPaymentTimeOut(int transactionId)
+    {
+        var scheduler = await _schedulerFactory.GetScheduler();
+        await scheduler.Start();
+        
+        JobDataMap jobDataMap = new JobDataMap();
+        jobDataMap.Put("TransactionId", transactionId);
+        IJobDetail job = JobBuilder.Create<PaymentTimeOutJob>()
+            .UsingJobData(jobDataMap)
+            .Build();
+        ITrigger trigger = TriggerBuilder.Create()
+            .StartAt(DateTime.Now.AddMinutes(10).AddSeconds(5))
+            .Build();
+        
+        await scheduler.ScheduleJob(job, trigger);
     }
 }

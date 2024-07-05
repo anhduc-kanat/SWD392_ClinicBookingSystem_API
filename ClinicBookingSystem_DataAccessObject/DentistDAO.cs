@@ -65,7 +65,14 @@ namespace ClinicBookingSystem_DataAccessObject
 
             return bookedDates;
         }
-      
+
+        public async Task<IEnumerable<User>> GetDentistsByServiceId(int serviceId)
+        {
+            return await GetQueryableAsync()
+                .Include(s => s.BusinessServices)
+                .Where(a => a.BusinessServices.Any(p => p.Id == serviceId && a.Role.Name =="DENTIST"))
+                .ToListAsync();
+        }
     }
 
 }

@@ -15,5 +15,9 @@ public enum AppointmentStatus
     [Description("Cancelled")]
     Cancelled = 0,
     [Description("Pending")]
-    Pending = 5
+    Pending = 5,
+    [Description("OnTreatment")]
+    OnTreatment = 6,
+    [Description("Queued")]
+    Queued = 7
 }
