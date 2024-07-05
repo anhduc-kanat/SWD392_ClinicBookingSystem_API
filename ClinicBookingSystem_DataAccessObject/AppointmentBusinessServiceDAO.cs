@@ -26,7 +26,7 @@ public class AppointmentBusinessServiceDAO : BaseDAO<AppointmentBusinessService>
         return await GetQueryableAsync()
             .Include(p => p.BusinessService)
             .Include(p => p.Meetings)
-            .Where(p => p.IsPaid == false)
+            .Where(p => p.IsPaid == false || p.IsPaid == null)
             .Where(p => p.Appointment.Id == appointmentId)
             .ToListAsync();
     }

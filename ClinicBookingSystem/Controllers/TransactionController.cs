@@ -1,5 +1,6 @@
 ﻿using ClinicBookingSystem_Service.IService;
 using ClinicBookingSystem_Service.Models.BaseResponse;
+using ClinicBookingSystem_Service.Models.Pagination;
 using ClinicBookingSystem_Service.Models.Request.Transaction;
 using ClinicBookingSystem_Service.Models.Response.Transaction;
 using Microsoft.AspNetCore.Mvc;
@@ -50,4 +51,5 @@ public class TransactionController : ControllerBase
     {
         return Ok(await _transactionService.DeleteTransaction(id));
     }
+
 }
