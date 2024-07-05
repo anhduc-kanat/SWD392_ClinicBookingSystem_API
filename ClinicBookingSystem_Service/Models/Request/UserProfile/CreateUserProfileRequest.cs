@@ -19,6 +19,5 @@ namespace ClinicBookingSystem_Service.Models.Request.Relative
         public string? Email { get; set; }
         public int? GroupId { get; set; }
         public string? Type { get; set; }
-        public int UserId { get; set; }
     }
 }

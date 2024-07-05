@@ -29,11 +29,11 @@ namespace ClinicBookingSystem_Service.Service
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<BaseResponse<CreateUserProfileResponse>> AddUserProfile(CreateUserProfileRequest request)
+        public async Task<BaseResponse<CreateUserProfileResponse>> AddUserProfile(int userId, CreateUserProfileRequest request)
         {
             try
             {
-                User user = await _unitOfWork.UserRepository.GetByIdAsync(request.UserId);
+                User user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
                 UserProfile data = _mapper.Map<UserProfile>(request);
                 data.User = user;
                 await _unitOfWork.UserProfileRepository.AddAsync(data);
