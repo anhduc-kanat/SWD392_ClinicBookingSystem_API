@@ -19,5 +19,6 @@ public class GetAppointmentServiceResponse
     public string UserAccountName { get; set; }
     public int TotalMeetingDate { get; set; }
     public int MeetingCount { get; set; }
+    public TransactionStatus TransactionStatus { get; set; }
     public ICollection<GetMeetingResponse>? Meetings { get; set; }
 }

@@ -315,21 +315,33 @@ public class AppointmentController : ControllerBase
         return Ok(response);
     }
     
-    /*[HttpPost]
-    [Route("staff-process-treatment-appointment/{appointmentId}")]
+    [HttpPost]
+    [Route("staff-create-treatment-payment/{appointmentId}")]
     [Authorize(Roles = "STAFF")]
-    public async Task<ActionResult<BaseResponse<StaffBookingAppointmentResponse>>>
-        StaffBookingAppointment([FromBody] StaffBookingAppointmentForCustomerRequest request)
+    public async Task<ActionResult<BaseResponse<StaffCreateTreatmentPaymentResponse>>>
+        StaffCreateTreatmentPayment(int appointmentId)
     {
         string userIpAddress = _getUserIpAddress.GetIpAddress();
         int staffId = int.Parse(User.Claims.First(c => c.Type == "userId").Value);
-        var appointmentResponse = await _appointmentService.StaffBookingAppointmentForUser(staffId, request);
-        UserInfoRequest userInfoRequest = new UserInfoRequest
-        {
-            UserIpAddress = userIpAddress,
-        };
-        var response = await _paymentService.CreateVnPayPaymentUrl(appointmentResponse.Data.AppointmentId, userInfoRequest);
+        var appointmentResponse = await _appointmentService.StaffCreateTreatmentPayment(appointmentId, staffId);
 
+        var createTransactionResponse = await _paymentService.CreateTransaction(new CreatePaymentTransactionRequest
+        {
+            AppointmentId = appointmentResponse.Data.AppointmentId,
+            Type = TransactionType.ServiceType,
+            AppointmentBusinessServices = appointmentResponse.Data.AppointmentBusinessServices,
+        });
+        
+        CreatePaymentRequest createPaymentRequest = new CreatePaymentRequest
+        {
+            Type = TransactionType.BookingType,
+            ServicePrice = createTransactionResponse.Data.ServicePrice,
+            AppointmentId = appointmentResponse.Data.AppointmentId,
+            UserIpAddress = userIpAddress,
+            UserAccountName = createTransactionResponse.Data.UserAccountName,
+            UserAccountPhone = createTransactionResponse.Data.UserAccountPhone
+        };
+        var response = await _paymentService.CreateVnPayPaymentUrl(createPaymentRequest);
         return Ok(response);
-    }*/
+    }
 }

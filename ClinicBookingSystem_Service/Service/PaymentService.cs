@@ -55,10 +55,10 @@ public class PaymentService : IPaymentService
         IEnumerable<Transaction> transactions = await
             _unitOfWork.TransactionRepository.GetListTransactionByAppointmentId(request.AppointmentId);
         //check if the previous transaction is paid or not
-        if (transactions.Any(trans => trans.IsPay == false))
+        /*if (transactions.Any(trans => trans.IsPay == false))
         {
             throw new CoreException("Please pay the previous transaction first", StatusCodeEnum.Conflict_409);
-        }
+        }*/
 
         var transaction = new Transaction
         {
@@ -191,6 +191,7 @@ public class PaymentService : IPaymentService
                                 foreach (var abs in appointmentBusinessServices)
                                 {
                                     abs.IsPaid = true;
+                                    abs.TransactionStatus = TransactionStatus.Paid;
                                 }
 
                                 //Transaction
@@ -210,6 +211,7 @@ public class PaymentService : IPaymentService
                                 //appointmentBusinessService
                                 foreach (var abs in appointmentBusinessServices)
                                 {
+                                    abs.TransactionStatus = TransactionStatus.Cancelled;
                                     abs.IsActive = false;
                                     abs.IsPaid = false;
                                 }
@@ -232,6 +234,7 @@ public class PaymentService : IPaymentService
                                 //appointmentBusinessService
                                 foreach (var abs in appointmentBusinessServices)
                                 {
+                                    abs.TransactionStatus = TransactionStatus.Overdue;
                                     abs.IsActive = false;
                                     abs.IsPaid = false;
                                 }
@@ -255,10 +258,11 @@ public class PaymentService : IPaymentService
                             {
                                 //appointment
                                 appointment.IsFullyPaid = true;
-                                appointment.Status = AppointmentStatus.Done;
+                                appointment.Status = AppointmentStatus.OnTreatment;
                                 //appointmentBusinessService
                                 foreach (var abs in appointmentBusinessServices)
                                 {
+                                    abs.TransactionStatus = TransactionStatus.Paid;
                                     abs.IsPaid = true;
                                 }
 
@@ -277,6 +281,7 @@ public class PaymentService : IPaymentService
                                 //appointmentBusinessService
                                 foreach (var abs in appointmentBusinessServices)
                                 {
+                                    abs.TransactionStatus = TransactionStatus.Cancelled;
                                     abs.IsPaid = false;
                                 }
 
@@ -296,6 +301,7 @@ public class PaymentService : IPaymentService
                                 //appointmentBusinessService
                                 foreach (var abs in appointmentBusinessServices)
                                 {
+                                    abs.TransactionStatus = TransactionStatus.Overdue;
                                     abs.IsPaid = false;
                                 }
 
