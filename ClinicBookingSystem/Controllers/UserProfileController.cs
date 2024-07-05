@@ -19,11 +19,14 @@ namespace ClinicBookingSystem_API.Controllers
             _userProfileService = userProfileService;
         }
 
+        //
         [HttpPost]
         [Route("new")]
+        [Authorize(Roles = "CUSTOMER")]
         public async Task<ActionResult<BaseResponse<CreateUserProfileResponse>>> Create( [FromBody] CreateUserProfileRequest request)
         {
-            return await _userProfileService.AddUserProfile(request);
+            var userId = int.Parse(User.Claims.First(c => c.Type == "userId").Value);
+            return await _userProfileService.AddUserProfile(userId, request);
         }
 
         [HttpPut]
