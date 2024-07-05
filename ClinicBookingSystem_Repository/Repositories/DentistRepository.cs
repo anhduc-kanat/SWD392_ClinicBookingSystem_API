@@ -24,6 +24,11 @@ namespace ClinicBookingSystem_Repository.Repositories
             return await _dentistDAO.CreateNewDentist(user, services);
         }
 
+        public async Task<IEnumerable<User>> GetDentistsByServiceId(int serviceId)
+        {
+            return await _dentistDAO.GetDentistsByServiceId(serviceId);
+        }
+
         public async Task<IEnumerable<DateTime>> GetAvailableDate(int id)
         {
             return await _dentistDAO.GetAllFreeDaysOfDentist(id);

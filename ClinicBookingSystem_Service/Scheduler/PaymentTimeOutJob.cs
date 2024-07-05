@@ -29,7 +29,7 @@ public class PaymentTimeOutJob : IJob
             transaction.Appointment = appointment;
             var appointmentBusinessServices =
                 await _unitOfWork.AppointmentBusinessServiceRepository
-                    .GetAppointmentBusinessServiceByAppointmentId(appointment.Id);
+                    .GetUnPaidAppointmentBusinessServiceByAppointmentId(appointment.Id);
             switch (transaction.Type)
             {
                 //Thanh toan phi giu cho, phi kham benh khi dat lich

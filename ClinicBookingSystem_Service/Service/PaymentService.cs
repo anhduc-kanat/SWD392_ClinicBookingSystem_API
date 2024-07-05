@@ -9,6 +9,7 @@ using ClinicBookingSystem_Service.Models.Enums;
 using ClinicBookingSystem_Service.Models.Request.Payment;
 using ClinicBookingSystem_Service.Models.Response.Payment;
 using ClinicBookingSystem_Service.Models.Response.Transaction;
+using ClinicBookingSystem_Service.Models.Utils;
 using ClinicBookingSystem_Service.Scheduler;
 using ClinicBookingSystem_Service.ThirdParties.VnPay;
 using ClinicBookingSystem_Service.ThirdParties.VnPay.Model.Request;
@@ -127,10 +128,11 @@ public class PaymentService : IPaymentService
         {
             totalPrice += abs.ServicePrice;
         }*/
-
+        GenerateTimeStamp generateTimeStamp = new GenerateTimeStamp();
         OrderRequest order = new OrderRequest
         {
-            OrderId = request.AppointmentId.ToString(),
+            appointmentId = request.AppointmentId,
+            OrderId = generateTimeStamp.GetUnixTimeStamp() + request.AppointmentId.ToString(),
             TotalPrice = request.ServicePrice,
         };
 
@@ -157,7 +159,7 @@ public class PaymentService : IPaymentService
 
     public async Task<BaseResponse<IEnumerable<SaveVnPayPaymentResponse>>> SaveVnPayPayment(VnPayDataRequest request)
     {
-        int appointmentId = int.Parse(request.vnp_TxnRef);
+        int appointmentId = int.Parse(request.vnp_OrderInfo);
         var transactions = await _unitOfWork.TransactionRepository.GetListTransactionByAppointmentId(appointmentId);
         foreach (var transaction in transactions)
         {
@@ -173,7 +175,7 @@ public class PaymentService : IPaymentService
                 transaction.Appointment = appointment;
                 var appointmentBusinessServices =
                     await _unitOfWork.AppointmentBusinessServiceRepository
-                        .GetAppointmentBusinessServiceByAppointmentId(appointmentId);
+                        .GetUnPaidAppointmentBusinessServiceByAppointmentId(appointmentId);
                 switch (transaction.Type)
                 {
                     //Thanh toan phi giu cho, phi kham benh khi dat lich
@@ -216,7 +218,7 @@ public class PaymentService : IPaymentService
                                     abs.IsPaid = false;
                                 }
 
-                                //Transaction
+                                //Transaction   
                                 transaction.Status = TransactionStatus.Cancelled;
                                 transaction.IsPay = false;
                                 break;
@@ -258,7 +260,7 @@ public class PaymentService : IPaymentService
                             {
                                 //appointment
                                 appointment.IsFullyPaid = true;
-                                appointment.Status = AppointmentStatus.OnTreatment;
+                                appointment.Status = AppointmentStatus.Queued;
                                 //appointmentBusinessService
                                 foreach (var abs in appointmentBusinessServices)
                                 {
