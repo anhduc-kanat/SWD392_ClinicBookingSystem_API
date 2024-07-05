@@ -60,7 +60,19 @@ namespace ClinicBookingSystem_API.Controllers
             var response = await _dentistService.GetAllDentistsByService(serviceName);
             return response;
         }
-
+        
+        /// <summary>
+        /// Lấy tất cả các bác sĩ theo serviceId
+        /// </summary>
+        /// <param name="serviceId"></param>
+        /// <returns></returns>
+        [HttpGet("get-dentist-service/{serviceId}")]
+        public async Task<ActionResult<BaseResponse<IEnumerable<GetAllDentistsResponse>>>> GetDentistByServiceId(int serviceId)
+        {
+            var response = await _dentistService.GetAllDentistsByServiceId(serviceId);
+            return response;
+        }
+        
         [HttpGet("get-date")]
         public async Task<ActionResult<BaseResponse<IEnumerable<DateTime>>>> GetAvailableDateOfDentist(int id)
         {

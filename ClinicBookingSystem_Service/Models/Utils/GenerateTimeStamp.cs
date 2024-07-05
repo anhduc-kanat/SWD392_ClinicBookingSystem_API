@@ -19,5 +19,12 @@ public class GenerateTimeStamp
         Console.WriteLine(timestamp);
         return timestamp;
     }
-    
+
+    public string GetUnixTimeStamp()
+    {
+        DateTime dateTime = DateTime.Now;
+        var time = dateTime.Day.ToString() + dateTime.Hour.ToString() + dateTime.Second.ToString();
+        /*long unixTimestampMilliseconds = ((DateTimeOffset) dateTime).ToUnixTimeSeconds();*/
+        return time;
+    }
 }
