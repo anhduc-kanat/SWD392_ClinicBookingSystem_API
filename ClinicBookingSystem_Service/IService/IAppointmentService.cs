@@ -38,4 +38,6 @@ public interface IAppointmentService
 
     Task<BaseResponse<DentistAddServiceIntoAppointmentResponse>> DentistAddServiceIntoAppointment(int appointmentId,
         IEnumerable<DentistAddServiceIntoAppointmentRequest> requests);
+
+    Task<BaseResponse<StaffCreateTreatmentPaymentResponse>> StaffCreateTreatmentPayment(int appointmentId, int staffId);
 }

@@ -13,6 +13,7 @@ public class AppointmentBusinessService : BaseEntities
     public int? DentistId { get; set; }
     public string? DentistName { get; set; }
     public string? ServiceName { get; set; }
+    public TransactionStatus TransactionStatus { get; set; }
     public bool? IsPaid { get; set; }
     public long ServicePrice { get; set; }
     public ServiceType? ServiceType { get; set; }
