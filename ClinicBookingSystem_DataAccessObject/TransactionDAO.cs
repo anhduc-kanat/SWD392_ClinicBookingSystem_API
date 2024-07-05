@@ -24,6 +24,7 @@ public class TransactionDAO : BaseDAO<Transaction>
     {
         return await GetQueryableAsync()
             .Where(p => p.Appointment.Id == appointmentId)
+            .Where(p => p.IsPay == false)
             .ToListAsync();
     }
     public async Task<Transaction> GetTransactionByTransactionId(int transactionId)

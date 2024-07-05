@@ -21,4 +21,8 @@ public class AppointmentBusinessServiceRepository : BaseRepository<AppointmentBu
     {
         return await _appointmentBusinessServiceDAO.GetAppointmentBusinessServiceByDentistInThatTask(dentistId, appointmentBusinessServiceId);
     }
+    public async Task<IEnumerable<AppointmentBusinessService>> GetUnPaidAppointmentBusiness(int appointmentId)
+    {
+        return await _appointmentBusinessServiceDAO.GetUnPaidAppointmentBusiness(appointmentId);
+    }
 }

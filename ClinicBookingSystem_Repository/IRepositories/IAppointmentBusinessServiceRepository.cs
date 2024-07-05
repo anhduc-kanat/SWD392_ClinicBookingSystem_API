@@ -9,4 +9,6 @@ public interface IAppointmentBusinessServiceRepository : IBaseRepository<Appoint
 
     Task<AppointmentBusinessService> GetAppointmentBusinessServiceByDentistInThatTask(int dentistId,
         int appointmentBusinessServiceId);
+
+    Task<IEnumerable<AppointmentBusinessService>> GetUnPaidAppointmentBusiness(int appointmentId);
 }
