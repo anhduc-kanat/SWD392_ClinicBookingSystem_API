@@ -5,6 +5,10 @@ using ClinicBookingSystem_Service.Models.Pagination;
 using ClinicBookingSystem_Service.Models.Request.Appointment;
 using ClinicBookingSystem_Service.Models.Request.Payment;
 using ClinicBookingSystem_Service.Models.Response.Appointment;
+using ClinicBookingSystem_Service.RabbitMQ.Consumers.Appointment;
+using ClinicBookingSystem_Service.RabbitMQ.Events;
+using ClinicBookingSystem_Service.RabbitMQ.Events.Appointment;
+using ClinicBookingSystem_Service.RabbitMQ.IService;
 using ClinicBookingSystem_Service.ThirdParties.VnPay;
 using ClinicBookingSystem.Common;
 using Microsoft.AspNetCore.Authorization;
@@ -19,8 +23,6 @@ public class AppointmentController : ControllerBase
     private readonly IAppointmentService _appointmentService;
     private readonly IPaymentService _paymentService;
     private readonly GetUserIpAddress _getUserIpAddress;
-
-
     public AppointmentController(IAppointmentService appointmentService,
         IPaymentService paymentService,
         GetUserIpAddress getUserIpAddress)
