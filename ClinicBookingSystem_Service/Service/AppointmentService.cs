@@ -12,17 +12,21 @@ using ClinicBookingSystem_Service.Models.Pagination;
 using ClinicBookingSystem_Service.Models.Request.Appointment;
 using ClinicBookingSystem_Service.Models.Request.Payment;
 using ClinicBookingSystem_Service.Models.Response.Appointment;
+using ClinicBookingSystem_Service.RabbitMQ.Events.Appointment;
+using ClinicBookingSystem_Service.RabbitMQ.IService;
+
 namespace ClinicBookingSystem_Service.Service;
 
 public class AppointmentService : IAppointmentService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
-
-    public AppointmentService(IUnitOfWork unitOfWork, IMapper mapper)
+    private readonly IRabbitMQService _rabbitMqService;
+    public AppointmentService(IUnitOfWork unitOfWork, IMapper mapper, IRabbitMQService rabbitMqService)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _rabbitMqService = rabbitMqService;
     }
 
     public async Task<BaseResponse<IEnumerable<GetAppointmentResponse>>> GetAllAppointments()
@@ -39,6 +43,7 @@ public class AppointmentService : IAppointmentService
         var appointments = await _unitOfWork.AppointmentRepository.GetAllAppointmentPagination(pageNumber, pageSize);
         int count = await _unitOfWork.AppointmentRepository.CountAllAsync();
         var result = _mapper.Map<IList<GetAppointmentResponse>>(appointments);
+        _rabbitMqService.ConsumerMessage("a");
         return new PaginationResponse<GetAppointmentResponse>(
             "Get all appointments successfully",
             StatusCodeEnum.OK_200,
