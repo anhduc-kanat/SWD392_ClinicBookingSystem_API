@@ -146,7 +146,7 @@ public class AppointmentService : IAppointmentService
         appointmentBusinessServiceDto.ServicePrice = businessService.Price;
         appointmentBusinessServiceDto.BusinessService = businessService;
         appointmentBusinessServiceDto.Appointment = appointment;
-        appointmentBusinessServiceDto.MeetingCount = 1;
+        appointmentBusinessServiceDto.TotalMeetingDate = 1;
 
         var appointmentBusinessService = _mapper.Map<AppointmentBusinessService>(appointmentBusinessServiceDto);
         
@@ -236,7 +236,7 @@ public class AppointmentService : IAppointmentService
         appointmentBusinessServiceDto.ServicePrice = businessService.Price;
         appointmentBusinessServiceDto.BusinessService = businessService;
         appointmentBusinessServiceDto.Appointment = appointment;
-        appointmentBusinessServiceDto.MeetingCount = 1;
+        appointmentBusinessServiceDto.TotalMeetingDate = 1;
         var appointmentBusinessService = _mapper.Map<AppointmentBusinessService>(appointmentBusinessServiceDto);
         appointmentBusinessService.TransactionStatus = TransactionStatus.Pending;
 

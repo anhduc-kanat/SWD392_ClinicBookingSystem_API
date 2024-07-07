@@ -123,7 +123,11 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .Include(p => p.AppointmentBusinessServices)
             .ThenInclude(p => p.Meetings)
             
-            .Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month && p.Date.Day == date.Day)
+            /*.Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month && p.Date.Day == date.Day)*/
+            .Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Year == date.Year)) 
+                        && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Month == date.Month))
+                        && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Day == date.Day)))
+            
             .Where(p => p.IsClinicalExamPaid == true)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
@@ -139,8 +143,11 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .ThenInclude(p => p.Role)
             .Include(p => p.Users)
             .ThenInclude(p => p.UserProfiles)
-            .Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month &&
-                        p.Date.Day == date.Day)
+            /*.Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month &&
+                        p.Date.Day == date.Day)*/
+            .Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Year == date.Year)) 
+                        && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Month == date.Month))
+                        && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Day == date.Day)))
             //appointment service
             .Include(p => p.AppointmentBusinessServices)
             .ThenInclude(p => p.Meetings)
@@ -164,8 +171,11 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .Include(p => p.Users)
             .ThenInclude(p => p.Role)
             .Where(p => p.Users.Any(p => p.Id == userId))
-            .Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month &&
-                        p.Date.Day == date.Day)
+            /*.Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month &&
+                        p.Date.Day == date.Day)*/
+            .Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Year == date.Year)) 
+                        && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Month == date.Month))
+                        && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Day == date.Day)))
             .Where(p => p.Status == AppointmentStatus.OnGoing && p.IsClinicalExamPaid == true)
             .CountAsync();
     }
@@ -175,8 +185,11 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .Include(p => p.Slot)
             .Include(p => p.Users)
             .ThenInclude(p => p.Role)
-            .Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month &&
-                        p.Date.Day == date.Day)
+            /*.Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month &&
+                        p.Date.Day == date.Day)*/
+            .Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Year == date.Year)) 
+                        && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Month == date.Month))
+                        && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Day == date.Day)))
             .Where(p => p.IsClinicalExamPaid == true)
             .CountAsync();
     }
