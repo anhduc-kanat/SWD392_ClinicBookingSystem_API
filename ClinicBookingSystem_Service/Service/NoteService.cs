@@ -20,7 +20,7 @@ public class NoteService : INoteService
     }
     public async Task<BaseResponse<DentistAddNoteResponse>> DentistAddNote(int dentistId, DentistAddNoteRequest request)
     {
-        var appointmentBusinessService =
+        /*var appointmentBusinessService =
             await _unitOfWork.AppointmentBusinessServiceRepository.GetAppointmentBusinessServiceByDentistInThatTask(
                 dentistId, request.AppointmentBusinessServiceId);
         
@@ -32,6 +32,7 @@ public class NoteService : INoteService
         await _unitOfWork.NoteRepository.AddAsync(note);
         await _unitOfWork.SaveChangesAsync();
         var result = _mapper.Map<DentistAddNoteResponse>(note);
-        return new BaseResponse<DentistAddNoteResponse>("Note added successfully", StatusCodeEnum.Created_201, result);
+        return new BaseResponse<DentistAddNoteResponse>("Note added successfully", StatusCodeEnum.Created_201, result);*/
+        throw new NotImplementedException();
     }
 }
