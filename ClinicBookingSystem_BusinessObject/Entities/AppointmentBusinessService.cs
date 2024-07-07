@@ -10,8 +10,6 @@ public class AppointmentBusinessService : BaseEntities
     public string? UserTreatmentName { get; set; }
     public int? UserAccountId { get; set; }
     public string? UserAccountName { get; set; }
-    public int? DentistId { get; set; }
-    public string? DentistName { get; set; }
     public string? ServiceName { get; set; }
     public TransactionStatus TransactionStatus { get; set; }
     public bool? IsPaid { get; set; }

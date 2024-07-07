@@ -15,12 +15,40 @@ public class RabbitMQService : IRabbitMQService
     public void PublishMessage(string queueName, string message)
     {
         var body = Encoding.UTF8.GetBytes(message);
-        _rabbitMQConnection.GetConnection().CreateModel().BasicPublish(exchange: "",
+        var channel = _rabbitMQConnection.GetConnection().CreateModel();
+        
+        channel.QueueDeclare(queue: queueName,
+            durable: true,
+            exclusive: false,
+            autoDelete: false,
+            arguments: null);
+        
+        channel.BasicPublish(exchange: "",
             routingKey: queueName,
             basicProperties: null,
             body: body);
     }
-    public void ConsumerMessage(string queueName)
+    public void ConsumeMessage(string queueName)
+    {
+        var channel = _rabbitMQConnection.GetConnection().CreateModel();
+        channel.QueueDeclare(queue: queueName,
+            durable: true,
+            exclusive: false,
+            autoDelete: false,
+            arguments: null);
+        BasicGetResult result = channel.BasicGet(queueName, autoAck: false);
+        if (result != null)
+        {
+            var body = result.Body.ToArray();
+            var message = Encoding.UTF8.GetString(body);
+            Console.WriteLine(" [x] Received {0}", message);
+
+            // Acknowledge the message
+            channel.BasicAck(deliveryTag: result.DeliveryTag, multiple: false);
+        }
+    }
+
+    public void ConsumeAllMessages(string queueName)
     {
         var channel = _rabbitMQConnection.GetConnection().CreateModel();
         channel.QueueDeclare(queue: queueName,
@@ -39,5 +67,10 @@ public class RabbitMQService : IRabbitMQService
         channel.BasicConsume(queue: queueName,
             autoAck: false,
             consumer: consumer);
+    }
+    public void PurgeQueue(string queueName)
+    {
+        var channel = _rabbitMQConnection.GetConnection().CreateModel();
+        channel.QueuePurge(queueName);
     }
 }

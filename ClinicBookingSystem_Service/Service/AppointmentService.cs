@@ -43,7 +43,6 @@ public class AppointmentService : IAppointmentService
         var appointments = await _unitOfWork.AppointmentRepository.GetAllAppointmentPagination(pageNumber, pageSize);
         int count = await _unitOfWork.AppointmentRepository.CountAllAsync();
         var result = _mapper.Map<IList<GetAppointmentResponse>>(appointments);
-        _rabbitMqService.ConsumerMessage("a");
         return new PaginationResponse<GetAppointmentResponse>(
             "Get all appointments successfully",
             StatusCodeEnum.OK_200,
@@ -140,13 +139,14 @@ public class AppointmentService : IAppointmentService
         var appointmentBusinessServiceDto = _mapper.Map<AppointmentBusinessServiceDto>(appointment);
         appointmentBusinessServiceDto.Status = AppointmentBusinessServiceStatus.Undone;
         appointmentBusinessServiceDto.ServiceId = businessService.Id;
-        appointmentBusinessServiceDto.DentistId = dentist.Id;
-        appointmentBusinessServiceDto.DentistName = dentist.FirstName + " " + dentist.LastName;
+        /*appointmentBusinessServiceDto.DentistId = dentist.Id;
+        appointmentBusinessServiceDto.DentistName = dentist.FirstName + " " + dentist.LastName;*/
         appointmentBusinessServiceDto.ServiceName = businessService.Name;
         appointmentBusinessServiceDto.ServiceType = businessService.ServiceType;
         appointmentBusinessServiceDto.ServicePrice = businessService.Price;
         appointmentBusinessServiceDto.BusinessService = businessService;
         appointmentBusinessServiceDto.Appointment = appointment;
+        appointmentBusinessServiceDto.TotalMeetingDate = 1;
 
         var appointmentBusinessService = _mapper.Map<AppointmentBusinessService>(appointmentBusinessServiceDto);
         
@@ -159,6 +159,8 @@ public class AppointmentService : IAppointmentService
             Date = appointmentBusinessService.Appointment.Date,
             AppointmentBusinessService = appointmentBusinessService,
             Status = MeetingStatus.Undone,
+            DentistId = dentist.Id,
+            DentistName = dentist.FirstName + " " + dentist.LastName
         };
         await _unitOfWork.MeetingRepository.AddAsync(meeting);
 
@@ -227,14 +229,14 @@ public class AppointmentService : IAppointmentService
 
         var appointmentBusinessServiceDto = _mapper.Map<AppointmentBusinessServiceDto>(appointment);
         appointmentBusinessServiceDto.Status = AppointmentBusinessServiceStatus.Undone;
-        appointmentBusinessServiceDto.DentistId = dentist.Id;
-        appointmentBusinessServiceDto.DentistName = dentist.FirstName + " " + dentist.LastName;
+        /*appointmentBusinessServiceDto.DentistId = dentist.Id;
+        appointmentBusinessServiceDto.DentistName = dentist.FirstName + " " + dentist.LastName;*/
         appointmentBusinessServiceDto.ServiceName = businessService.Name;
         appointmentBusinessServiceDto.ServiceType = businessService.ServiceType;
         appointmentBusinessServiceDto.ServicePrice = businessService.Price;
         appointmentBusinessServiceDto.BusinessService = businessService;
         appointmentBusinessServiceDto.Appointment = appointment;
-
+        appointmentBusinessServiceDto.TotalMeetingDate = 1;
         var appointmentBusinessService = _mapper.Map<AppointmentBusinessService>(appointmentBusinessServiceDto);
         appointmentBusinessService.TransactionStatus = TransactionStatus.Pending;
 
@@ -245,6 +247,8 @@ public class AppointmentService : IAppointmentService
             Date = appointmentBusinessService.Appointment.Date,
             AppointmentBusinessService = appointmentBusinessService,
             Status = MeetingStatus.Undone,
+            DentistId = dentist.Id,
+            DentistName = dentist.FirstName + " " + dentist.LastName
         };
         await _unitOfWork.MeetingRepository.AddAsync(meeting);
         //savechange
