@@ -8,6 +8,7 @@ namespace ClinicBookingSystem_Service.Models.Response.Customer
 {
     public class GetCustomerResponse
     {
+        public int? Id { get; set; }
         public string? PhoneNumber { get; set; }
 
         public string? FirstName { get; set; }
