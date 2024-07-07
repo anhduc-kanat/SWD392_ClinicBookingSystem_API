@@ -43,7 +43,6 @@ public class AppointmentService : IAppointmentService
         var appointments = await _unitOfWork.AppointmentRepository.GetAllAppointmentPagination(pageNumber, pageSize);
         int count = await _unitOfWork.AppointmentRepository.CountAllAsync();
         var result = _mapper.Map<IList<GetAppointmentResponse>>(appointments);
-        _rabbitMqService.ConsumerMessage("a");
         return new PaginationResponse<GetAppointmentResponse>(
             "Get all appointments successfully",
             StatusCodeEnum.OK_200,
