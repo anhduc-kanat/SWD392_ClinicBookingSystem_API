@@ -7,8 +7,7 @@ public interface IAppointmentBusinessServiceRepository : IBaseRepository<Appoint
 {
     Task<IEnumerable<AppointmentBusinessService>> GetAppointmentBusinessServiceByAppointmentId(int appointmentId);
 
-    /*Task<AppointmentBusinessService> GetAppointmentBusinessServiceByDentistInThatTask(int dentistId,
-        int appointmentBusinessServiceId);*/
+    Task<AppointmentBusinessService> GetAppointmentBusinessServiceByDentistInThatTask(int appointmentBusinessServiceId);
 
     Task<IEnumerable<AppointmentBusinessService>> GetUnPaidAppointmentBusiness(int appointmentId);
     Task<IEnumerable<AppointmentBusinessService>> GetUnPaidAppointmentBusinessServiceByAppointmentId(int appointmentId);
