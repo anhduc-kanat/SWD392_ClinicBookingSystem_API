@@ -336,7 +336,6 @@ public class AppointmentService : IAppointmentService
     public async Task<PaginationResponse<StaffGetAppointmentByDayResponse>> StaffGetAllAppointmentByDay(int pageNumber,
         int pageSize, DateOnly date)
     {
-
         var appointments =
             await _unitOfWork.AppointmentRepository.GetAppointmentByDatePagination(pageNumber, pageSize, date);
         int count = await _unitOfWork.AppointmentRepository.CountWhenStaffGetAppointmentByDate(date);

@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using System.Configuration;
+using ClinicBookingSystem_Repository.IRepositories;
 using ClinicBookingSystem_Service;
 using ClinicBookingSystem_Service.IService;
 using ClinicBookingSystem_Service.IServices;
@@ -15,9 +16,13 @@ using ClinicBookingSystem_Service.RabbitMQ.Service;
 using ClinicBookingSystem_Service.Scheduler;
 using ClinicBookingSystem_Service.Service;
 using ClinicBookingSystem_Service.Services;
+using ClinicBookingSystem_Service.SignalR.SignalRClient;
+using ClinicBookingSystem_Service.SignalR.SignalRHub;
 using ClinicBookingSystem_Service.ThirdParties.VnPay;
 using global::System;
 using MassTransit;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -100,7 +105,17 @@ public static class ConfigureService
             
         });
         services.AddMassTransitHostedService();
-
+        //signalR
+        services.AddSignalR();
+        services.AddScoped<AppointmentHub>();
+        //signalR client
+        services.AddScoped<AppointmentClient>(provider =>
+        {
+            var rabbitMqService = provider.GetRequiredService<IRabbitMQService>();
+            var unitOfWork = provider.GetRequiredService<IUnitOfWork>();
+            var hubUrl = "https://localhost:7002/appointmentHub";
+            return new AppointmentClient(hubUrl, rabbitMqService, unitOfWork);
+        });
         return services;
     }
 }
