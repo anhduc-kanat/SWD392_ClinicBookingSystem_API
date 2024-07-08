@@ -251,6 +251,15 @@ public class AppointmentService : IAppointmentService
             DentistName = dentist.FirstName + " " + dentist.LastName
         };
         await _unitOfWork.MeetingRepository.AddAsync(meeting);
+        
+        //Create result
+        Result appointmentResult = _mapper.Map<Result>(appointment);
+        appointmentResult.UserProfile = patient;
+        await _unitOfWork.ResultRepository.AddAsync(appointmentResult);
+
+        appointment.Result = appointmentResult;
+        await _unitOfWork.AppointmentRepository.AddAsync(appointment);
+        
         //savechange
         await _unitOfWork.SaveChangesAsync();
         var result = _mapper.Map<StaffBookingAppointmentResponse>(appointment);
