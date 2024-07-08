@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ClinicBookingSystem_BusinessObject.Entities;
 using ClinicBookingSystem_Repository.IRepositories;
+using ClinicBookingSystem_Service.CustomException;
 using ClinicBookingSystem_Service.IService;
 using ClinicBookingSystem_Service.Models.BaseResponse;
 using ClinicBookingSystem_Service.Models.Enums;
@@ -20,11 +21,22 @@ public class NoteService : INoteService
     }
     public async Task<BaseResponse<DentistAddNoteResponse>> DentistAddNote(int dentistId, DentistAddNoteRequest request)
     {
-        /*var appointmentBusinessService =
-            await _unitOfWork.AppointmentBusinessServiceRepository.GetAppointmentBusinessServiceByDentistInThatTask(
-                dentistId, request.AppointmentBusinessServiceId);
+        var appointmentBusinessService =
+            await _unitOfWork.AppointmentBusinessServiceRepository.
+                GetAppointmentBusinessServiceByDentistInThatTask(request.AppointmentBusinessServiceId);
+        if(appointmentBusinessService == null) 
+            throw new CoreException("Appointment Business Service not found", StatusCodeEnum.BadRequest_400);
+        
+        var dentist = await _unitOfWork.DentistRepository.GetDentistById(dentistId);
+        if (appointmentBusinessService.Meetings.Any(meeting => meeting.DentistId != dentist.Id))
+        {
+            throw new CoreException("Dentist is not in the meeting", StatusCodeEnum.BadRequest_400);
+        }
         
         Note note = _mapper.Map<Note>(request);
+        note.DentistId = dentistId;
+        note.DentistName = dentist.FirstName + " " + dentist.LastName;
+        
         Result appointmentResult = await _unitOfWork.ResultRepository.GetResultById(request.ResultId);
         _mapper.Map(appointmentBusinessService, note);
         
@@ -32,7 +44,6 @@ public class NoteService : INoteService
         await _unitOfWork.NoteRepository.AddAsync(note);
         await _unitOfWork.SaveChangesAsync();
         var result = _mapper.Map<DentistAddNoteResponse>(note);
-        return new BaseResponse<DentistAddNoteResponse>("Note added successfully", StatusCodeEnum.Created_201, result);*/
-        throw new NotImplementedException();
+        return new BaseResponse<DentistAddNoteResponse>("Note added successfully", StatusCodeEnum.Created_201, result);
     }
 }

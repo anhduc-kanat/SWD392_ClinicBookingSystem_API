@@ -1,6 +1,7 @@
 ﻿using ClinicBookingSystem_BusinessObject.Entities;
 using ClinicBookingSystem_DataAccessObject.BaseDAO;
 using ClinicBookingSystem_DataAcessObject.DBContext;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClinicBookingSystem_DataAccessObject;
 
