@@ -93,6 +93,9 @@ public class AppointmentDAO : BaseDAO<Appointment>
             //appointment service
             .Include(p => p.AppointmentBusinessServices)
             .ThenInclude(p => p.Meetings)
+            .Include(p => p.AppointmentBusinessServices)
+            .ThenInclude(p => p.BusinessService)
+            
             .Where(p => p.Users.Any(p => p.Id == userId))
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
@@ -122,6 +125,8 @@ public class AppointmentDAO : BaseDAO<Appointment>
             //appointment service
             .Include(p => p.AppointmentBusinessServices)
             .ThenInclude(p => p.Meetings)
+            .Include(p => p.AppointmentBusinessServices)
+            .ThenInclude(p => p.BusinessService)
             
             /*.Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month && p.Date.Day == date.Day)*/
             .Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Year == date.Year)) 
@@ -151,6 +156,8 @@ public class AppointmentDAO : BaseDAO<Appointment>
             //appointment service
             .Include(p => p.AppointmentBusinessServices)
             .ThenInclude(p => p.Meetings)
+            .Include(p => p.AppointmentBusinessServices)
+            .ThenInclude(p => p.BusinessService)
             //result
             .Include(p => p.Result)
             .ThenInclude(p => p.Medicines)
