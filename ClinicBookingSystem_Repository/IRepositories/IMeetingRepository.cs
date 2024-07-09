@@ -5,5 +5,5 @@ namespace ClinicBookingSystem_Repository.IRepositories;
 
 public interface IMeetingRepository : IBaseRepository<Meeting>
 {
-    
+    Task<IEnumerable<Meeting>> GetMeetingByToday(DateTime dateTime);
 }

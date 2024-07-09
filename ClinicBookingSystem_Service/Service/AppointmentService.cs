@@ -158,7 +158,7 @@ public class AppointmentService : IAppointmentService
         {
             Date = appointmentBusinessService.Appointment.Date,
             AppointmentBusinessService = appointmentBusinessService,
-            Status = MeetingStatus.Undone,
+            Status = MeetingStatus.Future,
             DentistId = dentist.Id,
             DentistName = dentist.FirstName + " " + dentist.LastName
         };
@@ -246,7 +246,7 @@ public class AppointmentService : IAppointmentService
         {
             Date = appointmentBusinessService.Appointment.Date,
             AppointmentBusinessService = appointmentBusinessService,
-            Status = MeetingStatus.Undone,
+            Status = MeetingStatus.Future,
             DentistId = dentist.Id,
             DentistName = dentist.FirstName + " " + dentist.LastName
         };
@@ -336,7 +336,6 @@ public class AppointmentService : IAppointmentService
     public async Task<PaginationResponse<StaffGetAppointmentByDayResponse>> StaffGetAllAppointmentByDay(int pageNumber,
         int pageSize, DateOnly date)
     {
-
         var appointments =
             await _unitOfWork.AppointmentRepository.GetAppointmentByDatePagination(pageNumber, pageSize, date);
         int count = await _unitOfWork.AppointmentRepository.CountWhenStaffGetAppointmentByDate(date);
@@ -410,7 +409,7 @@ public class AppointmentService : IAppointmentService
                 {
                     Date = new DateTime(metting.Date.Year, metting.Date.Month, metting.Date.Day, 0, 0, 0),
                     AppointmentBusinessService = appointmentBusinessService,
-                    Status = MeetingStatus.Undone,
+                    Status = MeetingStatus.Future,
                 };
                 await _unitOfWork.MeetingRepository.AddAsync(meeting);
             }

@@ -346,4 +346,5 @@ public class AppointmentController : ControllerBase
         var response = await _paymentService.CreateVnPayPaymentUrl(createPaymentRequest);
         return Ok(response);
     }
+    
 }

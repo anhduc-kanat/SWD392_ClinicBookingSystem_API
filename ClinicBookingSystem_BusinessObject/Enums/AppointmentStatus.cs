@@ -19,5 +19,7 @@ public enum AppointmentStatus
     [Description("OnTreatment")]
     OnTreatment = 6,
     [Description("Queued")]
-    Queued = 7
+    Queued = 7,
+    [Description("Waiting")]
+    Waiting = 8,
 }
