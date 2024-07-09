@@ -14,6 +14,7 @@ using ClinicBookingSystem_Service.RabbitMQ.Consumers.Appointment;
 using ClinicBookingSystem_Service.RabbitMQ.IService;
 using ClinicBookingSystem_Service.RabbitMQ.Service;
 using ClinicBookingSystem_Service.Scheduler;
+using ClinicBookingSystem_Service.Scheduler.BackgroundTask;
 using ClinicBookingSystem_Service.Service;
 using ClinicBookingSystem_Service.Services;
 using ClinicBookingSystem_Service.SignalR.SignalRClient;
@@ -65,8 +66,23 @@ public static class ConfigureService
         services.AddQuartz(p =>
         {
             p.UseMicrosoftDependencyInjectionJobFactory();
-            var jobKey = new JobKey("PaymentTimeOutJob");
-            p.AddJob<PaymentTimeOutJob>(opt => opt.WithIdentity(jobKey).StoreDurably());
+            var paymentJobKey = new JobKey("PaymentTimeOutJob");
+            p.AddJob<PaymentTimeOutJob>(opt => opt.WithIdentity(paymentJobKey).StoreDurably());
+            
+            
+            var checkMeetingJobKey = new JobKey("CheckMeetingJob");
+            p.AddJob<CheckMeetingJob>(opt => opt.WithIdentity(checkMeetingJobKey).StoreDurably());
+            p.AddTrigger(t =>
+                t.WithIdentity("CheckMeetingJobTrigger")
+                    .ForJob(checkMeetingJobKey)
+                    .StartNow()
+                    .WithDailyTimeIntervalSchedule
+                    (s =>
+                        s.WithIntervalInHours(24)
+                            .OnEveryDay()
+                            .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(5, 0))
+                    ));
+            
             services.AddQuartzHostedService(q =>
                 q.WaitForJobsToComplete = true);
         });
@@ -80,10 +96,11 @@ public static class ConfigureService
             Password = rabbitMQConfigSection["Password"],
             Port = Convert.ToInt32(rabbitMQConfigSection["Port"])
         };
+        
         services.AddScoped<IRabbitMQBus, RabbitMQBus>();
         services.AddSingleton(rabbitMQConfig);
         services.AddSingleton<RabbitMQConnection>();
-        services.AddScoped<IRabbitMQService, RabbitMQService>();
+        services.AddSingleton<IRabbitMQService, RabbitMQService>();
         services.AddMassTransit(config =>
         {
             //consumers
@@ -108,15 +125,17 @@ public static class ConfigureService
         services.AddMassTransitHostedService();
         //signalR
         services.AddSignalR();
-        services.AddScoped<AppointmentHub>();
+        services.AddSingleton<AppointmentHub>();
         //signalR client
-        services.AddScoped<AppointmentClient>(provider =>
+        services.AddSingleton<AppointmentClient>(provider =>
         {
             var rabbitMqService = provider.GetRequiredService<IRabbitMQService>();
             var unitOfWork = provider.GetRequiredService<IUnitOfWork>();
             var hubUrl = "https://localhost:7002/appointmentHub";
             return new AppointmentClient(hubUrl, rabbitMqService, unitOfWork);
         });
+        
+        services.AddHostedService<CheckAppointmentBackgroundService>();
         return services;
     }
 }
