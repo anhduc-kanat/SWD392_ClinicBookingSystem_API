@@ -25,16 +25,13 @@ public class PaymentService : IPaymentService
     private readonly IVnPayService _vnPayService;
     private readonly IMapper _mapper;
     private readonly ISchedulerFactory _schedulerFactory;
-    private readonly IHubContext<AppointmentHub> _hubContext;
     public PaymentService(IUnitOfWork unitOfWork, IVnPayService vnPayService, 
-        IMapper mapper, ISchedulerFactory schedulerFactory,
-        IHubContext<AppointmentHub> hubContext)
+        IMapper mapper, ISchedulerFactory schedulerFactory)
     {
         _unitOfWork = unitOfWork;
         _vnPayService = vnPayService;
         _mapper = mapper;
         _schedulerFactory = schedulerFactory;
-        _hubContext = hubContext;
     }
 
     public async Task<BaseResponse<CreateTransactionResponse>> CreateTransaction(
@@ -265,6 +262,7 @@ public class PaymentService : IPaymentService
                             {
                                 //appointment
                                 appointment.IsFullyPaid = true;
+                                appointment.Status = AppointmentStatus.Waiting;
                                 //appointmentBusinessService
                                 foreach (var abs in appointmentBusinessServices)
                                 {
@@ -275,11 +273,6 @@ public class PaymentService : IPaymentService
                                 //Transaction
                                 transaction.Status = TransactionStatus.Paid;
                                 transaction.IsPay = true;
-                                //check xem ngày hẹn có phải là ngày hôm nay không, nếu có thì set status là Queued
-                                if (appointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date == DateTime.Now)))
-                                {
-                                    appointment.Status = AppointmentStatus.Queued;
-                                }
                                 break;
                             }
                             //---------------------------------------------------------------------------//
@@ -338,7 +331,6 @@ public class PaymentService : IPaymentService
 
         await _unitOfWork.SaveChangesAsync();
         //send to signalr hub
-        await _hubContext.Clients.All.SendAsync("ReceiveAppointmentStatusChange", appointmentId);
         var result = _mapper.Map<IEnumerable<SaveVnPayPaymentResponse>>(transactions);
         return new BaseResponse<IEnumerable<SaveVnPayPaymentResponse>>("Save payment successfully", StatusCodeEnum.OK_200, result);
     }

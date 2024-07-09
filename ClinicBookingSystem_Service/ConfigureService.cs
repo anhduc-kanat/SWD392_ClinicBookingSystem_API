@@ -59,6 +59,7 @@ public static class ConfigureService
         services.AddScoped<IVnPayService, VnPayService>();
         services.AddScoped<IPaymentService, PaymentService>();
         services.AddScoped<INoteService, NoteService>();
+        services.AddScoped<IMeetingService, MeetingService>();
 
         //quartz
         services.AddQuartz(p =>
