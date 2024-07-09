@@ -50,4 +50,9 @@ public class AppointmentRepository : BaseRepository<Appointment>, IAppointmentRe
     {
         return await _appointmentDAO.CountWhenStaffGetAppointmentByDate(date);
     }
+
+    public async Task<IEnumerable<Appointment>> GetTodayMeetingTreatmentAppointment()
+    {
+        return await _appointmentDAO.GetTodayMeetingTreatmentAppointment();
+    }
 }

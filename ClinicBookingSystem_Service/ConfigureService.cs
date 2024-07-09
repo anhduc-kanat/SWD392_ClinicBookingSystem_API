@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using System.Configuration;
+using ClinicBookingSystem_Repository.IRepositories;
 using ClinicBookingSystem_Service;
 using ClinicBookingSystem_Service.IService;
 using ClinicBookingSystem_Service.IServices;
@@ -13,11 +14,16 @@ using ClinicBookingSystem_Service.RabbitMQ.Consumers.Appointment;
 using ClinicBookingSystem_Service.RabbitMQ.IService;
 using ClinicBookingSystem_Service.RabbitMQ.Service;
 using ClinicBookingSystem_Service.Scheduler;
+using ClinicBookingSystem_Service.Scheduler.BackgroundTask;
 using ClinicBookingSystem_Service.Service;
 using ClinicBookingSystem_Service.Services;
+using ClinicBookingSystem_Service.SignalR.SignalRClient;
+using ClinicBookingSystem_Service.SignalR.SignalRHub;
 using ClinicBookingSystem_Service.ThirdParties.VnPay;
 using global::System;
 using MassTransit;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -54,13 +60,29 @@ public static class ConfigureService
         services.AddScoped<IVnPayService, VnPayService>();
         services.AddScoped<IPaymentService, PaymentService>();
         services.AddScoped<INoteService, NoteService>();
+        services.AddScoped<IMeetingService, MeetingService>();
 
         //quartz
         services.AddQuartz(p =>
         {
             p.UseMicrosoftDependencyInjectionJobFactory();
-            var jobKey = new JobKey("PaymentTimeOutJob");
-            p.AddJob<PaymentTimeOutJob>(opt => opt.WithIdentity(jobKey).StoreDurably());
+            var paymentJobKey = new JobKey("PaymentTimeOutJob");
+            p.AddJob<PaymentTimeOutJob>(opt => opt.WithIdentity(paymentJobKey).StoreDurably());
+            
+            
+            var checkMeetingJobKey = new JobKey("CheckMeetingJob");
+            p.AddJob<CheckMeetingJob>(opt => opt.WithIdentity(checkMeetingJobKey).StoreDurably());
+            p.AddTrigger(t =>
+                t.WithIdentity("CheckMeetingJobTrigger")
+                    .ForJob(checkMeetingJobKey)
+                    .StartNow()
+                    .WithDailyTimeIntervalSchedule
+                    (s =>
+                        s.WithIntervalInHours(24)
+                            .OnEveryDay()
+                            .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(5, 0))
+                    ));
+            
             services.AddQuartzHostedService(q =>
                 q.WaitForJobsToComplete = true);
         });
@@ -74,10 +96,11 @@ public static class ConfigureService
             Password = rabbitMQConfigSection["Password"],
             Port = Convert.ToInt32(rabbitMQConfigSection["Port"])
         };
+        
         services.AddScoped<IRabbitMQBus, RabbitMQBus>();
         services.AddSingleton(rabbitMQConfig);
         services.AddSingleton<RabbitMQConnection>();
-        services.AddScoped<IRabbitMQService, RabbitMQService>();
+        services.AddSingleton<IRabbitMQService, RabbitMQService>();
         services.AddMassTransit(config =>
         {
             //consumers
@@ -100,7 +123,19 @@ public static class ConfigureService
             
         });
         services.AddMassTransitHostedService();
-
+        //signalR
+        services.AddSignalR();
+        services.AddSingleton<AppointmentHub>();
+        //signalR client
+        services.AddSingleton<AppointmentClient>(provider =>
+        {
+            var rabbitMqService = provider.GetRequiredService<IRabbitMQService>();
+            var unitOfWork = provider.GetRequiredService<IUnitOfWork>();
+            var hubUrl = "https://localhost:7002/appointmentHub";
+            return new AppointmentClient(hubUrl, rabbitMqService, unitOfWork);
+        });
+        
+        services.AddHostedService<CheckAppointmentBackgroundService>();
         return services;
     }
 }

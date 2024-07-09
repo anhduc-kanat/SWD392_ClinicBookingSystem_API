@@ -4,8 +4,12 @@ namespace ClinicBookingSystem_BusinessObject.Enums;
 
 public enum MeetingStatus
 {
-    [Description("Undone")]
-    Undone = 0,
     [Description("Done")]
     Done = 1,
+    [Description("Check In")]
+    CheckIn = 2,
+    [Description("Waiting")]
+    Waiting = 3,
+    [Description("Future")]
+    Future = 4
 }
