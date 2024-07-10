@@ -1,15 +1,21 @@
-﻿using ClinicBookingSystem_BusinessObject.Enums;
+﻿using ClinicBookingSystem_BusinessObject.Entities;
+using ClinicBookingSystem_BusinessObject.Enums;
+using ClinicBookingSystem_Service.Models.Response.Appointment;
 
 namespace ClinicBookingSystem_Service.Models.Response.Transaction;
 
 public class GetTransactionResponse
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
     public TransactionStatus Status { get; set; }
-    public bool IsPaid { get; set; }
-    public string QrLink { get; set; }
-    public string BankName { get; set; }
-    public DateTime PayAt { get; set; }
+    public long Amount { get; set; }
+    public string BankCode { get; set; }
+    public string BankTranNo { get; set; }
+    public string CardType { get; set; }
+    public DateTime PayDate { get; set; }
+    public string TransactionNo { get; set; }
+    public string TransactionStatus { get; set; }
+    public TransactionType Type { get; set; }
+
+    //Appointment
+    public GetAppointmentResponse Appointment { get; set; }
 }

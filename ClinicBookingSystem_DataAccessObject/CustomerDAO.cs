@@ -29,5 +29,13 @@ namespace ClinicBookingSystem_DataAccessObject
             return customers;
         }
 
+
+        public async Task<bool> GetUserByPhone(string phone)
+        {
+            User customer = await GetQueryableAsync()
+                .FirstOrDefaultAsync(a => a.PhoneNumber == phone);
+            return customer !=null;
+        }
+
     }
 }
