@@ -30,11 +30,20 @@ namespace ClinicBookingSystem_Service.Service
         public async Task<BaseResponse<CreateServiceResponse>> CreateService(CreateServiceRequest request)
         {
             var service = _mapper.Map<BusinessService>(request);
-            service.IsPreBooking = service.IsPreBooking ?? false;
-            if (service.IsPreBooking.Value)
+            if (service.ServiceType == ServiceType.Examination)
             {
-                service.ServiceType = ServiceType.Examination;
+                service.IsPreBooking = true;
             }
+            else
+            {
+                service.IsPreBooking = false;
+
+            }
+            /* service.IsPreBooking = service.IsPreBooking ?? false;
+             if (service.IsPreBooking.Value)
+             {
+                 service.ServiceType = ServiceType.Examination;
+             }*/
             await _unitOfWork.ServiceRepository.AddAsync(service);
             await _unitOfWork.SaveChangesAsync();
             var newServiceDto = _mapper.Map<CreateServiceResponse>(service);
@@ -76,6 +85,15 @@ namespace ClinicBookingSystem_Service.Service
         {
             var existService = await _unitOfWork.ServiceRepository.GetByIdAsync(id);
             _mapper.Map(request, existService);
+            if (existService.ServiceType == ServiceType.Examination)
+            {
+                existService.IsPreBooking = true;
+            }
+            else
+            {
+                existService.IsPreBooking = false;
+
+            }
             await _unitOfWork.ServiceRepository.UpdateAsync(existService);
             await _unitOfWork.SaveChangesAsync();
             var result = _mapper.Map<UpdateServiceResponse>(existService);

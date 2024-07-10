@@ -1,5 +1,6 @@
 ﻿using ClinicBookingSystem_BusinessObject.Entities;
 using ClinicBookingSystem_DataAccessObject.BaseDAO;
+using ClinicBookingSystem_DataAccessObject.IBaseDAO;
 using ClinicBookingSystem_DataAcessObject.DBContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,9 +9,12 @@ namespace ClinicBookingSystem_DataAccessObject;
 public class TransactionDAO : BaseDAO<Transaction>
 {
     private readonly ClinicBookingSystemContext _dbContext;
-    public TransactionDAO(ClinicBookingSystemContext dbContext) : base(dbContext)
+    private readonly IBaseDAO<Appointment> _appointmentDao;
+
+    public TransactionDAO(ClinicBookingSystemContext dbContext, IBaseDAO<Appointment> appointment) : base(dbContext)
     {
         _dbContext = dbContext;
+        _appointmentDao = appointment;
     }
 
     public async Task<Transaction> GetTransactionByAppointmentId(int appointmentId)
@@ -35,8 +39,14 @@ public class TransactionDAO : BaseDAO<Transaction>
             .FirstOrDefaultAsync();
     }
 
- /*   public async Task<IEnumerable<Transaction>> GetTransactionByUser(int userId)
+    public async Task<IEnumerable<Transaction>> GetTransactionByUser(int userId)
     {
-        return GetQueryableAsync().Where(p => p)
-    }*/
+
+        return GetQueryableAsync().Include(p=>p.Appointment.AppointmentBusinessServices)
+            .Where(p => _appointmentDao.GetQueryableAsync()
+        .Where(a => a.UserAccountId == userId).Select(a => a.Id)
+        .Contains(p.Appointment.Id)
+        )
+            .ToList();
+    }
 }
