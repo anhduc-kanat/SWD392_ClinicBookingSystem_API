@@ -1,6 +1,7 @@
 ﻿using ClinicBookingSystem_BusinessObject.Entities;
 using ClinicBookingSystem_BusinessObject.Enums;
 using ClinicBookingSystem_DataAccessObject.BaseDAO;
+using ClinicBookingSystem_DataAccessObject.IBaseDAO;
 using ClinicBookingSystem_DataAcessObject.DBContext;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,9 +15,18 @@ namespace ClinicBookingSystem_DataAccessObject
     public class DentistDAO : BaseDAO<User>
     {
         private readonly ClinicBookingSystemContext _context;
-        public DentistDAO(ClinicBookingSystemContext context) : base(context)
+        private readonly IBaseDAO<Meeting> _meetingDao;
+        private readonly IBaseDAO<Appointment> _appointmentDao;
+        private readonly IBaseDAO<AppointmentBusinessService> _appointmentBusinessDao;
+
+        public DentistDAO(ClinicBookingSystemContext context, IBaseDAO<Meeting> meetingDao
+            , IBaseDAO<Appointment> appointmentDao
+            , IBaseDAO<AppointmentBusinessService> appointmentBusinessDao) : base(context)
         {
             _context = context;
+            _meetingDao = meetingDao;
+            _appointmentDao = appointmentDao;
+            _appointmentBusinessDao = appointmentBusinessDao;
         }
 
 
@@ -54,8 +64,8 @@ namespace ClinicBookingSystem_DataAccessObject
         }
         public async Task<IEnumerable<DateTime>> GetAllFreeDaysOfDentist(int id)
         {
-            var targetStatus = AppointmentStatus.Scheduled;
             var today = DateTime.Today;
+            
             var endDay = today.AddMonths(2);
 
             IEnumerable<DateTime> allDays = Enumerable.Range(0, (endDay - today).Days + 1)
@@ -63,12 +73,25 @@ namespace ClinicBookingSystem_DataAccessObject
                                 .ToList();
             int slot = await _context.Slots.CountAsync();
 
-            var bookedDates = await _context.Appointments
-                .Where(a => a.Users.Any(u => u.Id == id) && a.Date >= today && a.Date <= endDay && a.Status == targetStatus )
-                .GroupBy(a => a.Date.Date)
+    /*        var bookedDates = await _context.Meetings
+                .Where(a => a.Date >= today && a.Date <= endDay)
+                .GroupBy(a => a.Date.Value.Date)
                 .Where(g => g.Count() >= slot)
                 .Select(a => a.Key)
-                .ToListAsync();
+                .ToListAsync();*/
+
+            var bookedDates = await _appointmentDao.GetQueryableAsync()
+                .Where(a => a.Date >= today && a.Date <= endDay && a.IsClinicalExamPaid == true && _appointmentBusinessDao.GetQueryableAsync()
+                .Where(abs => abs.Appointment.Id == a.Id && _meetingDao.GetQueryableAsync()
+                    .Where(m => m.DentistId == id)
+                    .Select(m => m.AppointmentBusinessService.Id)
+                    .Contains(abs.Id))
+                    .Any())
+                    .GroupBy(a => a.Date.Date)
+                    .Where(g => g.Count() >= slot)
+                    .Select(g => g.Key)
+                    .ToListAsync();
+
 
             return bookedDates;
         }
