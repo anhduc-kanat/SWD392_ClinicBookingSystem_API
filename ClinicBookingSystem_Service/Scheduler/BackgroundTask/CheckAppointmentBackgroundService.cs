@@ -32,8 +32,8 @@ public class CheckAppointmentBackgroundService : BackgroundService
             var queueService = provider.ServiceProvider.GetRequiredService<IQueueService>();
             _logger.LogInformation("5 secs job: CheckAppointmentBackgroundService is starting.");
         
-            /*await CheckMeetingStatus(unitOfWork);
-            await PublishAppointmentToQueue(appointmentService, queueService);*/
+            await CheckMeetingStatus(unitOfWork);
+            await PublishAppointmentToQueue(appointmentService, queueService);
             
             /*var appointments = await unitOfWork.AppointmentRepository.GetTodayMeetingTreatmentAppointment();
             if(appointments.IsNullOrEmpty()) return;
@@ -48,7 +48,7 @@ public class CheckAppointmentBackgroundService : BackgroundService
 
     private async Task CheckMeetingStatus(IUnitOfWork unitOfWork)
     {
-        _logger.LogInformation("Check MeetingStatus is starting.");
+        _logger.LogInformation("-------------Check MeetingStatus is starting-------------");
         _logger.LogInformation($"{DateTime.Now}");
         var meetings = await unitOfWork.MeetingRepository.GetMeetingByToday(DateTime.Now);
         if (meetings.IsNullOrEmpty()) return;
@@ -64,17 +64,24 @@ public class CheckAppointmentBackgroundService : BackgroundService
     }
     public async Task PublishAppointmentToQueue(IAppointmentService appointmentService, IQueueService queueService)
     {
-        _logger.LogInformation("Check appointment status is starting");
-        var appointmentsResponse = await appointmentService.GetAppointmentByMeetingDayForAjax();
-        var appointments = appointmentsResponse.Data;
-        
-        if(appointments.IsNullOrEmpty()) return;
-        foreach (var appointment in appointments)
+        try
         {
-            await queueService.PublishAppointmentToQueue(appointment.Id.Value);
-            _logger.LogInformation($"Publish message {appointment.Id} to queue");
+            _logger.LogInformation("-------------Check appointment status is starting-------------");
+            var appointmentsResponse = await appointmentService.GetAppointmentByMeetingDayForAjax();
+            var appointments = appointmentsResponse.Data;
+        
+            if(appointments.IsNullOrEmpty()) return;
+            foreach (var appointment in appointments)
+            {
+                await queueService.PublishAppointmentToQueue(appointment.Id.Value);
+                _logger.LogInformation($"Publish message {appointment.Id} to queue");
+            }
+            _logger.LogInformation("-------------Check and publish to queue completed-------------");
         }
-        _logger.LogInformation("-------------Check and publish to queue completed-------------");
-
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+        }
+        
     }
 }

@@ -22,4 +22,10 @@ public class MeetingRepository : BaseRepository<Meeting>, IMeetingRepository
     {
         return await _meetingDao.GetMeetingById(id);
     }
+
+    public async Task<Meeting> GetTreatmentMeetingQueue(int appointmentId, DateTime date)
+    {
+        return await _meetingDao.GetTreatmentMeetingQueue(appointmentId, date);
+    }
+    
 }

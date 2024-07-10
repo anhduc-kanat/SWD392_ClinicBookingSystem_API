@@ -25,16 +25,20 @@ public class QueueService : IQueueService
         if(appointment.Status != AppointmentStatus.Waiting) 
             throw new CoreException("Appointment is not in waiting for queue", StatusCodeEnum.BadRequest_400);
         
+        /*
         var appointmentBusinessService = appointment.AppointmentBusinessServices.FirstOrDefault(p =>
             p.Meetings.Any(p => p.Date.Value.Year == DateTime.Now.Year &&
                                  p.Date.Value.Month == DateTime.Now.Month &&
                                  p.Date.Value.Day == DateTime.Now.Day &&
-                                 p.Status == MeetingStatus.CheckIn));
-        if(appointmentBusinessService == null)
+                                 p.Status == MeetingStatus.CheckIn) && p.ServiceType == ServiceType.Treatment);*/
+        var meeting = await _unitOfWork.MeetingRepository.GetTreatmentMeetingQueue(appointmentId, DateTime.Now);
+        if(meeting == null)
             throw new CoreException("There is no AppointmentBusinessService suitable", StatusCodeEnum.BadRequest_400);
-        _rabbitMqService.PublishMessage(appointmentBusinessService.ServiceName, appointmentId.ToString());
+        _rabbitMqService.PublishMessage(meeting.AppointmentBusinessService.ServiceName, appointmentId.ToString());
+        meeting.Status = MeetingStatus.InQueue;
         appointment.Status = AppointmentStatus.Queued;
         await _unitOfWork.AppointmentRepository.UpdateAsync(appointment);
+        await _unitOfWork.MeetingRepository.UpdateAsync(meeting);
         await _unitOfWork.SaveChangesAsync();
     }
 }
