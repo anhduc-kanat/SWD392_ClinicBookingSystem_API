@@ -7,4 +7,5 @@ public interface IMeetingRepository : IBaseRepository<Meeting>
 {
     Task<IEnumerable<Meeting>> GetMeetingByToday(DateTime dateTime);
     Task<Meeting> GetMeetingById(int id);
+    Task<Meeting> GetTreatmentMeetingQueue(int appointmentId, DateTime date);
 }

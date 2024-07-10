@@ -11,5 +11,7 @@ public class MappingMeeting : Profile
         CreateMap<GetMeetingResponse, Meeting>().ReverseMap()
             .ForMember(dest => dest.Date, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.Date.Value)));
         CreateMap<Meeting, UpdateMeetingResponse>();
+        CreateMap<Meeting, AddDentistIntoMeetingResponse>().ReverseMap();
+        CreateMap<Meeting, UpdateDentistInMeeting>().ReverseMap();
     }
 }

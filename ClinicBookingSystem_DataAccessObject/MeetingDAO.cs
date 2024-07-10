@@ -1,4 +1,5 @@
 ﻿using ClinicBookingSystem_BusinessObject.Entities;
+using ClinicBookingSystem_BusinessObject.Enums;
 using ClinicBookingSystem_DataAccessObject.BaseDAO;
 using ClinicBookingSystem_DataAcessObject.DBContext;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,24 @@ public class MeetingDAO : BaseDAO<Meeting>
         return await GetQueryableAsync()
             .Include(p => p.AppointmentBusinessService)
             .ThenInclude(p => p.Appointment)
+            .Include(p => p.AppointmentBusinessService)
+            .ThenInclude(p => p.BusinessService)
             .Where(x => x.Id == id)
+            .FirstOrDefaultAsync();
+    }
+    
+    public async Task<Meeting> GetTreatmentMeetingQueue(int appointmentId, DateTime date)
+    {
+        return await GetQueryableAsync()
+            .Include(p => p.AppointmentBusinessService)
+            .ThenInclude(p => p.Appointment)
+            .Where(x => x.AppointmentBusinessService.Appointment.Id == appointmentId)
+            .Where(x => x.Date.Value.Year == date.Year &&
+                        x.Date.Value.Month == date.Month &&
+                        x.Date.Value.Day == date.Day)
+            .Where(p => p.AppointmentBusinessService.ServiceType == ServiceType.Treatment)
+            .Where(p => p.Status == MeetingStatus.CheckIn)
+            .Where(p => p.AppointmentBusinessService.Appointment.IsFullyPaid == true)
             .FirstOrDefaultAsync();
     }
 }
