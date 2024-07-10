@@ -3,5 +3,7 @@
 public interface IRabbitMQService
 {
     void PublishMessage(string queueName, string message);
-    void ConsumerMessage(string queueName);
+    void ConsumeMessage(string queueName);
+    void ConsumeAllMessages(string queueName);
+    void PurgeQueue(string queueName);
 }

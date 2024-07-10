@@ -11,8 +11,10 @@ using ClinicBookingSystem_Service.Models.Response.Payment;
 using ClinicBookingSystem_Service.Models.Response.Transaction;
 using ClinicBookingSystem_Service.Models.Utils;
 using ClinicBookingSystem_Service.Scheduler;
+using ClinicBookingSystem_Service.SignalR.SignalRHub;
 using ClinicBookingSystem_Service.ThirdParties.VnPay;
 using ClinicBookingSystem_Service.ThirdParties.VnPay.Model.Request;
+using Microsoft.AspNetCore.SignalR;
 using Quartz;
 
 namespace ClinicBookingSystem_Service.Service;
@@ -260,7 +262,7 @@ public class PaymentService : IPaymentService
                             {
                                 //appointment
                                 appointment.IsFullyPaid = true;
-                                appointment.Status = AppointmentStatus.Queued;
+                                appointment.Status = AppointmentStatus.Waiting;
                                 //appointmentBusinessService
                                 foreach (var abs in appointmentBusinessServices)
                                 {
@@ -328,6 +330,7 @@ public class PaymentService : IPaymentService
         }
 
         await _unitOfWork.SaveChangesAsync();
+        //send to signalr hub
         var result = _mapper.Map<IEnumerable<SaveVnPayPaymentResponse>>(transactions);
         return new BaseResponse<IEnumerable<SaveVnPayPaymentResponse>>("Save payment successfully", StatusCodeEnum.OK_200, result);
     }

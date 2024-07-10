@@ -93,6 +93,9 @@ public class AppointmentDAO : BaseDAO<Appointment>
             //appointment service
             .Include(p => p.AppointmentBusinessServices)
             .ThenInclude(p => p.Meetings)
+            .Include(p => p.AppointmentBusinessServices)
+            .ThenInclude(p => p.BusinessService)
+            
             .Where(p => p.Users.Any(p => p.Id == userId))
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
@@ -122,11 +125,40 @@ public class AppointmentDAO : BaseDAO<Appointment>
             //appointment service
             .Include(p => p.AppointmentBusinessServices)
             .ThenInclude(p => p.Meetings)
+            .Include(p => p.AppointmentBusinessServices)
+            .ThenInclude(p => p.BusinessService)
             
-            .Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month && p.Date.Day == date.Day)
+            /*.Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month && p.Date.Day == date.Day)*/
+            .Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Year == date.Year)) 
+                        && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Month == date.Month))
+                        && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Day == date.Day)))
+            
             .Where(p => p.IsClinicalExamPaid == true)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
+            .ToListAsync();
+    }
+    public async Task<IEnumerable<Appointment>> GetTodayMeetingTreatmentAppointment()
+    {
+        return await GetQueryableAsync()
+            .Include(p => p.Slot)
+            //user
+            .Include(p => p.Users)
+            .ThenInclude(p => p.Role)
+            .Include(p => p.Users)
+            .ThenInclude(p => p.UserProfiles)
+            //appointment service
+            .Include(p => p.AppointmentBusinessServices)
+            .ThenInclude(p => p.Meetings)
+            .Include(p => p.AppointmentBusinessServices)
+            .ThenInclude(p => p.BusinessService)
+            
+            /*.Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month && p.Date.Day == date.Day)*/
+            .Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Year == DateTime.Now.Year)) 
+                        && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Month == DateTime.Now.Month))
+                        && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Day == DateTime.Now.Day)))
+            
+            .Where(p => p.Status == AppointmentStatus.Waiting)
             .ToListAsync();
     }
 
@@ -139,20 +171,28 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .ThenInclude(p => p.Role)
             .Include(p => p.Users)
             .ThenInclude(p => p.UserProfiles)
-            .Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month &&
-                        p.Date.Day == date.Day)
+            /*.Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month &&
+                        p.Date.Day == date.Day)*/
+            .Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Year == date.Year)) 
+                        && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Month == date.Month))
+                        && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Day == date.Day)))
             //appointment service
             .Include(p => p.AppointmentBusinessServices)
             .ThenInclude(p => p.Meetings)
+            .Include(p => p.AppointmentBusinessServices)
+            .ThenInclude(p => p.BusinessService)
             //result
             .Include(p => p.Result)
             .ThenInclude(p => p.Medicines)
             .Include(p => p.Result)
             .ThenInclude(p => p.Notes)
             
-            .Where(p => p.Users.Any(p => p.Id == dentistId))
+            .Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.DentistId == dentistId)))
             .Where(p => p.IsClinicalExamPaid == true)
+            /*
             .Where(p => p.Status == AppointmentStatus.OnGoing)
+            */
+            .Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Status.Value == MeetingStatus.CheckIn)))
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
@@ -163,10 +203,17 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .Include(p => p.Slot)
             .Include(p => p.Users)
             .ThenInclude(p => p.Role)
-            .Where(p => p.Users.Any(p => p.Id == userId))
-            .Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month &&
-                        p.Date.Day == date.Day)
+            .Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.DentistId == userId)))
+            /*.Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month &&
+                        p.Date.Day == date.Day)*/
+            .Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Year == date.Year)) 
+                        && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Month == date.Month))
+                        && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Day == date.Day)))
+            /*
             .Where(p => p.Status == AppointmentStatus.OnGoing && p.IsClinicalExamPaid == true)
+            */
+            .Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Status == MeetingStatus.CheckIn)))
+            .Where(p => p.IsClinicalExamPaid == true)
             .CountAsync();
     }
     public async Task<int> CountWhenStaffGetAppointmentByDate(DateOnly date)
@@ -175,8 +222,11 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .Include(p => p.Slot)
             .Include(p => p.Users)
             .ThenInclude(p => p.Role)
-            .Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month &&
-                        p.Date.Day == date.Day)
+            /*.Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month &&
+                        p.Date.Day == date.Day)*/
+            .Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Year == date.Year)) 
+                        && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Month == date.Month))
+                        && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Day == date.Day)))
             .Where(p => p.IsClinicalExamPaid == true)
             .CountAsync();
     }

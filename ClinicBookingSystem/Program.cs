@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using ClinicBookingSystem_Service.Models.Configs.Payment;
 using ClinicBookingSystem_Service.RabbitMQ.Config;
+using ClinicBookingSystem_Service.SignalR.SignalRHub;
 using ClinicBookingSystem_Service.ThirdParties.VnPay.Config;
 using ClinicBookingSystem.Common;
 using ClinicBookingSystem.Middleware;
@@ -107,6 +108,8 @@ builder.Services.ConfigureServiceService(builder.Configuration);
 builder.Services.ConfigureDataAccessObjectService(builder.Configuration);
 var app = builder.Build();
 
+app.UseRouting();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -122,7 +125,14 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 });  
 app.UseCors();
 app.UseAuthentication();
+
 app.UseAuthorization();
+
+//signalR
+app.UseEndpoints(route =>
+{
+    route.MapHub<AppointmentHub>("/appointmentHub");
+});
 
 app.MapControllers();
 

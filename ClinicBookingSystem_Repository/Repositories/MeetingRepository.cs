@@ -12,4 +12,9 @@ public class MeetingRepository : BaseRepository<Meeting>, IMeetingRepository
     {
         _meetingDao = meetingDao;
     }
+
+    public async Task<IEnumerable<Meeting>> GetMeetingByToday(DateTime dateTime)
+    {
+        return await _meetingDao.GetMeetingByToday(dateTime);
+    }
 }

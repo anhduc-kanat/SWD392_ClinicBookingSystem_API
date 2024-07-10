@@ -8,4 +8,6 @@ public class GetMeetingResponse
     public DateOnly? Date { get; set; }
     public int MeetingAttempt { get; set; }
     public MeetingStatus Status { get; set; }
+    public int? DentistId { get; set; }
+    public string? DentistName { get; set; }
 }
