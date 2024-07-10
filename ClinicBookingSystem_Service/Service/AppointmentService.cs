@@ -373,6 +373,7 @@ public class AppointmentService : IAppointmentService
         IEnumerable<DentistAddServiceIntoAppointmentRequest> requests)
     {
         Appointment appointment = await _unitOfWork.AppointmentRepository.GetAppointmentById(appointmentId);
+        appointment.IsFullyPaid = false;
         if (!appointment.IsClinicalExamPaid.Value)
             throw new CoreException("Clinical exam has not been paid", StatusCodeEnum.BadRequest_400);
         if (appointment == null) throw new CoreException("Appointment not found", StatusCodeEnum.BadRequest_400);
@@ -437,5 +438,11 @@ public class AppointmentService : IAppointmentService
         return new BaseResponse<StaffCreateTreatmentPaymentResponse>("Get appointment business service successfully",
             StatusCodeEnum.OK_200, result);
     }
-
+    public async Task<BaseResponse<IEnumerable<GetAppointmentByMeetingDayForAjaxResponse>>> GetAppointmentByMeetingDayForAjax()
+    {
+        var appointments = await _unitOfWork.AppointmentRepository.GetTodayMeetingTreatmentAppointment();
+        var result = _mapper.Map<IEnumerable<GetAppointmentByMeetingDayForAjaxResponse>>(appointments);
+        return new BaseResponse<IEnumerable<GetAppointmentByMeetingDayForAjaxResponse>>("Get appointment by meeting day for ajax successfully",
+            StatusCodeEnum.OK_200, result);
+    }
 }

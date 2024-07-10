@@ -6,6 +6,7 @@ using ClinicBookingSystem_Service.Models.BaseResponse;
 using ClinicBookingSystem_Service.Models.Enums;
 using ClinicBookingSystem_Service.Models.Request.Transaction;
 using ClinicBookingSystem_Service.Models.Response.Transaction;
+using System.Collections.Generic;
 
 namespace ClinicBookingSystem_Service.Service;
 
@@ -61,5 +62,15 @@ public class TransactionService : ITransactionService
         IEnumerable<Transaction> transactions = await _unitOfWork.TransactionRepository.GetAllAsync();
         var result = _mapper.Map<IEnumerable<GetTransactionResponse>>(transactions);
         return new BaseResponse<IEnumerable<GetTransactionResponse>>("Get all transaction sucessfully", StatusCodeEnum.OK_200, result);
+    }
+
+    //get all transaction by user id
+   
+
+    public async Task<BaseResponse<IEnumerable<GetTransactionResponse>>> GetAllTransactionByUserId(int userId)
+    {
+        IEnumerable<Transaction> transactions = await _unitOfWork.TransactionRepository.GetListTransactionByUserId(userId);
+        var result = _mapper.Map< IEnumerable <GetTransactionResponse>>(transactions);
+        return new BaseResponse<IEnumerable<GetTransactionResponse>>("Get all transaction successfully", StatusCodeEnum.OK_200, result);
     }
 }

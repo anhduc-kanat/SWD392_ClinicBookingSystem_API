@@ -8,4 +8,6 @@ public interface ITransactionRepository : IBaseRepository<Transaction>
     Task<Transaction> GetTransactionByAppointmentId(int appointmentId);
     Task<IEnumerable<Transaction>> GetListTransactionByAppointmentId(int appointmentId);
     Task<Transaction> GetTransactionByTransactionId(int transactionId);
+    Task<IEnumerable<Transaction>> GetListTransactionByUserId(int userId);
+
 }

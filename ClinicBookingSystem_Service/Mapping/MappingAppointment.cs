@@ -4,6 +4,7 @@ using ClinicBookingSystem_Service.Models.DTOs.Appointment;
 using ClinicBookingSystem_Service.Models.DTOs.AppointmentBusinessService;
 using ClinicBookingSystem_Service.Models.Request.Appointment;
 using ClinicBookingSystem_Service.Models.Response.Appointment;
+using ClinicBookingSystem_Service.Models.Response.AppointmentService;
 
 namespace ClinicBookingSystem_Service.Mapping;
 
@@ -194,6 +195,47 @@ public class MappingAppointment : Profile
                         p.Id == src.UserTreatmentId).CCCD))
             .ForMember(dest => dest.AppointmentServices, opt => opt.MapFrom(src => src.AppointmentBusinessServices));
 
+        //Ajax
+        CreateMap<GetAppointmentByMeetingDayForAjaxResponse, Appointment>().ReverseMap()
+            .ForMember(dest => dest.Date, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.Date)))
+            .ForMember(dest => dest.SlotName, opt => opt.MapFrom(src => src.Slot.Name))
+            .ForMember(dest => dest.StartAt, opt => opt.MapFrom(src => src.Slot.StartAt))
+            .ForMember(dest => dest.EndAt, opt => opt.MapFrom(src => src.Slot.EndAt))
+            .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.UserTreatmentName))
+            .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.UserTreatmentId))
+            .ForMember(dest => dest.PatientAddress, opt =>
+                opt.MapFrom(src =>
+                    src.Users.FirstOrDefault(p =>
+                        p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
+                        p.Id == src.UserTreatmentId).Address))
+            .ForMember(dest => dest.PatientGender, opt =>
+                opt.MapFrom(src =>
+                    src.Users.FirstOrDefault(p =>
+                        p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
+                        p.Id == src.UserTreatmentId).Gender))
+            .ForMember(dest => dest.PatientType, opt =>
+                opt.MapFrom(src =>
+                    src.Users.FirstOrDefault(p =>
+                        p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
+                        p.Id == src.UserTreatmentId).Type))
+            .ForMember(dest => dest.PatientPhoneNumber, opt =>
+                opt.MapFrom(src =>
+                    src.Users.FirstOrDefault(p =>
+                        p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
+                        p.Id == src.UserTreatmentId).PhoneNumber))
+            .ForMember(dest => dest.PatientDateOfBirth, opt =>
+                opt.MapFrom(src =>
+                    src.Users.FirstOrDefault(p =>
+                        p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
+                        p.Id == src.UserTreatmentId).DateOfBirth))
+            .ForMember(dest => dest.PatientCCCD, opt =>
+                opt.MapFrom(src =>
+                    src.Users.FirstOrDefault(p =>
+                        p.Id == src.UserAccountId).UserProfiles.FirstOrDefault(p =>
+                        p.Id == src.UserTreatmentId).CCCD))
+            .ForMember(dest => dest.AppointmentServices, opt => opt.MapFrom(src => src.AppointmentBusinessServices));
+
+        
         //Check-in
         CreateMap<StaffUpdateAppointmentStatusResponse, Appointment>().ReverseMap();
         
@@ -205,5 +247,8 @@ public class MappingAppointment : Profile
 
         CreateMap<StaffCreateTreatmentPaymentResponse, Appointment>().ReverseMap()
             .ForMember(dest => dest.AppointmentId, opt => opt.MapFrom(src => src.Id));
+
+        CreateMap<Appointment, GetAppointmentOfTransactionResponse>()
+            .ForMember(dest => dest.Appointment, opt => opt.MapFrom(src => src.AppointmentBusinessServices)); ;
     }
 }

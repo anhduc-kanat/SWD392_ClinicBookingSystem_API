@@ -163,6 +163,7 @@ public class PaymentService : IPaymentService
     {
         int appointmentId = int.Parse(request.vnp_OrderInfo);
         var transactions = await _unitOfWork.TransactionRepository.GetListTransactionByAppointmentId(appointmentId);
+        
         foreach (var transaction in transactions)
         {
         _mapper.Map(request, transaction);
@@ -325,6 +326,7 @@ public class PaymentService : IPaymentService
                     await _unitOfWork.AppointmentBusinessServiceRepository.UpdateAsync(abs);
                 }
                 await _unitOfWork.AppointmentRepository.UpdateAsync(appointment);
+                transaction.Amount = transaction.Amount /100;
                 await _unitOfWork.TransactionRepository.UpdateAsync(transaction);
             }
         }
@@ -335,7 +337,7 @@ public class PaymentService : IPaymentService
         return new BaseResponse<IEnumerable<SaveVnPayPaymentResponse>>("Save payment successfully", StatusCodeEnum.OK_200, result);
     }
 
-    public async Task SetPaymentTimeOut(int transactionId)
+      public async Task SetPaymentTimeOut(int transactionId)
     {
         var scheduler = await _schedulerFactory.GetScheduler();
         await scheduler.Start();

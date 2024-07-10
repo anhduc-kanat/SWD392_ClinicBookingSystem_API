@@ -1,14 +1,10 @@
-﻿using System.Text.Json.Serialization;
-using ClinicBookingSystem_BusinessObject.Enums;
+﻿using ClinicBookingSystem_BusinessObject.Enums;
 using ClinicBookingSystem_Service.Models.Response.AppointmentService;
-using ClinicBookingSystem_Service.Models.Response.Meeting;
 using ClinicBookingSystem_Service.Models.Response.Result;
-using ClinicBookingSystem_Service.Models.Response.Service;
-using ClinicBookingSystem_Service.Models.Response.Slot;
 
 namespace ClinicBookingSystem_Service.Models.Response.Appointment;
 
-public class GetAppointmentResponse
+public class GetAppointmentByMeetingDayForAjaxResponse
 {
     public int? Id { get; set; }
     public DateOnly? Date { get; set; }
@@ -36,6 +32,5 @@ public class GetAppointmentResponse
     public TimeSpan? EndAt { get; set; }
     public GetResultResponse? Result { get; set; }
     public ICollection<GetAppointmentServiceResponse>? AppointmentServices { get; set; }
-
 
 }

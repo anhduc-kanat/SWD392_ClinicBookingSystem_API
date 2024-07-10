@@ -16,5 +16,7 @@ public interface ITransactionService
     Task<BaseResponse<DeleteTransactionResponse>> DeleteTransaction(int id);
     //get all transactions
     Task<BaseResponse<IEnumerable<GetTransactionResponse>>> GetAllTransaction();
-    
+    Task<BaseResponse<IEnumerable<GetTransactionResponse>>> GetAllTransactionByUserId(int userId);
+
+
 }
