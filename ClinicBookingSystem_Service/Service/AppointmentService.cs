@@ -437,7 +437,6 @@ public class AppointmentService : IAppointmentService
         return new BaseResponse<StaffCreateTreatmentPaymentResponse>("Get appointment business service successfully",
             StatusCodeEnum.OK_200, result);
     }
-
     public async Task<BaseResponse<IEnumerable<GetAppointmentByMeetingDayForAjaxResponse>>> GetAppointmentByMeetingDayForAjax()
     {
         var appointments = await _unitOfWork.AppointmentRepository.GetTodayMeetingTreatmentAppointment();
