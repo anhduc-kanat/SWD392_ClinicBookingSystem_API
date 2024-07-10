@@ -40,4 +40,5 @@ public interface IAppointmentService
         IEnumerable<DentistAddServiceIntoAppointmentRequest> requests);
 
     Task<BaseResponse<StaffCreateTreatmentPaymentResponse>> StaffCreateTreatmentPayment(int appointmentId, int staffId);
+    Task<BaseResponse<IEnumerable<GetAppointmentByMeetingDayForAjaxResponse>>> GetAppointmentByMeetingDayForAjax();
 }
