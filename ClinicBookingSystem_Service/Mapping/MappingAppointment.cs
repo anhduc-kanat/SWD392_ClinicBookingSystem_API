@@ -4,6 +4,7 @@ using ClinicBookingSystem_Service.Models.DTOs.Appointment;
 using ClinicBookingSystem_Service.Models.DTOs.AppointmentBusinessService;
 using ClinicBookingSystem_Service.Models.Request.Appointment;
 using ClinicBookingSystem_Service.Models.Response.Appointment;
+using ClinicBookingSystem_Service.Models.Response.AppointmentService;
 
 namespace ClinicBookingSystem_Service.Mapping;
 
@@ -246,5 +247,8 @@ public class MappingAppointment : Profile
 
         CreateMap<StaffCreateTreatmentPaymentResponse, Appointment>().ReverseMap()
             .ForMember(dest => dest.AppointmentId, opt => opt.MapFrom(src => src.Id));
+
+        CreateMap<Appointment, GetAppointmentOfTransactionResponse>()
+            .ForMember(dest => dest.Appointment, opt => opt.MapFrom(src => src.AppointmentBusinessServices)); ;
     }
 }

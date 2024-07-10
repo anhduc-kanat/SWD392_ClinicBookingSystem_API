@@ -52,4 +52,11 @@ public class TransactionController : ControllerBase
         return Ok(await _transactionService.DeleteTransaction(id));
     }
 
+    [HttpGet]
+    [Route("get-transaction-user/{id}")]
+    public async Task<ActionResult<BaseResponse<IEnumerable<GetTransactionResponse>>>> GetTransactionsByUserId(int id)
+    {
+        return Ok(await _transactionService.GetAllTransactionByUserId(id));
+    }
+
 }

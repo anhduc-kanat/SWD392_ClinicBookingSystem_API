@@ -26,4 +26,10 @@ public class TransactionRepository : BaseRepository<Transaction>, ITransactionRe
     {
         return await _transactionDAO.GetTransactionByTransactionId(transactionId);
     }
+
+    public async Task<IEnumerable<Transaction>> GetListTransactionByUserId(int userId)
+    {
+        return await _transactionDAO.GetTransactionByUser(userId);
+
+    }
 }

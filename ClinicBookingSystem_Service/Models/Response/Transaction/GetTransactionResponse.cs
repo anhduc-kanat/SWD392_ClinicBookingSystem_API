@@ -1,6 +1,7 @@
 ﻿using ClinicBookingSystem_BusinessObject.Entities;
 using ClinicBookingSystem_BusinessObject.Enums;
 using ClinicBookingSystem_Service.Models.Response.Appointment;
+using ClinicBookingSystem_Service.Models.Response.AppointmentService;
 
 namespace ClinicBookingSystem_Service.Models.Response.Transaction;
 
@@ -17,5 +18,7 @@ public class GetTransactionResponse
     public TransactionType Type { get; set; }
 
     //Appointment
-    public GetAppointmentResponse Appointment { get; set; }
+    /* public GetAppointmentResponse Appointment { get; set; }*/
+    public GetAppointmentOfTransactionResponse Appointment { get; set; }
+
 }

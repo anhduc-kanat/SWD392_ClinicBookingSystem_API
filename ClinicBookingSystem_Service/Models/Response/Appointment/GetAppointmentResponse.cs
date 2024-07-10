@@ -37,4 +37,5 @@ public class GetAppointmentResponse
     public GetResultResponse? Result { get; set; }
     public ICollection<GetAppointmentServiceResponse>? AppointmentServices { get; set; }
 
+
 }

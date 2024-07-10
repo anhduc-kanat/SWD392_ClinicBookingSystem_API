@@ -5,6 +5,7 @@ using ClinicBookingSystem_Service.Models.Request.Transaction;
 using ClinicBookingSystem_Service.Models.Response.Payment;
 using ClinicBookingSystem_Service.Models.Response.Transaction;
 using ClinicBookingSystem_Service.ThirdParties.VnPay.Model.Request;
+using MassTransit.Configuration;
 
 namespace ClinicBookingSystem_Service.Mapping;
 
@@ -12,7 +13,7 @@ public class MappingTransaction : Profile
 {
     public MappingTransaction()
     {
-        CreateMap<Transaction, GetTransactionResponse>().ReverseMap();
+        CreateMap<Transaction, GetTransactionResponse>();
         CreateMap<CreateTransactionRequest, Transaction>();
         CreateMap<UpdateTransactionRequest, Transaction>();
         CreateMap<Transaction, CreateTransactionResponse>().ReverseMap();
