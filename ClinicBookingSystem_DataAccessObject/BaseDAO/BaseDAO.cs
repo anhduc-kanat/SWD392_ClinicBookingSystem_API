@@ -36,7 +36,8 @@ public class BaseDAO<T> : IBaseDAO<T> where T : class, IBaseEntities
     }
     public async Task<T> DeleteAsync(T entity)
     {
-        _dbContext.Set<T>().Remove(entity);
+        entity.IsDelete = true;
+        _dbContext.Entry(entity).State = EntityState.Modified;
         return entity;
     }
     public IQueryable<T> GetAllAsync()
