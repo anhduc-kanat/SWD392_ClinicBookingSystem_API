@@ -373,6 +373,7 @@ public class AppointmentService : IAppointmentService
         IEnumerable<DentistAddServiceIntoAppointmentRequest> requests)
     {
         Appointment appointment = await _unitOfWork.AppointmentRepository.GetAppointmentById(appointmentId);
+        appointment.IsFullyPaid = false;
         if (!appointment.IsClinicalExamPaid.Value)
             throw new CoreException("Clinical exam has not been paid", StatusCodeEnum.BadRequest_400);
         if (appointment == null) throw new CoreException("Appointment not found", StatusCodeEnum.BadRequest_400);

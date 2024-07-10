@@ -326,6 +326,7 @@ public class PaymentService : IPaymentService
                     await _unitOfWork.AppointmentBusinessServiceRepository.UpdateAsync(abs);
                 }
                 await _unitOfWork.AppointmentRepository.UpdateAsync(appointment);
+                transaction.Amount = transaction.Amount /100;
                 await _unitOfWork.TransactionRepository.UpdateAsync(transaction);
             }
         }
