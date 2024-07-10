@@ -437,5 +437,4 @@ public class AppointmentService : IAppointmentService
         return new BaseResponse<StaffCreateTreatmentPaymentResponse>("Get appointment business service successfully",
             StatusCodeEnum.OK_200, result);
     }
-
 }
