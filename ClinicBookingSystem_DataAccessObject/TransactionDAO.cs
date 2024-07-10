@@ -34,4 +34,9 @@ public class TransactionDAO : BaseDAO<Transaction>
             .Include(p => p.Appointment)
             .FirstOrDefaultAsync();
     }
+
+ /*   public async Task<IEnumerable<Transaction>> GetTransactionByUser(int userId)
+    {
+        return GetQueryableAsync().Where(p => p)
+    }*/
 }

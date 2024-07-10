@@ -62,4 +62,11 @@ public class TransactionService : ITransactionService
         var result = _mapper.Map<IEnumerable<GetTransactionResponse>>(transactions);
         return new BaseResponse<IEnumerable<GetTransactionResponse>>("Get all transaction sucessfully", StatusCodeEnum.OK_200, result);
     }
+
+    //get all transaction by user id
+    public async Task<BaseResponse<IEnumerable<GetTransactionResponse>>> GetAllTransactionByUser(int userId)
+    {
+
+        return new BaseResponse<IEnumerable<GetTransactionResponse>>("Get all transaction successfully", StatusCodeEnum.OK_200);
+    } 
 }

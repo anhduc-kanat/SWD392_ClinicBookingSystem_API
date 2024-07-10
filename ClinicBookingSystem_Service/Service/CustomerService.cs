@@ -36,6 +36,11 @@ namespace ClinicBookingSystem_Service.Service
         {
             try
             {
+                bool exist =await _unitOfWork.CustomerRepository.GetCustomerByPhone(request.PhoneNumber);
+                if (exist)
+                {
+                    return new BaseResponse<RegisterResponse>("Phone was existed", StatusCodeEnum.BadRequest_400);
+                }
                 request.Password = _hash.EncodePassword(request.Password);
                 Role role = await _unitOfWork.RoleRepository.GetRoleByName("CUSTOMER");
                 User customerAddData = _mapper.Map<User>(request);

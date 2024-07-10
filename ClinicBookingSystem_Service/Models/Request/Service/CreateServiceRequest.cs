@@ -15,7 +15,6 @@ namespace ClinicBookingSystem_Service.Models.Request.Service
         public string? Description { get; set; }
         public int? ExpectedDurationInMinute { get; set; }
         [DefaultValue("false")]
-        public bool? IsPreBooking { get; set; }
         public long Price { get; set; }
         public ServiceType? ServiceType { get; set; }
 
