@@ -32,14 +32,15 @@ public class CheckAppointmentBackgroundService : BackgroundService
             var queueService = provider.ServiceProvider.GetRequiredService<IQueueService>();
             _logger.LogInformation("5 secs job: CheckAppointmentBackgroundService is starting.");
         
-            await CheckMeetingStatus(unitOfWork);
+            /*await CheckMeetingStatus(unitOfWork);
+            await PublishAppointmentToQueue(appointmentService, queueService);*/
+            
             /*var appointments = await unitOfWork.AppointmentRepository.GetTodayMeetingTreatmentAppointment();
             if(appointments.IsNullOrEmpty()) return;
             foreach (var appointment in appointments)
             {
 
             }*/
-            await PublishAppointmentToQueue(appointmentService, queueService);
             await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
         }
         
