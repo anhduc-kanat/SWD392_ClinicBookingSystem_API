@@ -28,5 +28,10 @@ namespace ClinicBookingSystem_Repository.Repositories
             return _customerDAO.GetCustomerById(roleId,customerId);
 
         }
+
+        public Task<bool> GetCustomerByPhone(string phone)
+        {
+            return _customerDAO.GetUserByPhone(phone);
+        }
     }
 }

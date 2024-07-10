@@ -17,4 +17,9 @@ public class MeetingRepository : BaseRepository<Meeting>, IMeetingRepository
     {
         return await _meetingDao.GetMeetingByToday(dateTime);
     }
+
+    public async Task<Meeting> GetMeetingById(int id)
+    {
+        return await _meetingDao.GetMeetingById(id);
+    }
 }
