@@ -16,11 +16,19 @@ namespace ClinicBookingSystem_DataAccessObject
     {
         private readonly ClinicBookingSystemContext _context;
         private readonly IBaseDAO<Appointment> _appointmentDao;
+        private readonly IBaseDAO<AppointmentBusinessService> _appointmentBusinessDao;
+        private readonly IBaseDAO<Meeting> _meetingDao;
 
-        public SlotDAO(ClinicBookingSystemContext context, IBaseDAO<Appointment> appointmentDao) : base(context)
+
+
+        public SlotDAO(ClinicBookingSystemContext context, IBaseDAO<Appointment> appointmentDao
+            , IBaseDAO<AppointmentBusinessService> appointmentBusinessDao
+            , IBaseDAO<Meeting> meetingDao) : base(context)
         {
             _context = context;
             _appointmentDao = appointmentDao;
+            _appointmentBusinessDao = appointmentBusinessDao;
+            _meetingDao = meetingDao;
         }
 
         public async Task<IEnumerable<Slot>> GetAllSlots()
@@ -65,12 +73,15 @@ namespace ClinicBookingSystem_DataAccessObject
             var targetStatus = AppointmentStatus.Scheduled;
             var slots = GetQueryableAsync()
                                   .Where(s => !_appointmentDao.GetQueryableAsync()
-                                      .Include(b => b.Users) // Bao gồm bảng liên kết AppointmentUser
-                                      .Any(b => b.Slot.Id == s.Id &&
-                                                b.Date.Date == dateTime.Date &&
-                                                b.Users.Any(c => c.Id == dentistId)
-                                                && b.Status == targetStatus))
-                                  .ToList();
+                                  .Where( a => a.Slot.Id == s.Id && a.Date.Date == dateTime.Date && a.IsClinicalExamPaid == true)
+                                     /* .Include(b => b.AppointmentBusinessServices)*/ // Bao gồm bảng liên kết AppointmentUser
+                                      .Any(a => _appointmentBusinessDao.GetQueryableAsync()
+                                      .Where(abs => abs.Appointment.Id == a.Id)
+                                      .Any(abs => _meetingDao.GetQueryableAsync()
+                                      .Where(m => m.DentistId == dentistId)
+                                      .Select(m => m.AppointmentBusinessService.Id)
+                                      .Contains(abs.Id)
+                                      ))).ToList();
             return slots;
         }
     }
