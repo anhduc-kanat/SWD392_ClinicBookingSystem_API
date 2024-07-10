@@ -11,5 +11,11 @@ public enum MeetingStatus
     [Description("Waiting")]
     Waiting = 3,
     [Description("Future")]
-    Future = 4
+    Future = 4,
+    [Description("In Queue")]
+    InQueue = 5,
+    [Description("Waiting for Dentist")]
+    WaitingDentist = 6,
+    [Description("In Treatment")]
+    InTreatment = 7,
 }

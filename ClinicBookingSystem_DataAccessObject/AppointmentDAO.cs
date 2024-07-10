@@ -158,7 +158,7 @@ public class AppointmentDAO : BaseDAO<Appointment>
                         && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Month == DateTime.Now.Month))
                         && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Day == DateTime.Now.Day)))
             
-            .Where(p => p.Status == AppointmentStatus.Waiting)
+            .Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Status == MeetingStatus.CheckIn)))
             .ToListAsync();
     }
 
