@@ -12,6 +12,6 @@ namespace ClinicBookingSystem_Repository.IRepositories
     {
         Task<IEnumerable<User>> GetAllCustomer(int roleId);
         Task<User> GetCustomerById(int roleId, int customerId);
-
+        Task<bool> GetCustomerByPhone(string phone);
     }
 }
