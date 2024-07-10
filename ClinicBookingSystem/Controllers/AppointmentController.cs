@@ -347,4 +347,12 @@ public class AppointmentController : ControllerBase
         return Ok(response);
     }
     
+    [HttpGet]
+    [Route("get-appointment-by-meeting-day-for-ajax")]
+    public async Task<ActionResult<IEnumerable<GetAppointmentByMeetingDayForAjaxResponse>>>
+        GetAppointmentByMeetingDayForAjax()
+    {
+        var response = await _appointmentService.GetAppointmentByMeetingDayForAjax();
+        return Ok(response);
+    }
 }

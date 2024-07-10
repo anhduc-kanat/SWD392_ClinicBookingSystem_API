@@ -437,4 +437,12 @@ public class AppointmentService : IAppointmentService
         return new BaseResponse<StaffCreateTreatmentPaymentResponse>("Get appointment business service successfully",
             StatusCodeEnum.OK_200, result);
     }
+
+    public async Task<BaseResponse<IEnumerable<GetAppointmentByMeetingDayForAjaxResponse>>> GetAppointmentByMeetingDayForAjax()
+    {
+        var appointments = await _unitOfWork.AppointmentRepository.GetTodayMeetingTreatmentAppointment();
+        var result = _mapper.Map<IEnumerable<GetAppointmentByMeetingDayForAjaxResponse>>(appointments);
+        return new BaseResponse<IEnumerable<GetAppointmentByMeetingDayForAjaxResponse>>("Get appointment by meeting day for ajax successfully",
+            StatusCodeEnum.OK_200, result);
+    }
 }

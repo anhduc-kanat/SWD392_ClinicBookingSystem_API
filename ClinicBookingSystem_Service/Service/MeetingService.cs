@@ -21,13 +21,32 @@ public class MeetingService : IMeetingService
 
     public async Task<BaseResponse<UpdateMeetingResponse>> UpdateMeetingStatus(int meetingId, MeetingStatus status)
     {
-        var meeting = await _unitOfWork.MeetingRepository.GetByIdAsync(meetingId);
+        var meeting = await _unitOfWork.MeetingRepository.GetMeetingById(meetingId);
         if(meeting == null) throw new CoreException("Meeting not found", StatusCodeEnum.BadRequest_400);
+        
+        var appointment =
+            await _unitOfWork.AppointmentRepository.GetAppointmentById(
+                meeting.AppointmentBusinessService.Appointment.Id);
+        if(appointment == null) throw new CoreException("Appointment not found", StatusCodeEnum.BadRequest_400);
+        
         if (meeting.Date.Value.Year > DateTime.Now.Year &&
             meeting.Date.Value.Month > DateTime.Now.Month &&
             meeting.Date.Value.Day > DateTime.Now.Day) throw new CoreException("Meeting is in the future", StatusCodeEnum.BadRequest_400);
         if(status == MeetingStatus.Done) throw new CoreException("Dont have permission to do this", StatusCodeEnum.BadRequest_400);
+        
         meeting.Status = status;
+        if (meeting.Status == MeetingStatus.CheckIn && appointment.IsFullyPaid == true)
+        {
+            meeting.AppointmentBusinessService.Appointment.Status = AppointmentStatus.Waiting;
+        }
+        else if (meeting.Status == MeetingStatus.CheckIn
+                 && appointment.IsFullyPaid == false 
+                 || appointment.IsFullyPaid == null
+                 && appointment.IsClinicalExamPaid == true)
+        {
+            meeting.AppointmentBusinessService.Appointment.Status = AppointmentStatus.OnGoing;
+        }
+
         await _unitOfWork.MeetingRepository.UpdateAsync(meeting);
         await _unitOfWork.SaveChangesAsync();
         var result = _mapper.Map<UpdateMeetingResponse>(meeting);

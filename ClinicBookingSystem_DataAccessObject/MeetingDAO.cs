@@ -21,4 +21,12 @@ public class MeetingDAO : BaseDAO<Meeting>
                         x.Date.Value.Day == date.Day)
             .ToListAsync();
     }
+    public async Task<Meeting> GetMeetingById(int id)
+    {
+        return await GetQueryableAsync()
+            .Include(p => p.AppointmentBusinessService)
+            .ThenInclude(p => p.Appointment)
+            .Where(x => x.Id == id)
+            .FirstOrDefaultAsync();
+    }
 }
