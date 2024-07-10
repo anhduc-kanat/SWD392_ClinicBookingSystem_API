@@ -1,5 +1,6 @@
 ﻿using ClinicBookingSystem_BusinessObject.Enums;
 using ClinicBookingSystem_Repository.IRepositories;
+using ClinicBookingSystem_Service.IService;
 using ClinicBookingSystem_Service.RabbitMQ.IService;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,21 +28,24 @@ public class CheckAppointmentBackgroundService : BackgroundService
         {
             var provider = _serviceProvider.CreateScope();
             var unitOfWork = provider.ServiceProvider.GetRequiredService<IUnitOfWork>();
+            var appointmentService = provider.ServiceProvider.GetRequiredService<IAppointmentService>();
+            var queueService = provider.ServiceProvider.GetRequiredService<IQueueService>();
             _logger.LogInformation("5 secs job: CheckAppointmentBackgroundService is starting.");
         
-        
+            await CheckMeetingStatus(unitOfWork);
             /*var appointments = await unitOfWork.AppointmentRepository.GetTodayMeetingTreatmentAppointment();
             if(appointments.IsNullOrEmpty()) return;
             foreach (var appointment in appointments)
             {
 
             }*/
+            await PublishAppointmentToQueue(appointmentService, queueService);
             await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
         }
         
     }
 
-    /*private async Task CheckMeetingStatus(IUnitOfWork unitOfWork)
+    private async Task CheckMeetingStatus(IUnitOfWork unitOfWork)
     {
         _logger.LogInformation("Check MeetingStatus is starting.");
         _logger.LogInformation($"{DateTime.Now}");
@@ -55,6 +59,21 @@ public class CheckAppointmentBackgroundService : BackgroundService
             await unitOfWork.MeetingRepository.UpdateAsync(meeting);
         }
         await unitOfWork.SaveChangesAsync();
-        _logger.LogInformation("Check MeetingStatus has been done.");
-    }*/
+        _logger.LogInformation("-------------Check MeetingStatus has been done-------------");
+    }
+    public async Task PublishAppointmentToQueue(IAppointmentService appointmentService, IQueueService queueService)
+    {
+        _logger.LogInformation("Check appointment status is starting");
+        var appointmentsResponse = await appointmentService.GetAppointmentByMeetingDayForAjax();
+        var appointments = appointmentsResponse.Data;
+        
+        if(appointments.IsNullOrEmpty()) return;
+        foreach (var appointment in appointments)
+        {
+            await queueService.PublishAppointmentToQueue(appointment.Id.Value);
+            _logger.LogInformation($"Publish message {appointment.Id} to queue");
+        }
+        _logger.LogInformation("-------------Check and publish to queue completed-------------");
+
+    }
 }
