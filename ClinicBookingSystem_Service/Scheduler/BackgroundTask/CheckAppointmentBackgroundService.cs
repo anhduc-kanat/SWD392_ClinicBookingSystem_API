@@ -33,7 +33,9 @@ public class CheckAppointmentBackgroundService : BackgroundService
             _logger.LogInformation("5 secs job: CheckAppointmentBackgroundService is starting.");
         
             await CheckMeetingStatus(unitOfWork);
+            /*
             await PublishAppointmentToQueue(appointmentService, queueService);
+            */
             
             /*var appointments = await unitOfWork.AppointmentRepository.GetTodayMeetingTreatmentAppointment();
             if(appointments.IsNullOrEmpty()) return;
@@ -62,7 +64,7 @@ public class CheckAppointmentBackgroundService : BackgroundService
         await unitOfWork.SaveChangesAsync();
         _logger.LogInformation("-------------Check MeetingStatus has been done-------------");
     }
-    public async Task PublishAppointmentToQueue(IAppointmentService appointmentService, IQueueService queueService)
+    /*public async Task PublishAppointmentToQueue(IAppointmentService appointmentService, IQueueService queueService)
     {
         try
         {
@@ -83,5 +85,5 @@ public class CheckAppointmentBackgroundService : BackgroundService
             _logger.LogError(e.Message);
         }
         
-    }
+    }*/
 }
