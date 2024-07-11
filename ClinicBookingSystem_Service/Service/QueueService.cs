@@ -18,9 +18,13 @@ public class QueueService : IQueueService
         _unitOfWork = unitOfWork;
     }
     
-    public async Task PublishAppointmentToQueue(int appointmentId, int dentistId)
+    public async Task PublishAppointmentToQueue(int meetingId, int dentistId)
     {
-        var appointment = await _unitOfWork.AppointmentRepository.GetAppointmentById(appointmentId);
+        var meeting = await _unitOfWork.MeetingRepository.GetTreatmentMeetingQueueByMeetingId(meetingId, DateTime.Now);
+        if(meeting == null)
+            throw new CoreException("There is no AppointmentBusinessService suitable", StatusCodeEnum.BadRequest_400);
+        
+        var appointment = await _unitOfWork.AppointmentRepository.GetAppointmentById(meeting.AppointmentBusinessService.Appointment.Id);
         if (appointment == null) throw new CoreException("Appointment not found", StatusCodeEnum.BadRequest_400);
         if(appointment.Status != AppointmentStatus.Waiting) 
             throw new CoreException("Appointment is not in waiting for queue", StatusCodeEnum.BadRequest_400);
@@ -31,19 +35,28 @@ public class QueueService : IQueueService
                                  p.Date.Value.Month == DateTime.Now.Month &&
                                  p.Date.Value.Day == DateTime.Now.Day &&
                                  p.Status == MeetingStatus.CheckIn) && p.ServiceType == ServiceType.Treatment);*/
-        var meeting = await _unitOfWork.MeetingRepository.GetTreatmentMeetingQueue(appointmentId, DateTime.Now);
-        if(meeting == null)
-            throw new CoreException("There is no AppointmentBusinessService suitable", StatusCodeEnum.BadRequest_400);
+
         
         var dentist = await _unitOfWork.DentistRepository.GetDentistById(dentistId);
         if(dentist == null) throw new CoreException("Dentist not found", StatusCodeEnum.BadRequest_400);
         if(!dentist.BusinessServices.Any(p => p.Id == meeting.AppointmentBusinessService.BusinessService.Id))
             throw new CoreException("Dentist not provide this service", StatusCodeEnum.BadRequest_400);
         string dentistName = dentist.FirstName + " " + dentist.LastName;
-        _rabbitMqService.PublishMessage(dentistName, appointmentId.ToString());
+       
+        _rabbitMqService.PublishMessage(dentistName, meeting.Id.ToString());
         meeting.Status = MeetingStatus.InQueue;
         appointment.Status = AppointmentStatus.OnTreatment;
+        
         await _unitOfWork.AppointmentRepository.UpdateAsync(appointment);
+        await _unitOfWork.MeetingRepository.UpdateAsync(meeting);
+        await _unitOfWork.SaveChangesAsync();
+    }
+
+    public async Task ConsumeMessageDentistQueue(string dentistName)
+    {
+        var meetingId = _rabbitMqService.ConsumeMessage(dentistName);
+        var meeting = await _unitOfWork.MeetingRepository.GetMeetingById(int.Parse(meetingId));
+        meeting.Status = MeetingStatus.InTreatment;
         await _unitOfWork.MeetingRepository.UpdateAsync(meeting);
         await _unitOfWork.SaveChangesAsync();
     }
