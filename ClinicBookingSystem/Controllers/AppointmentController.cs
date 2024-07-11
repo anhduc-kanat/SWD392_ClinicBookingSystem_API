@@ -183,6 +183,14 @@ public class AppointmentController : ControllerBase
     /// 
     /// + 4: Rejected (Staff hủy cuộc hẹn của customer)
     ///
+    /// + 5: Pending (Appointment chưa thanh toán lịch khám)
+    ///
+    /// + 6: OnTreatment (Appointment đang trong quá trình điều trị)
+    ///
+    /// + 7: Queued (Appointment đang trong hàng chờ)
+    ///
+    /// + 8: Waiting (Appointment đã hoàn tất thanh toán, chờ để điều trị)
+    ///
     /// - serviceType:
     ///
     /// + 1: Examination (Khám bệnh)
@@ -217,6 +225,14 @@ public class AppointmentController : ControllerBase
     /// + 3: Scheduled (Hệ thống tự động tạo ra khi customer đặt lịch)
     /// 
     /// + 4: Rejected (Staff hủy cuộc hẹn của customer)
+    ///
+    /// + 5: Pending (Appointment chưa thanh toán lịch khám)
+    ///
+    /// + 6: OnTreatment (Appointment đang trong quá trình điều trị)
+    ///
+    /// + 7: Queued (Appointment đang trong hàng chờ)
+    ///
+    /// + 8: Waiting (Appointment đã hoàn tất thanh toán, chờ để điều trị)
     /// </remarks>
     /// <param name="appointmentId"></param>
     /// <param name="appointmentStatus"></param>
@@ -246,6 +262,14 @@ public class AppointmentController : ControllerBase
     /// + 3: Scheduled (Hệ thống tự động tạo ra khi customer đặt lịch)
     /// 
     /// + 4: Rejected (Staff hủy cuộc hẹn của customer)
+    /// 
+    /// + 5: Pending (Appointment chưa thanh toán lịch khám)
+    ///
+    /// + 6: OnTreatment (Appointment đang trong quá trình điều trị)
+    ///
+    /// + 7: Queued (Appointment đang trong hàng chờ)
+    ///
+    /// + 8: Waiting (Appointment đã hoàn tất thanh toán, chờ để điều trị)
     ///
     /// - serviceType:
     ///
@@ -280,6 +304,13 @@ public class AppointmentController : ControllerBase
     /// 
     /// + 4: Rejected (Staff hủy cuộc hẹn của customer)
     ///
+    /// + 5: Pending (Appointment chưa thanh toán lịch khám)
+    ///
+    /// + 6: OnTreatment (Appointment đang trong quá trình điều trị)
+    ///
+    /// + 7: Queued (Appointment đang trong hàng chờ)
+    ///
+    /// + 8: Waiting (Appointment đã hoàn tất thanh toán, chờ để điều trị)
     /// - serviceType:
     ///
     /// + 1: Examination (Khám bệnh)
