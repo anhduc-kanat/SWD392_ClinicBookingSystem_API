@@ -27,6 +27,8 @@ public class ServiceDAO : BaseDAO<BusinessService>
     public async Task<BusinessService> GetServiceById(int id)
     {
         return await GetQueryableAsync()
+            .Include(p => p.Users)
+            .ThenInclude(p => p.Role)
             .FirstOrDefaultAsync(p => p.Id == id);
     }
     //
