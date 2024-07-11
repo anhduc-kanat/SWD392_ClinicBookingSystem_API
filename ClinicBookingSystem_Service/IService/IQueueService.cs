@@ -2,5 +2,6 @@
 
 public interface IQueueService
 {
-    Task PublishAppointmentToQueue(int appointmentId, int dentistId);
+    Task PublishAppointmentToQueue(int appointmentBusinessServiceId, int dentistId);
+    Task ConsumeMessageDentistQueue(string dentistName);
 }

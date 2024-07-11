@@ -58,7 +58,7 @@ public class MeetingController : ControllerBase
     {
         var addDentistResponse = await _meetingService.AddDentistIntoMeeting(meetingId, dentistId);
         if (addDentistResponse.Data != null)
-            await _queueService.PublishAppointmentToQueue(addDentistResponse.Data.AppointmentId,
+            await _queueService.PublishAppointmentToQueue(addDentistResponse.Data.MeetingId,
                 addDentistResponse.Data.DentistId);
         return addDentistResponse;
     }
