@@ -74,6 +74,7 @@ public class MeetingService : IMeetingService
         await _unitOfWork.MeetingRepository.UpdateAsync(meeting);
         await _unitOfWork.SaveChangesAsync();
         var result = _mapper.Map<AddDentistIntoMeetingResponse>(meeting);
+        result.AppointmentId = meeting.AppointmentBusinessService.Appointment.Id;
         return new BaseResponse<AddDentistIntoMeetingResponse>("Add dentist into meeting successfully", StatusCodeEnum.OK_200, result);
     }
     
