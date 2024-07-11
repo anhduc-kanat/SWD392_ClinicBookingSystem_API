@@ -96,4 +96,18 @@ public class MeetingService : IMeetingService
         
         return new BaseResponse<UpdateDentistInMeeting>("Add dentist into meeting successfully", StatusCodeEnum.OK_200, result);
     }
+    
+    public async Task<BaseResponse<UpdateMeetingIntoDoneResponse>> UpdateMeetingIntoDone(int meetingId)
+    {
+        var meeting = await _unitOfWork.MeetingRepository.GetMeetingById(meetingId);
+        if(meeting == null) throw new CoreException("Meeting not found", StatusCodeEnum.BadRequest_400);
+        if(meeting.Status == MeetingStatus.Done)
+            throw new CoreException("Meeting is already done", StatusCodeEnum.BadRequest_400);
+        
+        meeting.Status = MeetingStatus.Done;
+        await _unitOfWork.MeetingRepository.UpdateAsync(meeting);
+        await _unitOfWork.SaveChangesAsync();
+        var result = _mapper.Map<UpdateMeetingIntoDoneResponse>(meeting);
+        return new BaseResponse<UpdateMeetingIntoDoneResponse>("Update meeting into done successfully", StatusCodeEnum.OK_200, result);
+    }
 }

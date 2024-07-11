@@ -69,4 +69,21 @@ public class MeetingController : ControllerBase
         var result = await _meetingService.UpdateDentistInMeeting(meetingId, dentistId);
         return result;
     }
+    
+    /// <summary>
+    /// Dentist hoàn thành 1 cuộc hẹn, login và truyền Bearer token vào header
+    /// </summary>
+    /// <remarks>
+    /// Chỉ có dentist mới có quyền update meeting status thành Done
+    /// </remarks>
+    /// <param name="meetingId"></param>
+    /// <returns></returns>
+    [HttpPut]
+    [Route("update-meeting-into-done/{meetingId}")]
+    [Authorize(Roles = "DENTIST")]
+    public async Task<BaseResponse<UpdateMeetingIntoDoneResponse>> UpdateMeetingIntoDone(int meetingId)
+    {
+        var result = await _meetingService.UpdateMeetingIntoDone(meetingId);
+        return result;
+    }
 }
