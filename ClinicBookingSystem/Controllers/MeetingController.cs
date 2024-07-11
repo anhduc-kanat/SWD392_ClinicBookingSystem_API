@@ -2,6 +2,8 @@
 using ClinicBookingSystem_Service.IService;
 using ClinicBookingSystem_Service.Models.BaseResponse;
 using ClinicBookingSystem_Service.Models.Response.Meeting;
+using ClinicBookingSystem_Service.RabbitMQ.IService;
+using MassTransit.RabbitMqTransport;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,9 +14,12 @@ namespace ClinicBookingSystem_API.Controllers;
 public class MeetingController : ControllerBase
 {
     private readonly IMeetingService _meetingService;
-    public MeetingController(IMeetingService meetingService)
+    private readonly IQueueService _queueService;
+    public MeetingController(IMeetingService meetingService,
+        IQueueService queueService)
     {
         _meetingService = meetingService;
+        _queueService = queueService;
     }
     
     /// <summary>
@@ -51,8 +56,11 @@ public class MeetingController : ControllerBase
     [Authorize(Roles = "STAFF")]
     public async Task<BaseResponse<AddDentistIntoMeetingResponse>> AddDentistIntoMeeting(int meetingId, int dentistId)
     {
-        var result = await _meetingService.AddDentistIntoMeeting(meetingId, dentistId);
-        return result;
+        var addDentistResponse = await _meetingService.AddDentistIntoMeeting(meetingId, dentistId);
+        if (addDentistResponse.Data != null)
+            await _queueService.PublishAppointmentToQueue(addDentistResponse.Data.AppointmentId,
+                addDentistResponse.Data.DentistId);
+        return addDentistResponse;
     }
     
     /// <summary>
