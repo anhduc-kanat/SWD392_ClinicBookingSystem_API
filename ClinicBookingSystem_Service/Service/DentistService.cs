@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClinicBookingSystem_Service.CustomException;
 
 namespace ClinicBookingSystem_Service.Services
 {
@@ -26,6 +27,7 @@ namespace ClinicBookingSystem_Service.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+
         public async Task<BaseResponse<CreateDentistResponse>> CreateDentist(CreateDentistRequest request)
         {
             try
@@ -44,15 +46,17 @@ namespace ClinicBookingSystem_Service.Services
                         services.Add(service);
                     }
                 }
-                var createdUser = await _unitOfWork.DentistRepository.CreateNewDentist(user,services);
+
+                var createdUser = await _unitOfWork.DentistRepository.CreateNewDentist(user, services);
                 await _unitOfWork.SaveChangesAsync();
-                return new BaseResponse<CreateDentistResponse>("Create Dentist Successfully!", StatusCodeEnum.Created_201);
+                return new BaseResponse<CreateDentistResponse>("Create Dentist Successfully!",
+                    StatusCodeEnum.Created_201);
             }
             catch (Exception ex)
             {
-                return new BaseResponse<CreateDentistResponse>("Error at CreateDentist Service: " + ex.Message, StatusCodeEnum.InternalServerError_500);
+                return new BaseResponse<CreateDentistResponse>("Error at CreateDentist Service: " + ex.Message,
+                    StatusCodeEnum.InternalServerError_500);
             }
-            
         }
 
         public async Task<BaseResponse<DeleteDentistResponse>> DeleteDentist(int id)
@@ -63,11 +67,13 @@ namespace ClinicBookingSystem_Service.Services
                 await _unitOfWork.DentistRepository.DeleteAsync(dentist);
                 var response = _mapper.Map<DeleteDentistResponse>(dentist);
                 await _unitOfWork.SaveChangesAsync();
-                return new BaseResponse<DeleteDentistResponse>("Delete Dentist Successfully!", StatusCodeEnum.OK_200, response);
+                return new BaseResponse<DeleteDentistResponse>("Delete Dentist Successfully!", StatusCodeEnum.OK_200,
+                    response);
             }
             catch (Exception ex)
             {
-                return new BaseResponse<DeleteDentistResponse>("Error at DeleteDentist Service: " + ex.Message, StatusCodeEnum.InternalServerError_500);
+                return new BaseResponse<DeleteDentistResponse>("Error at DeleteDentist Service: " + ex.Message,
+                    StatusCodeEnum.InternalServerError_500);
             }
         }
 
@@ -76,12 +82,15 @@ namespace ClinicBookingSystem_Service.Services
             try
             {
                 IEnumerable<User> dentists = await _unitOfWork.DentistRepository.GetDentistsByRole();
-                IEnumerable<GetAllDentistsResponse> response = _mapper.Map<IEnumerable<GetAllDentistsResponse>>(dentists);
-                return new BaseResponse<IEnumerable<GetAllDentistsResponse>>("Get All Dentists successfully", StatusCodeEnum.OK_200, response);
+                IEnumerable<GetAllDentistsResponse> response =
+                    _mapper.Map<IEnumerable<GetAllDentistsResponse>>(dentists);
+                return new BaseResponse<IEnumerable<GetAllDentistsResponse>>("Get All Dentists successfully",
+                    StatusCodeEnum.OK_200, response);
             }
             catch (Exception ex)
             {
-                return new BaseResponse<IEnumerable<GetAllDentistsResponse>>("Error at GetAllDentists Service: " + ex.Message, StatusCodeEnum.InternalServerError_500);
+                return new BaseResponse<IEnumerable<GetAllDentistsResponse>>(
+                    "Error at GetAllDentists Service: " + ex.Message, StatusCodeEnum.InternalServerError_500);
             }
         }
 
@@ -90,12 +99,15 @@ namespace ClinicBookingSystem_Service.Services
             try
             {
                 IEnumerable<User> dentists = await _unitOfWork.DentistRepository.GetDentistsByService(serviceName);
-                IEnumerable<GetAllDentistsResponse> response = _mapper.Map<IEnumerable<GetAllDentistsResponse>>(dentists);
-                return new BaseResponse<IEnumerable<GetAllDentistsResponse>>("Get All Dentists successfully", StatusCodeEnum.OK_200, response);
+                IEnumerable<GetAllDentistsResponse> response =
+                    _mapper.Map<IEnumerable<GetAllDentistsResponse>>(dentists);
+                return new BaseResponse<IEnumerable<GetAllDentistsResponse>>("Get All Dentists successfully",
+                    StatusCodeEnum.OK_200, response);
             }
             catch (Exception ex)
             {
-                return new BaseResponse<IEnumerable<GetAllDentistsResponse>>("Error at GetAllDentists Service: " + ex.Message, StatusCodeEnum.InternalServerError_500);
+                return new BaseResponse<IEnumerable<GetAllDentistsResponse>>(
+                    "Error at GetAllDentists Service: " + ex.Message, StatusCodeEnum.InternalServerError_500);
             }
         }
 
@@ -104,12 +116,15 @@ namespace ClinicBookingSystem_Service.Services
             try
             {
                 IEnumerable<User> dentists = await _unitOfWork.DentistRepository.GetDentistsByServiceId(serviceId);
-                IEnumerable<GetAllDentistsResponse> response = _mapper.Map<IEnumerable<GetAllDentistsResponse>>(dentists);
-                return new BaseResponse<IEnumerable<GetAllDentistsResponse>>("Get All Dentists successfully", StatusCodeEnum.OK_200, response);
+                IEnumerable<GetAllDentistsResponse> response =
+                    _mapper.Map<IEnumerable<GetAllDentistsResponse>>(dentists);
+                return new BaseResponse<IEnumerable<GetAllDentistsResponse>>("Get All Dentists successfully",
+                    StatusCodeEnum.OK_200, response);
             }
             catch (Exception ex)
             {
-                return new BaseResponse<IEnumerable<GetAllDentistsResponse>>("Error at GetAllDentists Service: " + ex.Message, StatusCodeEnum.InternalServerError_500);
+                return new BaseResponse<IEnumerable<GetAllDentistsResponse>>(
+                    "Error at GetAllDentists Service: " + ex.Message, StatusCodeEnum.InternalServerError_500);
             }
         }
 
@@ -118,11 +133,13 @@ namespace ClinicBookingSystem_Service.Services
             try
             {
                 IEnumerable<DateTime> response = await _unitOfWork.DentistRepository.GetAvailableDate(id);
-                return new BaseResponse<IEnumerable<DateTime>>("Get Dentist By ID successfully!", StatusCodeEnum.OK_200, response);
+                return new BaseResponse<IEnumerable<DateTime>>("Get Dentist By ID successfully!", StatusCodeEnum.OK_200,
+                    response);
             }
             catch (Exception ex)
             {
-                return new BaseResponse<IEnumerable<DateTime>>("Error at GetDentistById Service: " + ex.Message, StatusCodeEnum.InternalServerError_500);
+                return new BaseResponse<IEnumerable<DateTime>>("Error at GetDentistById Service: " + ex.Message,
+                    StatusCodeEnum.InternalServerError_500);
             }
         }
 
@@ -132,11 +149,13 @@ namespace ClinicBookingSystem_Service.Services
             {
                 User dentist = await _unitOfWork.DentistRepository.GetByIdAsync(id);
                 GetDentistByIdResponse response = _mapper.Map<GetDentistByIdResponse>(dentist);
-                return new BaseResponse<GetDentistByIdResponse>("Get Dentist By ID successfully!", StatusCodeEnum.OK_200, response);
+                return new BaseResponse<GetDentistByIdResponse>("Get Dentist By ID successfully!",
+                    StatusCodeEnum.OK_200, response);
             }
             catch (Exception ex)
             {
-                return new BaseResponse<GetDentistByIdResponse>("Error at GetDentistById Service: " + ex.Message , StatusCodeEnum.InternalServerError_500);
+                return new BaseResponse<GetDentistByIdResponse>("Error at GetDentistById Service: " + ex.Message,
+                    StatusCodeEnum.InternalServerError_500);
             }
         }
 
@@ -154,8 +173,28 @@ namespace ClinicBookingSystem_Service.Services
             }
             catch (Exception ex)
             {
-                return new BaseResponse<UpdateDentistResponse>("Error at UpdateDentist Service: " + ex.Message, StatusCodeEnum.InternalServerError_500);
+                return new BaseResponse<UpdateDentistResponse>("Error at UpdateDentist Service: " + ex.Message,
+                    StatusCodeEnum.InternalServerError_500);
             }
+        }
+
+        public async Task<BaseResponse<AddDentistToBusinessServiceResponse>> AddDentistToService(int dentistId,
+            int businessServiceId)
+        {
+                User dentist = await _unitOfWork.DentistRepository.GetDentistById(dentistId);
+                if (dentist == null) throw new CoreException("Dentist not found!", StatusCodeEnum.BadRequest_400);
+                BusinessService service = await _unitOfWork.ServiceRepository.GetByIdAsync(businessServiceId);
+                if (service == null) throw new CoreException("Service not found!", StatusCodeEnum.BadRequest_400);
+
+                dentist.BusinessServices.Add(service);
+                service.Users.Add(dentist);
+                
+                await _unitOfWork.DentistRepository.UpdateAsync(dentist);
+                await _unitOfWork.ServiceRepository.UpdateAsync(service);
+                
+                await _unitOfWork.SaveChangesAsync();
+                return new BaseResponse<AddDentistToBusinessServiceResponse>("Add Dentist to Service Successfully!",
+                    StatusCodeEnum.OK_200);
         }
     }
 }
