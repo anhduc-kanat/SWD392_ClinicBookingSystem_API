@@ -14,9 +14,9 @@ public class RabbitMqController : ControllerBase
         _queueService = queueService;
     }
     
-    [HttpPost("publish-appointment-to-queue/{appointmentId}")]
-    public async Task PublishAppointmentToQueue(int appointmentId)
+    [HttpPost("publish-appointment-to-queue/{appointmentId}/{dentistId}")]
+    public async Task PublishAppointmentToQueue(int appointmentId, int dentistId)
     {
-        await _queueService.PublishAppointmentToQueue(appointmentId);
+        await _queueService.PublishAppointmentToQueue(appointmentId, dentistId);
     }
 }

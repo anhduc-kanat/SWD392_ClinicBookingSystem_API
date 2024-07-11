@@ -18,7 +18,7 @@ public class QueueService : IQueueService
         _unitOfWork = unitOfWork;
     }
     
-    public async Task PublishAppointmentToQueue(int appointmentId)
+    public async Task PublishAppointmentToQueue(int appointmentId, int dentistId)
     {
         var appointment = await _unitOfWork.AppointmentRepository.GetAppointmentById(appointmentId);
         if (appointment == null) throw new CoreException("Appointment not found", StatusCodeEnum.BadRequest_400);
@@ -34,7 +34,13 @@ public class QueueService : IQueueService
         var meeting = await _unitOfWork.MeetingRepository.GetTreatmentMeetingQueue(appointmentId, DateTime.Now);
         if(meeting == null)
             throw new CoreException("There is no AppointmentBusinessService suitable", StatusCodeEnum.BadRequest_400);
-        _rabbitMqService.PublishMessage(meeting.AppointmentBusinessService.ServiceName, appointmentId.ToString());
+        
+        var dentist = await _unitOfWork.DentistRepository.GetDentistById(dentistId);
+        if(dentist == null) throw new CoreException("Dentist not found", StatusCodeEnum.BadRequest_400);
+        if(!dentist.BusinessServices.Any(p => p.Id == meeting.AppointmentBusinessService.BusinessService.Id))
+            throw new CoreException("Dentist not provide this service", StatusCodeEnum.BadRequest_400);
+        
+        _rabbitMqService.PublishMessage(dentistId.ToString(), appointmentId.ToString());
         meeting.Status = MeetingStatus.InQueue;
         appointment.Status = AppointmentStatus.Queued;
         await _unitOfWork.AppointmentRepository.UpdateAsync(appointment);
