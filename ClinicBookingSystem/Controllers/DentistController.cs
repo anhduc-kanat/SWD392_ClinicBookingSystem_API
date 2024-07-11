@@ -79,5 +79,20 @@ namespace ClinicBookingSystem_API.Controllers
             var response = await _dentistService.GetAvailableDate(id);
             return response;
         }
+        
+        /// <summary>
+        /// Add dentist vô service
+        /// </summary>
+        /// <param name="dentistId"></param>
+        /// <param name="businessServiceId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("add-dentist-to-service/{dentistId}/{businessServiceId}")]
+        public async Task<ActionResult<BaseResponse<AddDentistToBusinessServiceResponse>>>
+            AddDentistToService(int dentistId, int businessServiceId)
+        {
+            var response = await _dentistService.AddDentistToService(dentistId, businessServiceId);
+            return response;
+        }
     }
 }
