@@ -66,10 +66,11 @@ namespace ClinicBookingSystem_API.Controllers
         /// </summary>
         /// <param name="serviceId"></param>
         /// <returns></returns>
-        [HttpGet("get-dentist-service/{serviceId}")]
-        public async Task<ActionResult<BaseResponse<IEnumerable<GetAllDentistsResponse>>>> GetDentistByServiceId(int serviceId)
+        [HttpGet]
+        [Route("get-dentist-service/{businessServiceId}")]
+        public async Task<ActionResult<BaseResponse<IEnumerable<GetAllDentistsResponse>>>> GetDentistByServiceId(int businessServiceId)
         {
-            var response = await _dentistService.GetAllDentistsByServiceId(serviceId);
+            var response = await _dentistService.GetAllDentistsByServiceId(businessServiceId);
             return response;
         }
         

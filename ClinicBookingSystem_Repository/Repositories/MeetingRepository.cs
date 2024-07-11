@@ -27,5 +27,9 @@ public class MeetingRepository : BaseRepository<Meeting>, IMeetingRepository
     {
         return await _meetingDao.GetTreatmentMeetingQueue(appointmentId, date);
     }
-    
+
+    public async Task<Meeting> GetTreatmentMeetingQueueByMeetingId(int meetingId, DateTime date)
+    {
+        return await _meetingDao.GetTreatmentMeetingQueueByMeetingId(meetingId, date);
+    }
 }

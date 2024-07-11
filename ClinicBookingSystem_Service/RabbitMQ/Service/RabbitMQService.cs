@@ -28,7 +28,7 @@ public class RabbitMQService : IRabbitMQService
             basicProperties: null,
             body: body);
     }
-    public void ConsumeMessage(string queueName)
+    public string ConsumeMessage(string queueName)
     {
         var channel = _rabbitMQConnection.GetConnection().CreateModel();
         channel.QueueDeclare(queue: queueName,
@@ -45,7 +45,10 @@ public class RabbitMQService : IRabbitMQService
 
             // Acknowledge the message
             channel.BasicAck(deliveryTag: result.DeliveryTag, multiple: false);
+            return message;
         }
+
+        return null!;
     }
 
     public void ConsumeAllMessages(string queueName)

@@ -2,6 +2,6 @@
 
 public class AddDentistIntoMeetingResponse
 {
-    public int AppointmentId { get; set; }
+    public int MeetingId { get; set; }
     public int DentistId { get; set; }
 }
