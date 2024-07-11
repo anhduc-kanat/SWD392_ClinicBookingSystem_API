@@ -183,7 +183,7 @@ namespace ClinicBookingSystem_Service.Services
         {
                 User dentist = await _unitOfWork.DentistRepository.GetDentistById(dentistId);
                 if (dentist == null) throw new CoreException("Dentist not found!", StatusCodeEnum.BadRequest_400);
-                BusinessService service = await _unitOfWork.ServiceRepository.GetByIdAsync(businessServiceId);
+                BusinessService service = await _unitOfWork.ServiceRepository.GetServiceById(businessServiceId);
                 if (service == null) throw new CoreException("Service not found!", StatusCodeEnum.BadRequest_400);
 
                 dentist.BusinessServices.Add(service);
