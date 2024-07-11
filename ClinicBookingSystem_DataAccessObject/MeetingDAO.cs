@@ -47,4 +47,19 @@ public class MeetingDAO : BaseDAO<Meeting>
             .Where(p => p.AppointmentBusinessService.Appointment.IsFullyPaid == true)
             .FirstOrDefaultAsync();
     }
+
+    public async Task<Meeting> GetTreatmentMeetingQueueByMeetingId(int meetingId, DateTime date)
+    {
+        return await GetQueryableAsync()
+            .Include(p => p.AppointmentBusinessService)
+            .ThenInclude(p => p.Appointment)
+            .Where(x => x.Id == meetingId)
+            .Where(x => x.Date.Value.Year == date.Year &&
+                        x.Date.Value.Month == date.Month &&
+                        x.Date.Value.Day == date.Day)
+            .Where(p => p.AppointmentBusinessService.ServiceType == ServiceType.Treatment)
+            .Where(p => p.Status == MeetingStatus.CheckIn)
+            .Where(p => p.AppointmentBusinessService.Appointment.IsFullyPaid == true)
+            .FirstOrDefaultAsync();
+    }
 }

@@ -19,4 +19,11 @@ public class RabbitMqController : ControllerBase
     {
         await _queueService.PublishAppointmentToQueue(appointmentId, dentistId);
     }
+    
+    [HttpGet]
+    [Route("consume-message-dentist-queue/{dentistName}")]
+    public async Task ConsumeMessageDentistQueue(string dentistName)
+    {
+        await _queueService.ConsumeMessageDentistQueue(dentistName);
+    }
 }
