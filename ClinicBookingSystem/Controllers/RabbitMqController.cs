@@ -21,9 +21,9 @@ public class RabbitMqController : ControllerBase
     }
     
     [HttpGet]
-    [Route("consume-message-dentist-queue/{dentistName}")]
-    public async Task ConsumeMessageDentistQueue(string dentistName)
+    [Route("consume-message-dentist-queue/{dentistPhoneNumber}")]
+    public async Task ConsumeMessageDentistQueue(string dentistPhoneNumber)
     {
-        await _queueService.ConsumeMessageDentistQueue(dentistName);
+        await _queueService.ConsumeMessageDentistQueue(dentistPhoneNumber);
     }
 }
