@@ -26,13 +26,21 @@ public class MeetingController : ControllerBase
     /// Update meeting status bởi staff, login và truyền Bearer token vào header
     /// </summary>
     /// <remarks>
-    /// 1: Done
+    /// 1: Done (Hoàn thành meeting)
     ///
     /// 2: CheckIn (Checkin để bắt đầu cuộc hẹn)
     ///
     /// 3: Waiting (Trong trạng thái chờ để được checkin)
     ///
     /// 4: Future (Cuộc hẹn sắp tới - không phải ngày hôm nay)
+    ///
+    /// 5: InQueue (Đang trong hàng đợi chờ tới lượt chữa trị
+    ///
+    /// 6: WaitingDentist (Đang chờ bác sĩ - cái này hiện đang ko sử dụng nhưng mà để cho vui)
+    ///
+    /// 7: InTreatment (Đang trong quá trình chữa trị)
+    ///
+    /// .Staff chỉ cần update meeting status thành CheckIn
     /// </remarks>
     /// <param name="meetingId"></param>
     /// <param name="status"></param>
