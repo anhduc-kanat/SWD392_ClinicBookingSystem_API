@@ -31,6 +31,10 @@ public class AppointmentController : ControllerBase
         _paymentService = paymentService;
         _getUserIpAddress = getUserIpAddress;
     }
+    /// <summary>
+    /// API NÀY KHÔNG SỬ DỤNG ĐƯỢC
+    /// </summary>
+    /// <returns></returns>
     // GET: api/appointment
     [HttpGet]
     [Route("get-all-appointment")]
@@ -40,6 +44,59 @@ public class AppointmentController : ControllerBase
         return Ok(response);
     }
 
+    /// <summary>
+    /// Lấy tất cả appointments theo trang
+    /// </summary>
+    /// <remarks>
+    /// - Appointment status:
+    /// 
+    /// + 0: Cancelled (Bị hủy bởi customer)
+    /// 
+    /// + 1: Done (Đã hoàn thành cuộc hẹn => tức là khi sinh ra result)
+    /// 
+    /// + 2: OnGoing (Staff check-in customer, bắt đầu cuộc hẹn)
+    /// 
+    /// + 3: Scheduled (Hệ thống tự động tạo ra khi customer đặt lịch)
+    /// 
+    /// + 4: Rejected (Staff hủy cuộc hẹn của customer)
+    ///
+    /// + 5: Pending (Appointment chưa thanh toán lịch khám)
+    ///
+    /// + 6: OnTreatment (Appointment đang trong quá trình điều trị)
+    ///
+    /// + 7: Queued (Appointment đang trong hàng chờ)
+    ///
+    /// + 8: Waiting (Appointment đã hoàn tất thanh toán, chờ để điều trị)
+    ///
+    /// - serviceType:
+    ///
+    /// + 1: Examination (Khám bệnh)
+    /// 
+    /// + 2: Treatment (Điều trị)
+    ///
+    /// Appointment status staff ko cần thao tác, chỉ cần thao tác ở meeting
+    /// 
+    /// -------------------------------------------------------------------
+    ///
+    /// - Meeting status
+    /// 
+    /// 1: Done (Hoàn thành meeting)
+    ///
+    /// 2: CheckIn (Checkin để bắt đầu cuộc hẹn)
+    ///
+    /// 3: Waiting (Trong trạng thái chờ để được checkin)
+    ///
+    /// 4: Future (Cuộc hẹn sắp tới - không phải ngày hôm nay)
+    ///
+    /// 5: InQueue (Đang trong hàng đợi chờ tới lượt chữa trị
+    ///
+    /// 6: WaitingDentist (Đang chờ bác sĩ - cái này hiện đang ko sử dụng nhưng mà để cho vui)
+    ///
+    /// 7: InTreatment (Đang trong quá trình chữa trị)
+    ///
+    /// </remarks>
+    /// <param name="request"></param>
+    /// <returns></returns>
     [HttpGet]
     [Route("get-all-appointment-pagination")]
     public async Task<ActionResult<PaginationResponse<GetAppointmentResponse>>> GetAllAppointmentsPagination([FromQuery] PaginationRequest request)
@@ -48,7 +105,59 @@ public class AppointmentController : ControllerBase
         return Ok(response);
     }
     
-
+    /// <summary>
+    /// Lấy appointment theo id
+    /// </summary>
+    /// <remarks>
+    ///   /// - Appointment status:
+    /// 
+    /// + 0: Cancelled (Bị hủy bởi customer)
+    /// 
+    /// + 1: Done (Đã hoàn thành cuộc hẹn => tức là khi sinh ra result)
+    /// 
+    /// + 2: OnGoing (Staff check-in customer, bắt đầu cuộc hẹn)
+    /// 
+    /// + 3: Scheduled (Hệ thống tự động tạo ra khi customer đặt lịch)
+    /// 
+    /// + 4: Rejected (Staff hủy cuộc hẹn của customer)
+    ///
+    /// + 5: Pending (Appointment chưa thanh toán lịch khám)
+    ///
+    /// + 6: OnTreatment (Appointment đang trong quá trình điều trị)
+    ///
+    /// + 7: Queued (Appointment đang trong hàng chờ)
+    ///
+    /// + 8: Waiting (Appointment đã hoàn tất thanh toán, chờ để điều trị)
+    ///
+    /// - serviceType:
+    ///
+    /// + 1: Examination (Khám bệnh)
+    /// 
+    /// + 2: Treatment (Điều trị)
+    ///
+    /// Appointment status staff ko cần thao tác, chỉ cần thao tác ở meeting
+    /// 
+    /// -------------------------------------------------------------------
+    ///
+    /// - Meeting status
+    /// 
+    /// 1: Done (Hoàn thành meeting)
+    ///
+    /// 2: CheckIn (Checkin để bắt đầu cuộc hẹn)
+    ///
+    /// 3: Waiting (Trong trạng thái chờ để được checkin)
+    ///
+    /// 4: Future (Cuộc hẹn sắp tới - không phải ngày hôm nay)
+    ///
+    /// 5: InQueue (Đang trong hàng đợi chờ tới lượt chữa trị
+    ///
+    /// 6: WaitingDentist (Đang chờ bác sĩ - cái này hiện đang ko sử dụng nhưng mà để cho vui)
+    ///
+    /// 7: InTreatment (Đang trong quá trình chữa trị)
+    ///
+    /// </remarks>
+    /// <param name="id"></param>
+    /// <returns></returns>
     // GET: api/appointment/1
     [HttpGet]
     [Route("get-appointment-by-id/{id}")]
@@ -171,7 +280,7 @@ public class AppointmentController : ControllerBase
     /// - User get tất cả các cuộc hẹn của bản thân, login và truyền Bearer token vào header
     /// </summary>
     /// <remarks>
-    /// - status:
+    /// - Appointment status:
     /// 
     /// + 0: Cancelled (Bị hủy bởi customer)
     /// 
@@ -195,7 +304,29 @@ public class AppointmentController : ControllerBase
     ///
     /// + 1: Examination (Khám bệnh)
     /// 
-    /// + 2: Treatment (Điều trị) 
+    /// + 2: Treatment (Điều trị)
+    ///
+    /// Appointment status staff ko cần thao tác, chỉ cần thao tác ở meeting
+    /// 
+    /// -------------------------------------------------------------------
+    ///
+    /// - Meeting status
+    /// 
+    /// 1: Done (Hoàn thành meeting)
+    ///
+    /// 2: CheckIn (Checkin để bắt đầu cuộc hẹn)
+    ///
+    /// 3: Waiting (Trong trạng thái chờ để được checkin)
+    ///
+    /// 4: Future (Cuộc hẹn sắp tới - không phải ngày hôm nay)
+    ///
+    /// 5: InQueue (Đang trong hàng đợi chờ tới lượt chữa trị
+    ///
+    /// 6: WaitingDentist (Đang chờ bác sĩ - cái này hiện đang ko sử dụng nhưng mà để cho vui)
+    ///
+    /// 7: InTreatment (Đang trong quá trình chữa trị)
+    ///
+    /// .Staff chỉ cần update meeting status thành CheckIn
     /// </remarks>
     /// <param name="paginationRequest"></param>
     /// <returns></returns>
@@ -220,7 +351,7 @@ public class AppointmentController : ControllerBase
     /// 
     /// + 1: Done (Đã hoàn thành cuộc hẹn => tức là khi sinh ra result)
     /// 
-    /// + 2: OnGoing (Staff check-in customer, bắt đầu cuộc hẹn)
+    /// + 2: OnExamination (Staff check-in customer, bắt đầu cuộc hẹn)
     /// 
     /// + 3: Scheduled (Hệ thống tự động tạo ra khi customer đặt lịch)
     /// 
@@ -233,6 +364,8 @@ public class AppointmentController : ControllerBase
     /// + 7: Queued (Appointment đang trong hàng chờ)
     ///
     /// + 8: Waiting (Appointment đã hoàn tất thanh toán, chờ để điều trị)
+    ///
+    /// .Hiện tại không cân sử dụng api này, checkin bằng meeting
     /// </remarks>
     /// <param name="appointmentId"></param>
     /// <param name="appointmentStatus"></param>
@@ -251,7 +384,7 @@ public class AppointmentController : ControllerBase
     /// - Staff get tất cả appointments theo ngày, login và truyền Bearer token vào header
     /// </summary>
     /// <remarks>
-    /// - status:
+    /// - Appointment status:
     /// 
     /// + 0: Cancelled (Bị hủy bởi customer)
     /// 
@@ -262,7 +395,7 @@ public class AppointmentController : ControllerBase
     /// + 3: Scheduled (Hệ thống tự động tạo ra khi customer đặt lịch)
     /// 
     /// + 4: Rejected (Staff hủy cuộc hẹn của customer)
-    /// 
+    ///
     /// + 5: Pending (Appointment chưa thanh toán lịch khám)
     ///
     /// + 6: OnTreatment (Appointment đang trong quá trình điều trị)
@@ -275,7 +408,29 @@ public class AppointmentController : ControllerBase
     ///
     /// + 1: Examination (Khám bệnh)
     /// 
-    /// + 2: Treatment (Điều trị) 
+    /// + 2: Treatment (Điều trị)
+    ///
+    /// Appointment status staff ko cần thao tác, chỉ cần thao tác ở meeting
+    /// 
+    /// -------------------------------------------------------------------
+    ///
+    /// - Meeting status
+    /// 
+    /// 1: Done (Hoàn thành meeting)
+    ///
+    /// 2: CheckIn (Checkin để bắt đầu cuộc hẹn)
+    ///
+    /// 3: Waiting (Trong trạng thái chờ để được checkin)
+    ///
+    /// 4: Future (Cuộc hẹn sắp tới - không phải ngày hôm nay)
+    ///
+    /// 5: InQueue (Đang trong hàng đợi chờ tới lượt chữa trị
+    ///
+    /// 6: WaitingDentist (Đang chờ bác sĩ - cái này hiện đang ko sử dụng nhưng mà để cho vui)
+    ///
+    /// 7: InTreatment (Đang trong quá trình chữa trị)
+    ///
+    /// .Staff chỉ cần update meeting status thành CheckIn
     /// </remarks>
     /// <param name="paginationRequest"></param>
     /// <returns></returns>
@@ -292,7 +447,7 @@ public class AppointmentController : ControllerBase
     /// - Dentist get tất cả appointments theo ngày, khi staff checkin appointment thì dentist mới nhận được appointment, login và truyền Bearer token vào header
     /// </summary>
     /// <remarks>
-    /// - status:
+    /// - Appointment status:
     /// 
     /// + 0: Cancelled (Bị hủy bởi customer)
     /// 
@@ -311,11 +466,34 @@ public class AppointmentController : ControllerBase
     /// + 7: Queued (Appointment đang trong hàng chờ)
     ///
     /// + 8: Waiting (Appointment đã hoàn tất thanh toán, chờ để điều trị)
+    ///
     /// - serviceType:
     ///
     /// + 1: Examination (Khám bệnh)
     /// 
-    /// + 2: Treatment (Điều trị) 
+    /// + 2: Treatment (Điều trị)
+    ///
+    /// Appointment status staff ko cần thao tác, chỉ cần thao tác ở meeting
+    /// 
+    /// -------------------------------------------------------------------
+    ///
+    /// - Meeting status
+    /// 
+    /// 1: Done (Hoàn thành meeting)
+    ///
+    /// 2: CheckIn (Checkin để bắt đầu cuộc hẹn)
+    ///
+    /// 3: Waiting (Trong trạng thái chờ để được checkin)
+    ///
+    /// 4: Future (Cuộc hẹn sắp tới - không phải ngày hôm nay)
+    ///
+    /// 5: InQueue (Đang trong hàng đợi chờ tới lượt chữa trị
+    ///
+    /// 6: WaitingDentist (Đang chờ bác sĩ - cái này hiện đang ko sử dụng nhưng mà để cho vui)
+    ///
+    /// 7: InTreatment (Đang trong quá trình chữa trị)
+    ///
+    /// .Staff chỉ cần update meeting status thành CheckIn
     /// </remarks>
     /// <param name="paginationRequest"></param>
     /// <returns></returns>
@@ -378,6 +556,59 @@ public class AppointmentController : ControllerBase
         return Ok(response);
     }
     
+    /// <summary>
+    /// Job pick tự động, ko cần sử dụng api này
+    /// </summary>
+    /// <remarks>
+    /// - Appointment status:
+    /// 
+    /// + 0: Cancelled (Bị hủy bởi customer)
+    /// 
+    /// + 1: Done (Đã hoàn thành cuộc hẹn => tức là khi sinh ra result)
+    /// 
+    /// + 2: OnGoing (Staff check-in customer, bắt đầu cuộc hẹn)
+    /// 
+    /// + 3: Scheduled (Hệ thống tự động tạo ra khi customer đặt lịch)
+    /// 
+    /// + 4: Rejected (Staff hủy cuộc hẹn của customer)
+    ///
+    /// + 5: Pending (Appointment chưa thanh toán lịch khám)
+    ///
+    /// + 6: OnTreatment (Appointment đang trong quá trình điều trị)
+    ///
+    /// + 7: Queued (Appointment đang trong hàng chờ)
+    ///
+    /// + 8: Waiting (Appointment đã hoàn tất thanh toán, chờ để điều trị)
+    ///
+    /// - serviceType:
+    ///
+    /// + 1: Examination (Khám bệnh)
+    /// 
+    /// + 2: Treatment (Điều trị)
+    ///
+    /// Appointment status staff ko cần thao tác, chỉ cần thao tác ở meeting
+    /// 
+    /// -------------------------------------------------------------------
+    ///
+    /// - Meeting status
+    /// 
+    /// 1: Done (Hoàn thành meeting)
+    ///
+    /// 2: CheckIn (Checkin để bắt đầu cuộc hẹn)
+    ///
+    /// 3: Waiting (Trong trạng thái chờ để được checkin)
+    ///
+    /// 4: Future (Cuộc hẹn sắp tới - không phải ngày hôm nay)
+    ///
+    /// 5: InQueue (Đang trong hàng đợi chờ tới lượt chữa trị
+    ///
+    /// 6: WaitingDentist (Đang chờ bác sĩ - cái này hiện đang ko sử dụng nhưng mà để cho vui)
+    ///
+    /// 7: InTreatment (Đang trong quá trình chữa trị)
+    ///
+    /// .Staff chỉ cần update meeting status thành CheckIn
+    /// </remarks>
+    /// <returns></returns>
     [HttpGet]
     [Route("get-appointment-by-meeting-day-for-ajax")]
     public async Task<ActionResult<IEnumerable<GetAppointmentByMeetingDayForAjaxResponse>>>
