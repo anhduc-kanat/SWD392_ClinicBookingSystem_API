@@ -7,6 +7,7 @@ using ClinicBookingSystem_Service.IServices;
 using ClinicBookingSystem_Service.Models.BaseResponse;
 using ClinicBookingSystem_Service.Models.Enums;
 using ClinicBookingSystem_Service.Models.Request.Dentist;
+using ClinicBookingSystem_Service.Models.Response.Authen;
 using ClinicBookingSystem_Service.Models.Response.Dentist;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,12 @@ namespace ClinicBookingSystem_Service.Services
         {
             try
             {
+                /*bool exist = await _unitOfWork.CustomerRepository.GetCustomerByPhone(request.PhoneNumber);
+                if (exist)
+                {
+                    return new BaseResponse<CreateDentistResponse>("Phone was existed", StatusCodeEnum.BadRequest_400);
+
+                }*/
                 HashPassword hash = new HashPassword();
                 request.Password = hash.EncodePassword(request.Password);
                 User user = _mapper.Map<User>(request);
@@ -147,7 +154,7 @@ namespace ClinicBookingSystem_Service.Services
         {
             try
             {
-                User dentist = await _unitOfWork.DentistRepository.GetByIdAsync(id);
+                User dentist = await _unitOfWork.DentistRepository.GetDentistById(id);
                 GetDentistByIdResponse response = _mapper.Map<GetDentistByIdResponse>(dentist);
                 return new BaseResponse<GetDentistByIdResponse>("Get Dentist By ID successfully!",
                     StatusCodeEnum.OK_200, response);
@@ -165,8 +172,22 @@ namespace ClinicBookingSystem_Service.Services
             {
                 /*HashPassword hash = new HashPassword();
                 request.Password = hash.EncodePassword(request.Password);*/
-                User dentist = await _unitOfWork.DentistRepository.GetByIdAsync(id);
+                List<int> servicesId = request.ServicesId;
+                User dentist = await _unitOfWork.DentistRepository.GetDentistById(id);
                 _mapper.Map(request, dentist);
+                var serviceRemove = dentist.BusinessServices.Where(s => !servicesId.Contains(s.Id)).ToList();
+                foreach(var service in serviceRemove)
+                {
+                    dentist.BusinessServices.Remove(service);
+                }
+                foreach(var serviceId in servicesId)
+                {
+                    if (!dentist.BusinessServices.Any(ds => ds.Id == serviceId))
+                    {
+                        var newBusinessService = await _unitOfWork.ServiceRepository.GetByIdAsync(serviceId);
+                        dentist.BusinessServices.Add(newBusinessService);
+                    }
+                }
                 User updatedDentist = await _unitOfWork.DentistRepository.UpdateAsync(dentist);
                 await _unitOfWork.SaveChangesAsync();
                 return new BaseResponse<UpdateDentistResponse>("Update Dentist Successfully!", StatusCodeEnum.OK_200);
