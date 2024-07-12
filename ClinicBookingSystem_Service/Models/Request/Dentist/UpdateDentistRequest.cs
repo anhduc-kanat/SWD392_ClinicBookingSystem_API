@@ -15,7 +15,6 @@ namespace ClinicBookingSystem_Service.Models.Request.Dentist
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public List<int>? ServicesId { get; set; }
-        public string? Password { get; set; }
 
 
     }
