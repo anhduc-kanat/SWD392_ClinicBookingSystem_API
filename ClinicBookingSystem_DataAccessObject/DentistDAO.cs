@@ -38,11 +38,11 @@ namespace ClinicBookingSystem_DataAccessObject
               return user;
         }
 
-
         public async Task<IEnumerable<User>> GetDentistsByRole()
         {
             return await GetQueryableAsync()
                 .Include(u => u.Role)
+                .Include(u => u.BusinessServices)
                 .Where(u => u.Role.Name == "DENTIST")
                 .ToListAsync();
         }
