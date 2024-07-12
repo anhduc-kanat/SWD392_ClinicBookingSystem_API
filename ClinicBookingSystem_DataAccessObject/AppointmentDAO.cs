@@ -97,6 +97,7 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .ThenInclude(p => p.BusinessService)
             
             .Where(p => p.Users.Any(p => p.Id == userId))
+            .OrderByDescending(p => p.Date.Date)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
