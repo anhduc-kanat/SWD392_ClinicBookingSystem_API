@@ -41,9 +41,7 @@ public class QueueService : IQueueService
         if(dentist == null) throw new CoreException("Dentist not found", StatusCodeEnum.BadRequest_400);
         if(!dentist.BusinessServices.Any(p => p.Id == meeting.AppointmentBusinessService.BusinessService.Id))
             throw new CoreException("Dentist not provide this service", StatusCodeEnum.BadRequest_400);
-        string dentistName = dentist.FirstName + " " + dentist.LastName;
-       
-        _rabbitMqService.PublishMessage(dentistName, meeting.Id.ToString());
+        _rabbitMqService.PublishMessage(dentist.PhoneNumber, meeting.Id.ToString());
         meeting.Status = MeetingStatus.InQueue;
         appointment.Status = AppointmentStatus.OnTreatment;
         
@@ -52,9 +50,9 @@ public class QueueService : IQueueService
         await _unitOfWork.SaveChangesAsync();
     }
 
-    public async Task ConsumeMessageDentistQueue(string dentistName)
+    public async Task ConsumeMessageDentistQueue(string dentistPhoneNumber)
     {
-        var meetingId = _rabbitMqService.ConsumeMessage(dentistName);
+        var meetingId = _rabbitMqService.ConsumeMessage(dentistPhoneNumber);
         var meeting = await _unitOfWork.MeetingRepository.GetMeetingById(int.Parse(meetingId));
         meeting.Status = MeetingStatus.InTreatment;
         await _unitOfWork.MeetingRepository.UpdateAsync(meeting);
