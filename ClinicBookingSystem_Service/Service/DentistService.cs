@@ -172,20 +172,23 @@ namespace ClinicBookingSystem_Service.Services
             {
                 /*HashPassword hash = new HashPassword();
                 request.Password = hash.EncodePassword(request.Password);*/
-                List<int> servicesId = request.ServicesId;
                 User dentist = await _unitOfWork.DentistRepository.GetDentistById(id);
-                _mapper.Map(request, dentist);
-                var serviceRemove = dentist.BusinessServices.Where(s => !servicesId.Contains(s.Id)).ToList();
-                foreach(var service in serviceRemove)
+                if (request.ServicesId != null)
                 {
-                    dentist.BusinessServices.Remove(service);
-                }
-                foreach(var serviceId in servicesId)
-                {
-                    if (!dentist.BusinessServices.Any(ds => ds.Id == serviceId))
+                    List<int> servicesId = request.ServicesId;
+                    _mapper.Map(request, dentist);
+                    var serviceRemove = dentist.BusinessServices.Where(s => !servicesId.Contains(s.Id)).ToList();
+                    foreach (var service in serviceRemove)
                     {
-                        var newBusinessService = await _unitOfWork.ServiceRepository.GetByIdAsync(serviceId);
-                        dentist.BusinessServices.Add(newBusinessService);
+                        dentist.BusinessServices.Remove(service);
+                    }
+                    foreach (var serviceId in servicesId)
+                    {
+                        if (!dentist.BusinessServices.Any(ds => ds.Id == serviceId))
+                        {
+                            var newBusinessService = await _unitOfWork.ServiceRepository.GetByIdAsync(serviceId);
+                            dentist.BusinessServices.Add(newBusinessService);
+                        }
                     }
                 }
                 User updatedDentist = await _unitOfWork.DentistRepository.UpdateAsync(dentist);
