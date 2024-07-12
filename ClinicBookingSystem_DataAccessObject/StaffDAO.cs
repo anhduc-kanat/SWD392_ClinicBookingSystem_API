@@ -19,7 +19,7 @@ namespace ClinicBookingSystem_DataAccessObject
         }
         public async Task<IEnumerable<User>> GetStaffsByRole()
         {
-            return await _context.Users.Include(u => u.Role).Where(u => u.Role.Name == "STAFF").ToListAsync();
+            return await GetQueryableAsync().Include(u => u.Role).Where(u => u.Role.Name == "STAFF").ToListAsync();
         }
     }
 }
