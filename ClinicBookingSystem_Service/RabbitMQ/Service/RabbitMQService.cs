@@ -76,4 +76,11 @@ public class RabbitMQService : IRabbitMQService
         var channel = _rabbitMQConnection.GetConnection().CreateModel();
         channel.QueuePurge(queueName);
     }
+
+    public int GetQueueLength(string queueName)
+    {
+        var channel = _rabbitMQConnection.GetConnection().CreateModel();
+        QueueDeclareOk result = channel.QueueDeclarePassive(queueName);
+        return (int)result.MessageCount;
+    }
 }
