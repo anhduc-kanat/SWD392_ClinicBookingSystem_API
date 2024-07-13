@@ -26,4 +26,11 @@ public class RabbitMqController : ControllerBase
     {
         await _queueService.ConsumeMessageDentistQueue(dentistPhoneNumber);
     }
+    
+    [HttpGet]
+    [Route("get-queue-length/{dentistPhoneNumber}")]
+    public async Task<int> GetQueueLength(string dentistPhoneNumber)
+    {
+        return await _queueService.GetQueueLength(dentistPhoneNumber);
+    }
 }

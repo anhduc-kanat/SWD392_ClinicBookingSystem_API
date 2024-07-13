@@ -58,4 +58,9 @@ public class QueueService : IQueueService
         await _unitOfWork.MeetingRepository.UpdateAsync(meeting);
         await _unitOfWork.SaveChangesAsync();
     }
+    
+    public async Task<int> GetQueueLength(string dentistPhoneNumber)
+    {
+        return _rabbitMqService.GetQueueLength(dentistPhoneNumber);
+    }
 }

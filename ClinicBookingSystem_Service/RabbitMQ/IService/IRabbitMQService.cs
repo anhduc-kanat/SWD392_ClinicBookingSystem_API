@@ -6,4 +6,5 @@ public interface IRabbitMQService
     string ConsumeMessage(string queueName);
     void ConsumeAllMessages(string queueName);
     void PurgeQueue(string queueName);
+    int GetQueueLength(string queueName);
 }

@@ -13,5 +13,7 @@ public class MappingMeeting : Profile
         CreateMap<Meeting, UpdateMeetingResponse>();
         CreateMap<Meeting, AddDentistIntoMeetingResponse>().ReverseMap();
         CreateMap<Meeting, UpdateDentistInMeeting>().ReverseMap();
+
+        CreateMap<Meeting, UpdateMeetingIntoDoneResponse>();
     }
 }
