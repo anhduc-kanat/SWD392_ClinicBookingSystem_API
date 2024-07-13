@@ -174,9 +174,11 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .ThenInclude(p => p.UserProfiles)
             /*.Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month &&
                         p.Date.Day == date.Day)*/
-            .Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Year == date.Year)) 
+            
+            /*.Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Year == date.Year)) 
                         && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Month == date.Month))
-                        && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Day == date.Day)))
+                        && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Day == date.Day)))*/
+            
             //appointment service
             .Include(p => p.AppointmentBusinessServices)
             .ThenInclude(p => p.Meetings)
@@ -188,12 +190,35 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .Include(p => p.Result)
             .ThenInclude(p => p.Notes)
             
+            .Where(p => p.AppointmentBusinessServices.Any(abs => abs.Meetings.Any(m => 
+                (m.Date.Value.Year == date.Year &&
+                 m.Date.Value.Month == date.Month &&
+                 m.Date.Value.Day == date.Day && 
+                 m.DentistId == dentistId &&
+                 ((m.AppointmentBusinessService.ServiceType == (ServiceType?)1 && m.Status.Value == MeetingStatus.CheckIn) ||
+                  (m.AppointmentBusinessService.ServiceType == (ServiceType?)2 && m.Status.Value == MeetingStatus.InTreatment
+                  ))))))
+            /*
             .Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.DentistId == dentistId)))
+            */
             .Where(p => p.IsClinicalExamPaid == true)
             /*
             .Where(p => p.Status == AppointmentStatus.OnGoing)
             */
-            .Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Status.Value == MeetingStatus.CheckIn)))
+            
+            /*.Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => 
+                p.Date.Value.Year == date.Year &&
+                p.Date.Value.Month == date.Month &&
+                p.Date.Value.Day == date.Day && 
+                ((p.AppointmentBusinessService.ServiceType == (ServiceType?)1 && p.Status.Value == MeetingStatus.CheckIn) ||
+                 (p.AppointmentBusinessService.ServiceType == (ServiceType?)2 && p.Status.Value == MeetingStatus.InTreatment)))))*/
+                
+            /*p.Status.Value == MeetingStatus.CheckIn ||
+                p.Status.Value == MeetingStatus.InTreatment &&
+                p.Status.Value != MeetingStatus.Done)))*/
+            /*.Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p =>
+                p.Status.Value != MeetingStatus.Done)))*/
+            
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
@@ -207,13 +232,34 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.DentistId == userId)))
             /*.Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month &&
                         p.Date.Day == date.Day)*/
-            .Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Year == date.Year)) 
+            
+            /*.Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Year == date.Year)) 
                         && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Month == date.Month))
-                        && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Day == date.Day)))
+                        && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Day == date.Day)))*/
+            .Where(p => p.AppointmentBusinessServices.Any(abs => abs.Meetings.Any(m => 
+                (m.Date.Value.Year == date.Year &&
+                 m.Date.Value.Month == date.Month &&
+                 m.Date.Value.Day == date.Day && 
+                 m.DentistId == userId &&
+                 ((m.AppointmentBusinessService.ServiceType == (ServiceType?)1 && m.Status.Value == MeetingStatus.CheckIn) ||
+                  (m.AppointmentBusinessService.ServiceType == (ServiceType?)2 && m.Status.Value == MeetingStatus.InTreatment
+                  ))))))
             /*
             .Where(p => p.Status == AppointmentStatus.OnGoing && p.IsClinicalExamPaid == true)
             */
-            .Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Status == MeetingStatus.CheckIn)))
+            
+            /*.Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => 
+                p.Date.Value.Year == date.Year &&
+                p.Date.Value.Month == date.Month &&
+                p.Date.Value.Day == date.Day && 
+                ((p.AppointmentBusinessService.ServiceType == (ServiceType?)1 && p.Status.Value == MeetingStatus.CheckIn) ||
+                 (p.AppointmentBusinessService.ServiceType == (ServiceType?)2 && p.Status.Value == MeetingStatus.InTreatment)))))*/
+                
+            /*p.Status.Value == MeetingStatus.CheckIn ||
+                p.Status.Value == MeetingStatus.InTreatment &&
+                p.Status.Value != MeetingStatus.Done)))*/
+                
+            /*.Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Status == MeetingStatus.CheckIn)))*/
             .Where(p => p.IsClinicalExamPaid == true)
             .CountAsync();
     }
