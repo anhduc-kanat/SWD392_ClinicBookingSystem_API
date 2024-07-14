@@ -10,6 +10,7 @@ using ClinicBookingSystem_Repository.IRepositories;
 using ClinicBookingSystem_Repository.Repositories;
 using ClinicBookingSystem_Service.IService;
 using AutoMapper;
+using ClinicBookingSystem_Service.CustomException;
 using ClinicBookingSystem_Service.Models.BaseResponse;
 using ClinicBookingSystem_Service.Models.DTOs.Slot;
 using ClinicBookingSystem_Service.Models.Enums;
@@ -51,7 +52,10 @@ namespace ClinicBookingSystem_Service.Service
         {
             TimeSpan StartTime = new TimeSpan(request.StartAtHour, request.StartAtMinute, 0);
             TimeSpan EndTime = new TimeSpan(request.EndAtHour, request.EndAtMinute, 0);
-            bool isMorningShift = StartTime.Hours < 12;
+            var existSlot = await _unitOfWork.SlotRepository.GetSlotByTime(StartTime, EndTime);
+            if (existSlot != null) throw new CoreException("Slot is already exist", StatusCodeEnum.Conflict_409);
+            
+            bool isMorningShift = request.StartAtHour < 12;
             SlotDto slotDto = new SlotDto
             {
                 Name = request.Name,
@@ -78,9 +82,14 @@ namespace ClinicBookingSystem_Service.Service
 
         public async Task<BaseResponse<SlotResponse>> UpdateSlot(int id, UpdateSlotRequest request)
         {
+              TimeSpan StartTime = new TimeSpan((int)request.StartAtHour, (int)request.StartAtMinute, 0);
+            TimeSpan EndTime = new TimeSpan((int)request.EndAtHour, (int)request.EndAtMinute, 0);
+            var availableSlot = await _unitOfWork.SlotRepository.GetSlotByTimeExceptCurrentSlot(id, StartTime, EndTime);
+            if (availableSlot != null) throw new CoreException("Slot is already exist", StatusCodeEnum.Conflict_409);
+
             var existSlot = await _unitOfWork.SlotRepository.GetByIdAsync(id);
-            existSlot.IsMorningShift = existSlot.StartAt.Hours < 12;
-            _mapper.Map(request,existSlot);
+            existSlot.IsMorningShift = request.StartAtHour < 12;
+            _mapper.Map(request, existSlot);
             await _unitOfWork.SlotRepository.UpdateAsync(existSlot);
             await _unitOfWork.SaveChangesAsync();
             var result = _mapper.Map<SlotResponse>(existSlot);
