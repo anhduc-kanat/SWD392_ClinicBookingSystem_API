@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClinicBookingSystem_DataAccessObject.Migrations;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace ClinicBookingSystem_DataAcessObject.DBContext
 {
@@ -40,7 +42,8 @@ namespace ClinicBookingSystem_DataAcessObject.DBContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            modelBuilder.Entity<Meeting>()
+                .ToTable(tb => tb.HasTrigger("update_appointment_status_after_meeting_done"));
         }
     }
 }
