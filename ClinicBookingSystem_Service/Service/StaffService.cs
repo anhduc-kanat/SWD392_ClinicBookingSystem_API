@@ -7,6 +7,7 @@ using ClinicBookingSystem_Service.IService;
 using ClinicBookingSystem_Service.Models.BaseResponse;
 using ClinicBookingSystem_Service.Models.Enums;
 using ClinicBookingSystem_Service.Models.Request.Staff;
+using ClinicBookingSystem_Service.Models.Response.Authen;
 using ClinicBookingSystem_Service.Models.Response.Staff;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,11 @@ namespace ClinicBookingSystem_Service.Service
         {
             try
             {
+                bool exist = await _unitOfWork.CustomerRepository.GetCustomerByPhone(request.PhoneNumber);
+                if (exist)
+                {
+                    return new BaseResponse<CreateStaffResponse>("Phone was existed", StatusCodeEnum.BadRequest_400);
+                }
                 HashPassword hash = new HashPassword();
                 request.Password = hash.EncodePassword(request.Password);
                 User user = _mapper.Map<User>(request);

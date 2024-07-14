@@ -33,12 +33,12 @@ namespace ClinicBookingSystem_Service.Services
         {
             try
             {
-                /*bool exist = await _unitOfWork.CustomerRepository.GetCustomerByPhone(request.PhoneNumber);
+                bool exist = await _unitOfWork.CustomerRepository.GetCustomerByPhone(request.PhoneNumber);
                 if (exist)
                 {
                     return new BaseResponse<CreateDentistResponse>("Phone was existed", StatusCodeEnum.BadRequest_400);
 
-                }*/
+                }
                 HashPassword hash = new HashPassword();
                 request.Password = hash.EncodePassword(request.Password);
                 User user = _mapper.Map<User>(request);
@@ -173,7 +173,7 @@ namespace ClinicBookingSystem_Service.Services
                 /*HashPassword hash = new HashPassword();
                 request.Password = hash.EncodePassword(request.Password);*/
                 User dentist = await _unitOfWork.DentistRepository.GetDentistById(id);
-                if (request.ServicesId != null)
+                if (request.ServicesId.Count != 0)
                 {
                     List<int> servicesId = request.ServicesId;
                     _mapper.Map(request, dentist);
