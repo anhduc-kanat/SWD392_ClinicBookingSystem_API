@@ -84,5 +84,22 @@ namespace ClinicBookingSystem_DataAccessObject
                                       ))).ToList();
             return slots;
         }
+        
+        public async Task<Slot> GetSlotByTime(TimeSpan startTime, TimeSpan endTime)
+        {
+            var slot = await GetQueryableAsync()
+                .FirstOrDefaultAsync(s => 
+                    (startTime >= s.StartAt && startTime < s.EndAt) || 
+                    (endTime > s.StartAt && endTime <= s.EndAt));
+            return slot;
+        }
+        public async Task<Slot> GetSlotByTimeExceptCurrentSlot(int slotId, TimeSpan startTime, TimeSpan endTime)
+        {
+            var slot = await GetQueryableAsync()
+                .FirstOrDefaultAsync(s => s.Id != slotId &&
+                    ((startTime >= s.StartAt && startTime < s.EndAt) || 
+                    (endTime > s.StartAt && endTime <= s.EndAt)));
+            return slot;
+        }
     }
 }

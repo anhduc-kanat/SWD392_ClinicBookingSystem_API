@@ -11,7 +11,11 @@ public class MappingSlot : Profile
     public MappingSlot()
     {
         CreateMap<CreateNewSlotRequest, Slot>();
-        CreateMap<UpdateSlotRequest, Slot>();
+        CreateMap<UpdateSlotRequest, Slot>()
+            .ForMember(dest => dest.StartAt, opt => opt.MapFrom(src =>
+                src.StartAtHour + ":" + src.StartAtMinute + ":00"))
+            .ForMember(dest => dest.EndAt, opt => opt.MapFrom(src =>
+                src.EndAtHour + ":" + src.EndAtMinute + ":00"));
         CreateMap<Slot, SlotResponse>().ReverseMap();
         CreateMap<Slot, SlotDto>().ReverseMap();
 
