@@ -16,6 +16,7 @@ namespace ClinicBookingSystem_Repository.IRepositories
         public Task<Slot> UpdateSlot(Slot slot);
         public Task<Slot> DeleteSlot(int id);
         public Task<IEnumerable<Slot>> CheckAvailableSlot(int dentistId, DateTime dateTime);
-
+        Task<Slot> GetSlotByTime(TimeSpan startTime, TimeSpan endTime);
+        Task<Slot> GetSlotByTimeExceptCurrentSlot(int slotId, TimeSpan startTime, TimeSpan endTime);
     }
 }
