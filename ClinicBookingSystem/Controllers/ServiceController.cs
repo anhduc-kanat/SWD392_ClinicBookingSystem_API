@@ -29,6 +29,10 @@ public class ServiceController : ControllerBase
         return Ok(services);
     }
 
+    /// <summary>
+    /// Customers chỉ được book và thấy services khám
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     [Route("get-all-exam-services")]
     public async Task<ActionResult<BaseResponse<IEnumerable<GetServiceResponse>>>> GetExamServices()
@@ -68,5 +72,17 @@ public class ServiceController : ControllerBase
     {
         var service = await _serviceService.DeleteService(id);
         return Ok(service);
+    }
+    
+    /// <summary>
+    /// Dentist thêm services điều trị cho customers
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    [Route("get-all-treatment-services")]
+    public async Task<ActionResult<BaseResponse<IEnumerable<GetServiceResponse>>>> GetTreatmentServices()
+    {
+        var services = await _serviceService.GetAllTreatmentServices();
+        return Ok(services);
     }
 }
