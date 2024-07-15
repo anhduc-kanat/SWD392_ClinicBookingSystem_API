@@ -50,5 +50,13 @@ namespace ClinicBookingSystem_API.Controllers
             
         }
 
+        [HttpPost]
+        [Route("change-password/{userId}")]
+        public async Task<ActionResult<BaseResponse<ChangePasswordResponse>>> ChangePassword(int userId, string oldPassword, string newPassword)
+        {
+            return await _customerService.ChangePassword(userId, oldPassword, newPassword);
+
+        }
+
     }
 }
