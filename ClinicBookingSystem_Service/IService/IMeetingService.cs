@@ -6,7 +6,7 @@ namespace ClinicBookingSystem_Service.IService;
 
 public interface IMeetingService
 {
-    Task<BaseResponse<UpdateMeetingResponse>> UpdateMeetingStatus(int dentistId, int meetingId, MeetingStatus status);
+    Task<BaseResponse<UpdateMeetingResponse>> UpdateMeetingStatus(int meetingId, MeetingStatus status);
     Task<BaseResponse<AddDentistIntoMeetingResponse>> AddDentistIntoMeeting(int meetingId, int dentistId);
     Task<BaseResponse<UpdateDentistInMeeting>> UpdateDentistInMeeting(int meetingId, int dentistId);
     Task<BaseResponse<UpdateMeetingIntoDoneResponse>> UpdateMeetingIntoDone(int meetingId);
