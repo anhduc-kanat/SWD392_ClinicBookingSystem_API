@@ -54,7 +54,12 @@ public class QueueService : IQueueService
     {
         var meetingId = _rabbitMqService.ConsumeMessage(dentistPhoneNumber);
         var meeting = await _unitOfWork.MeetingRepository.GetMeetingById(int.Parse(meetingId));
+        var dentist = await _unitOfWork.DentistRepository.GetDentistById((int)meeting.DentistId);
+        
         meeting.Status = MeetingStatus.InTreatment;
+        dentist.IsBusy = true;
+        
+        await _unitOfWork.DentistRepository.UpdateAsync(dentist);
         await _unitOfWork.MeetingRepository.UpdateAsync(meeting);
         await _unitOfWork.SaveChangesAsync();
     }
