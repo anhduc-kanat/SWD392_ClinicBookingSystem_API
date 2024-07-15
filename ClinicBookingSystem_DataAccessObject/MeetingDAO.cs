@@ -62,4 +62,5 @@ public class MeetingDAO : BaseDAO<Meeting>
             .Where(p => p.AppointmentBusinessService.Appointment.IsFullyPaid == true)
             .FirstOrDefaultAsync();
     }
+
 }

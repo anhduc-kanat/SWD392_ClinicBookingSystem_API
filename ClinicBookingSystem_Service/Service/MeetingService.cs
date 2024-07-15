@@ -38,7 +38,9 @@ public class MeetingService : IMeetingService
         if (status == MeetingStatus.CheckIn)
         {
             if(meeting.AppointmentBusinessService.IsPaid == false) 
-                throw new CoreException("Appointment is not fully paid", StatusCodeEnum.BadRequest_400); 
+                throw new CoreException("Appointment is not fully paid", StatusCodeEnum.BadRequest_400);
+            if (await _unitOfWork.AppointmentRepository.GetAppointmentIfExistTreatmentMeeting(appointment.Id) != null)
+                throw new CoreException("Please finish previous ongoing service", StatusCodeEnum.Conflict_409);
         }
         meeting.Status = status;
         if (meeting.Status == MeetingStatus.CheckIn && appointment.IsFullyPaid == true)
@@ -52,7 +54,7 @@ public class MeetingService : IMeetingService
         {
             meeting.AppointmentBusinessService.Appointment.Status = AppointmentStatus.OnGoing;
         }
-
+        
         await _unitOfWork.MeetingRepository.UpdateAsync(meeting);
         await _unitOfWork.SaveChangesAsync();
         var result = _mapper.Map<UpdateMeetingResponse>(meeting);

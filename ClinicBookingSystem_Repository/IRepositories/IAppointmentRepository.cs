@@ -15,4 +15,5 @@ public interface IAppointmentRepository : IBaseRepository<Appointment>
     Task<int> CountDentistAppointment(int dentistId, DateOnly date);
     Task<int> CountWhenStaffGetAppointmentByDate(DateOnly date);
     Task<IEnumerable<Appointment>> GetTodayMeetingTreatmentAppointment();
+    Task<Appointment> GetAppointmentIfExistTreatmentMeeting(int appointmentId);
 }
