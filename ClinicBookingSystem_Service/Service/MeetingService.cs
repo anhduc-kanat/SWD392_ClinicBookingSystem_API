@@ -103,10 +103,13 @@ public class MeetingService : IMeetingService
     {
         var meeting = await _unitOfWork.MeetingRepository.GetMeetingById(meetingId);
         if(meeting == null) throw new CoreException("Meeting not found", StatusCodeEnum.BadRequest_400);
+        var dentist = await _unitOfWork.DentistRepository.GetDentistById((int)meeting.DentistId);
         if(meeting.Status == MeetingStatus.Done)
             throw new CoreException("Meeting is already done", StatusCodeEnum.BadRequest_400);
         
         meeting.Status = MeetingStatus.Done;
+        dentist.IsBusy = false;
+        await _unitOfWork.DentistRepository.UpdateAsync(dentist);
         await _unitOfWork.MeetingRepository.UpdateAsync(meeting);
         await _unitOfWork.SaveChangesAsync();
         var result = _mapper.Map<UpdateMeetingIntoDoneResponse>(meeting);
