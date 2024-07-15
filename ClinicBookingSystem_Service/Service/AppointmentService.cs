@@ -12,6 +12,7 @@ using ClinicBookingSystem_Service.Models.Pagination;
 using ClinicBookingSystem_Service.Models.Request.Appointment;
 using ClinicBookingSystem_Service.Models.Request.Payment;
 using ClinicBookingSystem_Service.Models.Response.Appointment;
+using ClinicBookingSystem_Service.Models.Response.AppointmentService;
 using ClinicBookingSystem_Service.RabbitMQ.Events.Appointment;
 using ClinicBookingSystem_Service.RabbitMQ.IService;
 
@@ -444,5 +445,17 @@ public class AppointmentService : IAppointmentService
         var result = _mapper.Map<IEnumerable<GetAppointmentByMeetingDayForAjaxResponse>>(appointments);
         return new BaseResponse<IEnumerable<GetAppointmentByMeetingDayForAjaxResponse>>("Get appointment by meeting day for ajax successfully",
             StatusCodeEnum.OK_200, result);
+    }
+
+    public async Task<BaseResponse<DeleteAppointmentServiceResponse>> DeleteServiceInAppointment(int appBusinessId)
+    {
+        var appBusinessService = await _unitOfWork.AppointmentBusinessServiceRepository.GetByIdAsync(appBusinessId);
+        if(appBusinessService.IsPaid == false || appBusinessService.IsPaid == null)
+        {
+            await _unitOfWork.AppointmentBusinessServiceRepository.DeleteAsync(appBusinessService);
+            await _unitOfWork.SaveChangesAsync();
+            return new BaseResponse<DeleteAppointmentServiceResponse>("Delete Service in appointment successfully",StatusCodeEnum.OK_200);
+        }
+        return new BaseResponse<DeleteAppointmentServiceResponse>("Service was pay can not delete",StatusCodeEnum.BadRequest_400);
     }
 }

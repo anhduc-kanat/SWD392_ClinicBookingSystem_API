@@ -4,6 +4,7 @@ using ClinicBookingSystem_Service.Models.BaseResponse;
 using ClinicBookingSystem_Service.Models.Pagination;
 using ClinicBookingSystem_Service.Models.Request.Appointment;
 using ClinicBookingSystem_Service.Models.Response.Appointment;
+using ClinicBookingSystem_Service.Models.Response.AppointmentService;
 
 namespace ClinicBookingSystem_Service.IService;
 
@@ -41,4 +42,6 @@ public interface IAppointmentService
 
     Task<BaseResponse<StaffCreateTreatmentPaymentResponse>> StaffCreateTreatmentPayment(int appointmentId, int staffId);
     Task<BaseResponse<IEnumerable<GetAppointmentByMeetingDayForAjaxResponse>>> GetAppointmentByMeetingDayForAjax();
+
+    Task<BaseResponse<DeleteAppointmentServiceResponse>> DeleteServiceInAppointment(int appBusinessId);
 }

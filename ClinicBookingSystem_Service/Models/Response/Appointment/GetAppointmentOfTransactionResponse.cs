@@ -10,6 +10,7 @@ namespace ClinicBookingSystem_Service.Models.Response.Appointment
 {
     public class GetAppointmentOfTransactionResponse
     {
+        public string userAccountName { get; set; }
         public ICollection <GetAppointmentServiceName> Appointment { get; set; }
     }
 }
