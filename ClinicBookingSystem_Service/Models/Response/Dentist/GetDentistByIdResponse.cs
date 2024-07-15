@@ -14,6 +14,7 @@ namespace ClinicBookingSystem_Service.Models.Response.Dentist
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
         public bool IsBusy { get; set; }
+        public int QueueLength { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

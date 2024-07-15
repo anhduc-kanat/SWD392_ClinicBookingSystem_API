@@ -44,6 +44,8 @@ namespace ClinicBookingSystem_DataAcessObject.DBContext
         {
             modelBuilder.Entity<Meeting>()
                 .ToTable(tb => tb.HasTrigger("update_appointment_status_after_meeting_done"));
+            modelBuilder.Entity<AppointmentBusinessService>()
+                .ToTable(tb => tb.HasTrigger("update_appointment_status_after_appointmentservice_done"));
         }
     }
 }

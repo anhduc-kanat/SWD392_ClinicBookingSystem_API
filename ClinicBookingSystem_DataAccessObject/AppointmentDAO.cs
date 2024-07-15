@@ -286,4 +286,15 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .Where(p => p.IsClinicalExamPaid == true)
             .CountAsync();
     }
+
+    public async Task<Appointment> GetAppointmentIfExistTreatmentMeeting(int appointmentId)
+    {
+        return await GetQueryableAsync()
+            .Include(p => p.AppointmentBusinessServices)
+            .ThenInclude(p => p.Meetings)
+            .Where(p => p.Id == appointmentId)
+            .FirstOrDefaultAsync(p => p.AppointmentBusinessServices.Any(
+                p => p.Meetings.Any(
+                    p => p.Status == MeetingStatus.InQueue || p.Status == MeetingStatus.InTreatment || p.Status == MeetingStatus.CheckIn)));
+    }
 }

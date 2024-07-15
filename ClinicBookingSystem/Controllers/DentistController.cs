@@ -1,4 +1,5 @@
-﻿using ClinicBookingSystem_Service.Models.Request.Dentist;
+﻿using ClinicBookingSystem_Service.IService;
+using ClinicBookingSystem_Service.Models.Request.Dentist;
 using ClinicBookingSystem_Service.IServices;
 using ClinicBookingSystem_Service.Models.BaseResponse;
 using ClinicBookingSystem_Service.Models.Request.Dentist;
@@ -13,9 +14,12 @@ namespace ClinicBookingSystem_API.Controllers
     public class DentistController : ControllerBase
     {
         private readonly IDentistService _dentistService;
-        public DentistController(IDentistService dentistService)
+        private readonly IQueueService _queueService;
+        public DentistController(IDentistService dentistService,
+            IQueueService queueService)
         {
             _dentistService = dentistService;
+            _queueService = queueService;
         }
 
         [HttpPost]
@@ -37,6 +41,7 @@ namespace ClinicBookingSystem_API.Controllers
         public async Task<ActionResult<BaseResponse<GetDentistByIdResponse>>> GetDentistById(int id)
         {
             var response = await _dentistService.GetDentistById(id);
+            response.Data.QueueLength = await _queueService.GetQueueLength(response.Data.PhoneNumber);
             return response;
         }
 
@@ -44,6 +49,10 @@ namespace ClinicBookingSystem_API.Controllers
         public async Task<ActionResult<BaseResponse<IEnumerable<GetAllDentistsResponse>>>> GetAllDentists()
         {
             var response = await _dentistService.GetAllDentists();
+            foreach (var res in response.Data)
+            {
+                res.QueueLength = await _queueService.GetQueueLength(res.PhoneNumber);
+            }
             return response;
         }
 
