@@ -292,6 +292,7 @@ public class AppointmentDAO : BaseDAO<Appointment>
         return await GetQueryableAsync()
             .Include(p => p.AppointmentBusinessServices)
             .ThenInclude(p => p.Meetings)
+            .Where(p => p.Id == appointmentId)
             .FirstOrDefaultAsync(p => p.AppointmentBusinessServices.Any(
                 p => p.Meetings.Any(
                     p => p.Status == MeetingStatus.InQueue || p.Status == MeetingStatus.InTreatment || p.Status == MeetingStatus.CheckIn)));
