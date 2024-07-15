@@ -44,6 +44,7 @@ namespace ClinicBookingSystem_Service.Services
                 User user = _mapper.Map<User>(request);
                 Role role = await _unitOfWork.RoleRepository.GetRoleByName("DENTIST");
                 user.Role = role;
+                user.IsBusy = false;
                 List<BusinessService> services = new List<BusinessService>();
                 foreach (int serviceId in request.ServicesId)
                 {

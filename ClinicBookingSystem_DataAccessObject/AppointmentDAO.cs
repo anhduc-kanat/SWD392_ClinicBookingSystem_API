@@ -48,6 +48,8 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .ThenInclude(p => p.BusinessService)
             .Include(p => p.AppointmentBusinessServices)
             .ThenInclude(p => p.Meetings)
+            .Where(p => p.AppointmentBusinessServices.Any(p =>
+                p.IsDelete == false && p.IsActive == true))
             .FirstOrDefaultAsync(p => p.Id == Id);
     }
 
@@ -70,6 +72,8 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .ThenInclude(p => p.Meetings)
             .Include(p => p.AppointmentBusinessServices)
             .ThenInclude(p => p.BusinessService)
+            .Where(p => p.AppointmentBusinessServices.Any(p =>
+                p.IsDelete == false && p.IsActive == true))
             
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
@@ -95,6 +99,9 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .ThenInclude(p => p.Meetings)
             .Include(p => p.AppointmentBusinessServices)
             .ThenInclude(p => p.BusinessService)
+            
+            .Where(p => p.AppointmentBusinessServices.Any(p =>
+                p.IsDelete == false && p.IsActive == true))
             
             .Where(p => p.Users.Any(p => p.Id == userId))
             .OrderByDescending(p => p.Date)
@@ -134,6 +141,9 @@ public class AppointmentDAO : BaseDAO<Appointment>
                         && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Month == date.Month))
                         && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Day == date.Day)))
             
+            .Where(p => p.AppointmentBusinessServices.Any(p =>
+                p.IsDelete == false && p.IsActive == true))
+            
             .Where(p => p.IsClinicalExamPaid == true)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
@@ -160,6 +170,9 @@ public class AppointmentDAO : BaseDAO<Appointment>
                         && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Day == DateTime.Now.Day)))
             
             .Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Status == MeetingStatus.CheckIn)))
+            
+            .Where(p => p.AppointmentBusinessServices.Any(p =>
+                p.IsDelete == false && p.IsActive == true))
             .ToListAsync();
     }
 
@@ -218,6 +231,8 @@ public class AppointmentDAO : BaseDAO<Appointment>
                 p.Status.Value != MeetingStatus.Done)))*/
             /*.Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p =>
                 p.Status.Value != MeetingStatus.Done)))*/
+            .Where(p => p.AppointmentBusinessServices.Any(p =>
+                p.IsDelete == false && p.IsActive == true))
             
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
