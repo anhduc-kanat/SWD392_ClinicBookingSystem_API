@@ -33,6 +33,7 @@ public class CheckAppointmentBackgroundService : BackgroundService
             _logger.LogInformation("5 secs job: CheckAppointmentBackgroundService is starting.");
         
             await CheckMeetingStatus(unitOfWork);
+            await ConsumeMessageWhenDentistIsNotBusy(unitOfWork, queueService);
             /*
             await PublishAppointmentToQueue(appointmentService, queueService);
             */
@@ -64,6 +65,30 @@ public class CheckAppointmentBackgroundService : BackgroundService
         await unitOfWork.SaveChangesAsync();
         _logger.LogInformation("-------------Check MeetingStatus has been done-------------");
     }
+    
+    private async Task ConsumeMessageWhenDentistIsNotBusy(IUnitOfWork unitOfWork, IQueueService queueService)
+    {
+        try
+        {
+            _logger.LogInformation("-------------Consume message when dentist is not busy is starting-------------");
+        
+            var dentists = await unitOfWork.DentistRepository.GetDentistsByRole();
+            if (dentists.IsNullOrEmpty()) return;
+            foreach (var dentist in dentists)
+            {
+                var queueLength = await queueService.GetQueueLength(dentist.PhoneNumber);
+                if ((bool)dentist.IsBusy || queueLength == 0) continue;
+                await queueService.ConsumeMessageDentistQueue(dentist.PhoneNumber);
+                _logger.LogInformation($"Consume message for dentist {dentist.Id}");
+            }
+            _logger.LogInformation("-------------Consume message when dentist is not busy has been done-------------");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+        }
+
+    } 
     /*public async Task PublishAppointmentToQueue(IAppointmentService appointmentService, IQueueService queueService)
     {
         try

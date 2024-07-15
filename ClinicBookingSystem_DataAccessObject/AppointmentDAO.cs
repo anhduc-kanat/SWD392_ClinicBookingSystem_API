@@ -44,9 +44,9 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .Include(p => p.Users)
             .ThenInclude(p => p.UserProfiles)
             //appointment service
-            .Include(p => p.AppointmentBusinessServices.Where(p => p.IsDelete == false && p.IsActive == true))
+            .Include(p => p.AppointmentBusinessServices.Where(p => p.IsDelete == false ))
             .ThenInclude(p => p.Meetings)
-            .Include(p => p.AppointmentBusinessServices.Where(p => p.IsDelete == false && p.IsActive == true))
+            .Include(p => p.AppointmentBusinessServices.Where(p => p.IsDelete == false ))
             .ThenInclude(p => p.BusinessService)
             
             .FirstOrDefaultAsync(p => p.Id == Id);
@@ -67,9 +67,9 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .Include(p => p.Result)
             .ThenInclude(p => p.Medicines)
             //appointment service            
-            .Include(p => p.AppointmentBusinessServices.Where(p => p.IsDelete == false && p.IsActive == true))
+            .Include(p => p.AppointmentBusinessServices.Where(p => p.IsDelete == false))
             .ThenInclude(p => p.Meetings)
-            .Include(p => p.AppointmentBusinessServices.Where(p => p.IsDelete == false && p.IsActive == true))
+            .Include(p => p.AppointmentBusinessServices.Where(p => p.IsDelete == false))
             .ThenInclude(p => p.BusinessService)
             
             .Skip((pageNumber - 1) * pageSize)
@@ -92,9 +92,9 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .Include(p => p.Result)
             .ThenInclude(p => p.Notes)
             //appointment service
-            .Include(p => p.AppointmentBusinessServices.Where(p => p.IsDelete == false && p.IsActive == true))
+            .Include(p => p.AppointmentBusinessServices.Where(p => p.IsDelete == false))
             .ThenInclude(p => p.Meetings)
-            .Include(p => p.AppointmentBusinessServices.Where(p => p.IsDelete == false && p.IsActive == true))
+            .Include(p => p.AppointmentBusinessServices.Where(p => p.IsDelete == false))
             .ThenInclude(p => p.BusinessService)
             
             .Where(p => p.Users.Any(p => p.Id == userId))
@@ -125,9 +125,9 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .Include(p => p.Users)
             .ThenInclude(p => p.UserProfiles)
             //appointment service
-            .Include(p => p.AppointmentBusinessServices.Where(p => p.IsDelete == false && p.IsActive == true))
+            .Include(p => p.AppointmentBusinessServices.Where(p => p.IsDelete == false ))
             .ThenInclude(p => p.Meetings)
-            .Include(p => p.AppointmentBusinessServices.Where(p => p.IsDelete == false && p.IsActive == true))
+            .Include(p => p.AppointmentBusinessServices.Where(p => p.IsDelete == false ))
             .ThenInclude(p => p.BusinessService)
             
             /*.Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month && p.Date.Day == date.Day)*/
@@ -136,7 +136,7 @@ public class AppointmentDAO : BaseDAO<Appointment>
                         && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Day == date.Day)))
             
             .Where(p => p.AppointmentBusinessServices.Any(p =>
-                p.IsDelete == false && p.IsActive == true))
+                p.IsDelete == false ))
             
             .Where(p => p.IsClinicalExamPaid == true)
             .Skip((pageNumber - 1) * pageSize)
@@ -153,9 +153,9 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .Include(p => p.Users)
             .ThenInclude(p => p.UserProfiles)
             //appointment service
-            .Include(p => p.AppointmentBusinessServices.Where(p => p.IsDelete == false && p.IsActive == true))
+            .Include(p => p.AppointmentBusinessServices.Where(p => p.IsDelete == false ))
             .ThenInclude(p => p.Meetings)
-            .Include(p => p.AppointmentBusinessServices.Where(p => p.IsDelete == false && p.IsActive == true))
+            .Include(p => p.AppointmentBusinessServices.Where(p => p.IsDelete == false ))
             .ThenInclude(p => p.BusinessService)
             
             /*.Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month && p.Date.Day == date.Day)*/
@@ -166,7 +166,7 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Status == MeetingStatus.CheckIn)))
             
             .Where(p => p.AppointmentBusinessServices.Any(p =>
-                p.IsDelete == false && p.IsActive == true))
+                p.IsDelete == false ))
             .ToListAsync();
     }
 
@@ -187,9 +187,9 @@ public class AppointmentDAO : BaseDAO<Appointment>
                         && p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p => p.Date.Value.Day == date.Day)))*/
             
             //appointment service
-            .Include(p => p.AppointmentBusinessServices.Where(p => p.IsDelete == false && p.IsActive == true))
+            .Include(p => p.AppointmentBusinessServices.Where(p => p.IsDelete == false ))
             .ThenInclude(p => p.Meetings)
-            .Include(p => p.AppointmentBusinessServices.Where(p => p.IsDelete == false && p.IsActive == true))
+            .Include(p => p.AppointmentBusinessServices.Where(p => p.IsDelete == false ))
             .ThenInclude(p => p.BusinessService)
             //result
             .Include(p => p.Result)
@@ -226,7 +226,7 @@ public class AppointmentDAO : BaseDAO<Appointment>
             /*.Where(p => p.AppointmentBusinessServices.Any(p => p.Meetings.Any(p =>
                 p.Status.Value != MeetingStatus.Done)))*/
             .Where(p => p.AppointmentBusinessServices.Any(p =>
-                p.IsDelete == false && p.IsActive == true))
+                p.IsDelete == false ))
             
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
