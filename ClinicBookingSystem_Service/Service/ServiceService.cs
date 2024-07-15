@@ -66,6 +66,13 @@ namespace ClinicBookingSystem_Service.Service
             return new BaseResponse<IEnumerable<GetServiceResponse>>("Get All Exam Services successfully", StatusCodeEnum.OK_200, serviceResult);
         }
 
+        public async Task<BaseResponse<IEnumerable<GetServiceResponse>>> GetAllTreatmentServices()
+        {
+            IEnumerable<BusinessService> services = await _unitOfWork.ServiceRepository.GetAllTreatmentServices();
+            var serviceResult = _mapper.Map<IEnumerable<GetServiceResponse>>(services);
+            return new BaseResponse<IEnumerable<GetServiceResponse>>("Get All Exam Services successfully", StatusCodeEnum.OK_200, serviceResult);
+        }
+        
         public async Task<BaseResponse<IEnumerable<GetServiceResponse>>> GetAllServices()
         {
             IEnumerable<BusinessService> services = await _unitOfWork.ServiceRepository.GetAllAsync();
