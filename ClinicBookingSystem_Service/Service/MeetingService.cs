@@ -115,4 +115,14 @@ public class MeetingService : IMeetingService
         var result = _mapper.Map<UpdateMeetingIntoDoneResponse>(meeting);
         return new BaseResponse<UpdateMeetingIntoDoneResponse>("Update meeting into done successfully", StatusCodeEnum.OK_200, result);
     }
+
+    public async Task<BaseResponse<UpdateDateOfMeeting>> UpdateDateOfMeeting(int meetingId, DateTime date)
+    {
+        var meeting = await _unitOfWork.MeetingRepository.GetMeetingById(meetingId);
+        if (meeting == null) throw new CoreException("Meeting not found", StatusCodeEnum.BadRequest_400);
+        meeting.Date = date;
+        await _unitOfWork.MeetingRepository.UpdateAsync(meeting);
+        await _unitOfWork.SaveChangesAsync();
+        return new BaseResponse<UpdateDateOfMeeting>("Updatedate meeting successfully", StatusCodeEnum.OK_200);
+    }
 }

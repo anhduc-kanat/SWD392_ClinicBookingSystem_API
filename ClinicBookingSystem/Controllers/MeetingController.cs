@@ -102,4 +102,13 @@ public class MeetingController : ControllerBase
         var result = await _meetingService.UpdateMeetingIntoDone(meetingId);
         return result;
     }
+
+    [HttpPut]
+    [Route("update-date-meeting/{meetingId}")]
+    /*[Authorize(Roles = "DENTIST")]*/
+    public async Task<BaseResponse<UpdateDateOfMeeting>> UpdateDateOfMeeting(int meetingId, DateTime date)
+    {
+        var result = await _meetingService.UpdateDateOfMeeting(meetingId, date);
+        return result;
+    }
 }
