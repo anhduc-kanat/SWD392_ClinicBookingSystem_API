@@ -27,6 +27,7 @@ namespace ClinicBookingSystem_BusinessObject.Entities
         public DateTime? DateOfBirth { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
+        public bool? IsBusy { get; set; }
         public int? Gender { get; set; }
         //Các thuộc tính thuộc lịch nghỉ làm của nhân viên
         public int? TotalDateOff {  get; set; }
