@@ -108,6 +108,7 @@ public class MeetingController : ControllerBase
     /*[Authorize(Roles = "DENTIST")]*/
     public async Task<BaseResponse<UpdateDateOfMeeting>> UpdateDateOfMeeting(int meetingId, DateTime date)
     {
+       
         var result = await _meetingService.UpdateDateOfMeeting(meetingId, date);
         return result;
     }

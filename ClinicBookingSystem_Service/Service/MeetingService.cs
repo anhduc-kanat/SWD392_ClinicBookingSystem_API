@@ -118,6 +118,10 @@ public class MeetingService : IMeetingService
 
     public async Task<BaseResponse<UpdateDateOfMeeting>> UpdateDateOfMeeting(int meetingId, DateTime date)
     {
+        if (date <= DateTime.Now)
+        {
+            return new BaseResponse<UpdateDateOfMeeting>("Can not update date in past", StatusCodeEnum.BadRequest_400);
+        }
         var meeting = await _unitOfWork.MeetingRepository.GetMeetingById(meetingId);
         if (meeting == null) throw new CoreException("Meeting not found", StatusCodeEnum.BadRequest_400);
         meeting.Date = date;
