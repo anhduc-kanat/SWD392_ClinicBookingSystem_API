@@ -10,4 +10,6 @@ public interface IMeetingService
     Task<BaseResponse<AddDentistIntoMeetingResponse>> AddDentistIntoMeeting(int meetingId, int dentistId);
     Task<BaseResponse<UpdateDentistInMeeting>> UpdateDentistInMeeting(int meetingId, int dentistId);
     Task<BaseResponse<UpdateMeetingIntoDoneResponse>> UpdateMeetingIntoDone(int meetingId);
+    Task<BaseResponse<UpdateDateOfMeeting>> UpdateDateOfMeeting(int meetingId, DateTime date);
+
 }
