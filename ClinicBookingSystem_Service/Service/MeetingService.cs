@@ -19,10 +19,12 @@ public class MeetingService : IMeetingService
         _mapper = mapper;
     }
 
-    public async Task<BaseResponse<UpdateMeetingResponse>> UpdateMeetingStatus(int meetingId, MeetingStatus status)
+    public async Task<BaseResponse<UpdateMeetingResponse>> UpdateMeetingStatus(int dentistId, int meetingId, MeetingStatus status)
     {
         var meeting = await _unitOfWork.MeetingRepository.GetMeetingById(meetingId);
         if(meeting == null) throw new CoreException("Meeting not found", StatusCodeEnum.BadRequest_400);
+        
+        if(meeting.DentistId != dentistId) throw new CoreException("Dont have permission to do this", StatusCodeEnum.BadRequest_400);
         
         var appointment =
             await _unitOfWork.AppointmentRepository.GetAppointmentById(

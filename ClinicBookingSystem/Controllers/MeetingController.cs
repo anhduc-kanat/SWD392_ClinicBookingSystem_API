@@ -47,9 +47,11 @@ public class MeetingController : ControllerBase
     /// <returns></returns>
     [HttpPut]
     [Route("update-meeting-status/{meetingId}")]
+    [Authorize(Roles = "DENTIST")]
     public async Task<BaseResponse<UpdateMeetingResponse>> UpdateMeetingStatus(int meetingId, MeetingStatus status)
     {
-        var result = await _meetingService.UpdateMeetingStatus(meetingId, status);
+        var dentistId = int.Parse(User.Claims.First(x => x.Type == "userId").Value);
+        var result = await _meetingService.UpdateMeetingStatus(dentistId, meetingId, status);
         return result;
     }
     
