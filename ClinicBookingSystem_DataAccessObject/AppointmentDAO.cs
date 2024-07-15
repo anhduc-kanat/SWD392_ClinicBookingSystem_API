@@ -294,6 +294,6 @@ public class AppointmentDAO : BaseDAO<Appointment>
             .ThenInclude(p => p.Meetings)
             .FirstOrDefaultAsync(p => p.AppointmentBusinessServices.Any(
                 p => p.Meetings.Any(
-                    p => p.Status == MeetingStatus.InQueue || p.Status == MeetingStatus.InTreatment)));
+                    p => p.Status == MeetingStatus.InQueue || p.Status == MeetingStatus.InTreatment || p.Status == MeetingStatus.CheckIn)));
     }
 }
