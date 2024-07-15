@@ -13,7 +13,9 @@ public class MappingTransaction : Profile
 {
     public MappingTransaction()
     {
-        CreateMap<Transaction, GetTransactionResponse>();
+        CreateMap<Transaction, GetTransactionResponse>()
+            .ForMember(dest => dest.Appointment, opt => opt.MapFrom(src => src.Appointment));
+        
         CreateMap<CreateTransactionRequest, Transaction>();
         CreateMap<UpdateTransactionRequest, Transaction>();
         CreateMap<Transaction, CreateTransactionResponse>().ReverseMap();

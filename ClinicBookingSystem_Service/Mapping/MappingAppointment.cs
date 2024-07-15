@@ -249,6 +249,6 @@ public class MappingAppointment : Profile
             .ForMember(dest => dest.AppointmentId, opt => opt.MapFrom(src => src.Id));
 
         CreateMap<Appointment, GetAppointmentOfTransactionResponse>()
-            .ForMember(dest => dest.Appointment, opt => opt.MapFrom(src => src.AppointmentBusinessServices)); ;
+            .ForMember(dest => dest.Appointment, opt => opt.MapFrom(src => src.AppointmentBusinessServices)); 
     }
 }
