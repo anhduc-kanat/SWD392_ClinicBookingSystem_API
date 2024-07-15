@@ -35,7 +35,11 @@ public class MeetingService : IMeetingService
             meeting.Date.Value.Month > DateTime.Now.Month &&
             meeting.Date.Value.Day > DateTime.Now.Day) throw new CoreException("Meeting is in the future", StatusCodeEnum.BadRequest_400);
         if(status == MeetingStatus.Done) throw new CoreException("Dont have permission to do this", StatusCodeEnum.BadRequest_400);
-        
+        if (status == MeetingStatus.CheckIn)
+        {
+            if(meeting.AppointmentBusinessService.IsPaid == false) 
+                throw new CoreException("Appointment is not fully paid", StatusCodeEnum.BadRequest_400); 
+        }
         meeting.Status = status;
         if (meeting.Status == MeetingStatus.CheckIn && appointment.IsFullyPaid == true)
         {
