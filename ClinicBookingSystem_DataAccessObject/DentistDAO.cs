@@ -103,6 +103,14 @@ namespace ClinicBookingSystem_DataAccessObject
                 .Where(a => a.BusinessServices.Any(p => p.Id == serviceId && a.Role.Name =="DENTIST"))
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<User>> GetDentistIsNotBusy()
+        {
+            return await GetQueryableAsync()
+                .Include(s => s.BusinessServices.Where(p => p.ServiceType == ServiceType.Treatment))
+                .Where(a => a.IsBusy == false && a.Role.Name == "DENTIST")
+                .ToListAsync();
+        }
     }
 
 }

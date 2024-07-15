@@ -72,12 +72,12 @@ public class CheckAppointmentBackgroundService : BackgroundService
         {
             _logger.LogInformation("-------------Consume message when dentist is not busy is starting-------------");
         
-            var dentists = await unitOfWork.DentistRepository.GetDentistsByRole();
+            var dentists = await unitOfWork.DentistRepository.GetDentistIsNotBusy();
             if (dentists.IsNullOrEmpty()) return;
             foreach (var dentist in dentists)
             {
                 var queueLength = await queueService.GetQueueLength(dentist.PhoneNumber);
-                if ((bool)dentist.IsBusy || queueLength == 0) continue;
+                if (queueLength == 0) continue;
                 await queueService.ConsumeMessageDentistQueue(dentist.PhoneNumber);
                 _logger.LogInformation($"Consume message for dentist {dentist.Id}");
             }
