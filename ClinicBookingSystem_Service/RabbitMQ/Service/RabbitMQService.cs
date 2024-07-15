@@ -79,8 +79,16 @@ public class RabbitMQService : IRabbitMQService
 
     public int GetQueueLength(string queueName)
     {
-        var channel = _rabbitMQConnection.GetConnection().CreateModel();
-        QueueDeclareOk result = channel.QueueDeclarePassive(queueName);
-        return (int)result.MessageCount;
+        try
+        {
+            var channel = _rabbitMQConnection.GetConnection().CreateModel();
+            QueueDeclareOk result = channel.QueueDeclarePassive(queueName);
+            return (int)result.MessageCount;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Queue '{queueName}' does not exist. Exception: {e.Message}");
+            return 0;
+        }
     }
 }
