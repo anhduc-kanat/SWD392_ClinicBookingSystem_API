@@ -19,10 +19,12 @@ public class MeetingService : IMeetingService
         _mapper = mapper;
     }
 
-    public async Task<BaseResponse<UpdateMeetingResponse>> UpdateMeetingStatus(int meetingId, MeetingStatus status)
+    public async Task<BaseResponse<UpdateMeetingResponse>> UpdateMeetingStatus(int dentistId, int meetingId, MeetingStatus status)
     {
         var meeting = await _unitOfWork.MeetingRepository.GetMeetingById(meetingId);
         if(meeting == null) throw new CoreException("Meeting not found", StatusCodeEnum.BadRequest_400);
+        
+        if(meeting.DentistId != dentistId) throw new CoreException("Dont have permission to do this", StatusCodeEnum.BadRequest_400);
         
         var appointment =
             await _unitOfWork.AppointmentRepository.GetAppointmentById(
@@ -31,11 +33,17 @@ public class MeetingService : IMeetingService
         /*if(appointment.IsFullyPaid is null or false)
             throw new CoreException("Appointment is not fully paid", StatusCodeEnum.BadRequest_400);*/
         
-        if (meeting.Date.Value.Year > DateTime.Now.Year &&
-            meeting.Date.Value.Month > DateTime.Now.Month &&
+        if (meeting.Date.Value.Year > DateTime.Now.Year ||
+            meeting.Date.Value.Month > DateTime.Now.Month ||
             meeting.Date.Value.Day > DateTime.Now.Day) throw new CoreException("Meeting is in the future", StatusCodeEnum.BadRequest_400);
         if(status == MeetingStatus.Done) throw new CoreException("Dont have permission to do this", StatusCodeEnum.BadRequest_400);
-        
+        if (status == MeetingStatus.CheckIn)
+        {
+            if(meeting.AppointmentBusinessService.IsPaid == false) 
+                throw new CoreException("Appointment is not fully paid", StatusCodeEnum.BadRequest_400);
+            if (await _unitOfWork.AppointmentRepository.GetAppointmentIfExistTreatmentMeeting(appointment.Id) != null)
+                throw new CoreException("Please finish previous ongoing service", StatusCodeEnum.Conflict_409);
+        }
         meeting.Status = status;
         if (meeting.Status == MeetingStatus.CheckIn && appointment.IsFullyPaid == true)
         {
@@ -48,7 +56,7 @@ public class MeetingService : IMeetingService
         {
             meeting.AppointmentBusinessService.Appointment.Status = AppointmentStatus.OnGoing;
         }
-
+        
         await _unitOfWork.MeetingRepository.UpdateAsync(meeting);
         await _unitOfWork.SaveChangesAsync();
         var result = _mapper.Map<UpdateMeetingResponse>(meeting);

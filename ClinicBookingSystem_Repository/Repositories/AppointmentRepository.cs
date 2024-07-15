@@ -55,4 +55,9 @@ public class AppointmentRepository : BaseRepository<Appointment>, IAppointmentRe
     {
         return await _appointmentDAO.GetTodayMeetingTreatmentAppointment();
     }
+
+    public async Task<Appointment> GetAppointmentIfExistTreatmentMeeting(int appointmentId)
+    {
+        return await _appointmentDAO.GetAppointmentIfExistTreatmentMeeting(appointmentId);
+    }
 }
