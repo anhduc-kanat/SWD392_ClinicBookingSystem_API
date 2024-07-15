@@ -105,10 +105,14 @@ public class MeetingService : IMeetingService
         return new BaseResponse<UpdateDentistInMeeting>("Add dentist into meeting successfully", StatusCodeEnum.OK_200, result);
     }
     
-    public async Task<BaseResponse<UpdateMeetingIntoDoneResponse>> UpdateMeetingIntoDone(int meetingId)
+    public async Task<BaseResponse<UpdateMeetingIntoDoneResponse>> UpdateMeetingIntoDone(int dentistId, int meetingId)
     {
         var meeting = await _unitOfWork.MeetingRepository.GetMeetingById(meetingId);
         if(meeting == null) throw new CoreException("Meeting not found", StatusCodeEnum.BadRequest_400);
+        
+        if(meeting.DentistId != dentistId) 
+            throw new CoreException("You dont have permission to do this", StatusCodeEnum.Forbidden_403);
+        
         var dentist = await _unitOfWork.DentistRepository.GetDentistById((int)meeting.DentistId);
         if(meeting.Status == MeetingStatus.Done)
             throw new CoreException("Meeting is already done", StatusCodeEnum.BadRequest_400);

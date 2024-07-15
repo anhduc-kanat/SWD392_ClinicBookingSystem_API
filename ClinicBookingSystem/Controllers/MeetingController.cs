@@ -99,7 +99,8 @@ public class MeetingController : ControllerBase
     [Authorize(Roles = "DENTIST")]
     public async Task<BaseResponse<UpdateMeetingIntoDoneResponse>> UpdateMeetingIntoDone(int meetingId)
     {
-        var result = await _meetingService.UpdateMeetingIntoDone(meetingId);
+        var dentistId = int.Parse(User.Claims.First(c => c.Type == "userId").Value);
+        var result = await _meetingService.UpdateMeetingIntoDone(dentistId, meetingId);
         return result;
     }
 
