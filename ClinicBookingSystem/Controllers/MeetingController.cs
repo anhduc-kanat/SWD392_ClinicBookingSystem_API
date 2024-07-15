@@ -47,11 +47,9 @@ public class MeetingController : ControllerBase
     /// <returns></returns>
     [HttpPut]
     [Route("update-meeting-status/{meetingId}")]
-    [Authorize(Roles = "DENTIST")]
     public async Task<BaseResponse<UpdateMeetingResponse>> UpdateMeetingStatus(int meetingId, MeetingStatus status)
     {
-        var dentistId = int.Parse(User.Claims.First(x => x.Type == "userId").Value);
-        var result = await _meetingService.UpdateMeetingStatus(dentistId, meetingId, status);
+        var result = await _meetingService.UpdateMeetingStatus(meetingId, status);
         return result;
     }
     
@@ -101,7 +99,8 @@ public class MeetingController : ControllerBase
     [Authorize(Roles = "DENTIST")]
     public async Task<BaseResponse<UpdateMeetingIntoDoneResponse>> UpdateMeetingIntoDone(int meetingId)
     {
-        var result = await _meetingService.UpdateMeetingIntoDone(meetingId);
+        var dentistId = int.Parse(User.Claims.First(c => c.Type == "userId").Value);
+        var result = await _meetingService.UpdateMeetingIntoDone(dentistId, meetingId);
         return result;
     }
 
