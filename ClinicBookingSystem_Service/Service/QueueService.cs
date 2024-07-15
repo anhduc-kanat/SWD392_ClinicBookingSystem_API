@@ -53,7 +53,13 @@ public class QueueService : IQueueService
     public async Task ConsumeMessageDentistQueue(string dentistPhoneNumber)
     {
         var meetingId = _rabbitMqService.ConsumeMessage(dentistPhoneNumber);
+        
         var meeting = await _unitOfWork.MeetingRepository.GetMeetingById(int.Parse(meetingId));
+        if(meeting.Date.Value.Year != DateTime.Now.Year ||
+           meeting.Date.Value.Month != DateTime.Now.Month ||
+           meeting.Date.Value.Day != DateTime.Now.Day) 
+            throw new CoreException("Meeting is not today", StatusCodeEnum.BadRequest_400);
+        
         var dentist = await _unitOfWork.DentistRepository.GetDentistById((int)meeting.DentistId);
         
         meeting.Status = MeetingStatus.InTreatment;
