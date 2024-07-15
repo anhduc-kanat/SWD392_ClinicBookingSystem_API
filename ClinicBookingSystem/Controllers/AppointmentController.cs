@@ -13,6 +13,7 @@ using ClinicBookingSystem_Service.ThirdParties.VnPay;
 using ClinicBookingSystem.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ClinicBookingSystem_Service.Models.Response.AppointmentService;
 
 namespace ClinicBookingSystem_API.Controllers;
 
@@ -615,6 +616,15 @@ public class AppointmentController : ControllerBase
         GetAppointmentByMeetingDayForAjax()
     {
         var response = await _appointmentService.GetAppointmentByMeetingDayForAjax();
+        return Ok(response);
+    }
+
+
+    [HttpDelete]
+    [Route("delete-business-service-on-appointment/{appBusinessServiceId}")]
+    public async Task<ActionResult<DeleteAppointmentServiceResponse>> DeleteServiceInAppointment(int appBusinessServiceId)
+    {
+        var response = await _appointmentService.DeleteServiceInAppointment(appBusinessServiceId);
         return Ok(response);
     }
 }
