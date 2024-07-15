@@ -103,6 +103,7 @@ builder.Services.Configure<RabbitMQConfig>(builder.Configuration.GetSection("Rab
 builder.Services.Configure<PaymentConfig>(builder.Configuration.GetSection("Payment"));
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<GetUserIpAddress>();
+
 builder.Services.ConfigureRepositoryService(builder.Configuration);
 builder.Services.ConfigureServiceService(builder.Configuration);
 builder.Services.ConfigureDataAccessObjectService(builder.Configuration);
