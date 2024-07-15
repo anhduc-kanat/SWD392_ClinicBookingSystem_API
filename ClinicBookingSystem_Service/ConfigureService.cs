@@ -1,16 +1,21 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using System.Configuration;
+using System.Net;
+using System.Net.Mail;
 using ClinicBookingSystem_Repository.IRepositories;
 using ClinicBookingSystem_Service;
+using ClinicBookingSystem_Service.Common.Utils;
 using ClinicBookingSystem_Service.IService;
 using ClinicBookingSystem_Service.IServices;
 using ClinicBookingSystem_Service.Mapping;
 using ClinicBookingSystem_Service.Models.DTOs.VNPAY;
-using ClinicBookingSystem_Service.Models.Utils;
+using ClinicBookingSystem_Service.Notification.EmailNotification.IService;
+using ClinicBookingSystem_Service.Notification.EmailNotification.Service;
 using ClinicBookingSystem_Service.RabbitMQ;
 using ClinicBookingSystem_Service.RabbitMQ.Config;
 using ClinicBookingSystem_Service.RabbitMQ.Consumers.Appointment;
+using ClinicBookingSystem_Service.RabbitMQ.Consumers.EmailNotification;
 using ClinicBookingSystem_Service.RabbitMQ.IService;
 using ClinicBookingSystem_Service.RabbitMQ.Service;
 using ClinicBookingSystem_Service.Scheduler;
@@ -28,6 +33,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Quartz;
+using HashPassword = ClinicBookingSystem_Service.Models.Utils.HashPassword;
 
 public static class ConfigureService
 {
@@ -63,6 +69,25 @@ public static class ConfigureService
         services.AddScoped<IMeetingService, MeetingService>();
         services.AddScoped<IQueueService, QueueService>();
 
+        //Email
+        services.AddSingleton<RazorViewToStringRenderer>();
+        services.AddControllersWithViews();
+        services.AddTransient<SmtpClient>((serviceProvider) =>
+        {
+            var config = serviceProvider.GetRequiredService<IConfiguration>();
+            return new SmtpClient()
+            {
+                Host = config.GetValue<string>("Email:Host"),
+                Port = config.GetValue<int>("Email:Port"),
+                EnableSsl = true,
+                Credentials = new NetworkCredential(
+                    config.GetValue<string>("Email:Username"),
+                    config.GetValue<string>("Email:Password")
+                )
+            };
+        });
+        
+        services.AddScoped<IEmailService, EmailService>();        
         //quartz
         services.AddQuartz(p =>
         {
@@ -106,6 +131,7 @@ public static class ConfigureService
         {
             //consumers
             config.AddConsumer<GetAllConsumer>();
+            config.AddConsumer<EmailNotificationConsumer>();
             
             //register rabbitmq
             config.UsingRabbitMq((ctx, cfg) =>

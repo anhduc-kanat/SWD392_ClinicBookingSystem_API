@@ -14,6 +14,8 @@ using ClinicBookingSystem.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ClinicBookingSystem_Service.Models.Response.AppointmentService;
+using ClinicBookingSystem_Service.Notification.EmailNotification;
+using ClinicBookingSystem_Service.Notification.EmailNotification.IService;
 
 namespace ClinicBookingSystem_API.Controllers;
 
@@ -24,13 +26,16 @@ public class AppointmentController : ControllerBase
     private readonly IAppointmentService _appointmentService;
     private readonly IPaymentService _paymentService;
     private readonly GetUserIpAddress _getUserIpAddress;
+    private readonly IEmailService _emailService;
     public AppointmentController(IAppointmentService appointmentService,
         IPaymentService paymentService,
-        GetUserIpAddress getUserIpAddress)
+        GetUserIpAddress getUserIpAddress,
+        IEmailService emailService)
     {
         _appointmentService = appointmentService;
         _paymentService = paymentService;
         _getUserIpAddress = getUserIpAddress;
+        _emailService = emailService;
     }
     /// <summary>
     /// API NÀY KHÔNG SỬ DỤNG ĐƯỢC
