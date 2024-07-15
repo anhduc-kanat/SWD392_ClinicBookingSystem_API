@@ -13,6 +13,11 @@ public class ServiceRepository : BaseRepository<BusinessService>, IServiceReposi
         _serviceDAO = serviceDAO;
     }
 
+    public async Task<IEnumerable<BusinessService>> GetAllTreatmentServices()
+    {
+        return await _serviceDAO.GetAllTreatmentServices();
+    }
+
     public async Task<BusinessService> CreateService(BusinessService businessService)
     {
         return await _serviceDAO.CreateService(businessService);
