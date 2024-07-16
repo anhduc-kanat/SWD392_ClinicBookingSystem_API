@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,9 +11,11 @@ namespace ClinicBookingSystem_Service.Common.Utils;
 public class RazorViewToStringRenderer
 {
     private readonly RazorLightEngine _engine;
+    private readonly IWebHostEnvironment _env;
 
-    public RazorViewToStringRenderer()
+    public RazorViewToStringRenderer(IWebHostEnvironment env)
     {
+        _env = env;
         _engine = new RazorLightEngineBuilder()
             .UseFileSystemProject(Directory.GetCurrentDirectory()) // or a specific path to your templates
             .UseMemoryCachingProvider()
@@ -21,7 +24,7 @@ public class RazorViewToStringRenderer
 
     public async Task<string> RenderViewToStringAsync<TModel>(string viewPath, TModel model)
     {
-        string templatePath = Path.Combine(Directory.GetCurrentDirectory(), viewPath);
+        string templatePath = Path.Combine(_env.WebRootPath, viewPath);
         string templateContent = await File.ReadAllTextAsync(templatePath);
         string result = await _engine.CompileRenderStringAsync(viewPath, templateContent, model);
         return result;
