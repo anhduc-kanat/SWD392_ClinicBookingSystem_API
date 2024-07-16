@@ -35,11 +35,7 @@
     </Content>
   </ItemGroup>
 
-<!--  <ItemGroup>
-    <Compile Include="wwwroot\View\NotificationEmailTemplate.cshtml.cs" />
-  </ItemGroup>-->
-  
   <ItemGroup>
-    <Content Include="wwwroot/**" CopyToPublishDirectory="PreserveNewest" />
+    <Compile Include="wwwroot\View\NotificationEmailTemplate.cshtml.cs" />
   </ItemGroup>
 </Project>
