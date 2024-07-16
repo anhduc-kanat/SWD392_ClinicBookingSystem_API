@@ -7,6 +7,7 @@
     <UserSecretsId>c100edcb-e116-4dae-84de-3d5e09243735</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
     <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
@@ -32,6 +33,10 @@
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="wwwroot\View\NotificationEmailTemplate.cshtml.cs" />
   </ItemGroup>
 
 </Project>

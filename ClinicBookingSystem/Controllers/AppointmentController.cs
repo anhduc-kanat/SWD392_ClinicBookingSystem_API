@@ -14,6 +14,8 @@ using ClinicBookingSystem.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ClinicBookingSystem_Service.Models.Response.AppointmentService;
+using ClinicBookingSystem_Service.Notification.EmailNotification;
+using ClinicBookingSystem_Service.Notification.EmailNotification.IService;
 
 namespace ClinicBookingSystem_API.Controllers;
 

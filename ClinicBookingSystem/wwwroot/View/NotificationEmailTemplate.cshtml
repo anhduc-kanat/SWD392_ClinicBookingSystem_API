@@ -1,0 +1,27 @@
+﻿@model ClinicBookingSystem_Service.RabbitMQ.Events.EmailNotification.EmailNotificationEvent
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html lang="">
+<head>
+    <title>@Model.Subject</title>
+</head>
+<body>
+<div>
+    <h1>@Model.Title</h1>
+    <div style="display: flex; justify-content: center">
+        <div>
+                    <p>Your account has been created successfully, here is your login information</p>
+                    <p><mark>PhoneNumber</mark>: @Model.PhoneNumber</p>
+                    <p><mark>Password</mark>: @Model.Password</p>
+                    <p>pleases do not share with anyone</p>
+                    <p>sincerely, DuckClinic Team</p>
+        </div>
+    </div>
+   
+</div>
+</body>
+</html>

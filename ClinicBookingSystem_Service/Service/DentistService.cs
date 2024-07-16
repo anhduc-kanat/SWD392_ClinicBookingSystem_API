@@ -15,6 +15,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ClinicBookingSystem_Service.CustomException;
+using ClinicBookingSystem_Service.Notification.EmailNotification.Service;
+using ClinicBookingSystem_Service.RabbitMQ.Events.EmailNotification;
+using ClinicBookingSystem_Service.RabbitMQ.IService;
 
 namespace ClinicBookingSystem_Service.Services
 {
@@ -22,10 +25,12 @@ namespace ClinicBookingSystem_Service.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public DentistService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IRabbitMQBus _rabbitMQBus;
+        public DentistService(IUnitOfWork unitOfWork, IMapper mapper, IRabbitMQBus rabbitMqBus)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _rabbitMQBus = rabbitMqBus;
         }
 
         public async Task<BaseResponse<CreateDentistResponse>> CreateDentist(CreateDentistRequest request)
@@ -33,6 +38,7 @@ namespace ClinicBookingSystem_Service.Services
             try
             {
                 bool exist = await _unitOfWork.CustomerRepository.GetCustomerByPhone(request.PhoneNumber);
+                var unhashedPassword = request.Password;
                 if (exist)
                 {
                     return new BaseResponse<CreateDentistResponse>("Phone was existed", StatusCodeEnum.BadRequest_400);
@@ -53,9 +59,18 @@ namespace ClinicBookingSystem_Service.Services
                         services.Add(service);
                     }
                 }
-
                 var createdUser = await _unitOfWork.DentistRepository.CreateNewDentist(user, services);
                 await _unitOfWork.SaveChangesAsync();
+
+                await _rabbitMQBus.PublishAsync(new EmailNotificationEvent()
+                {
+                    Title = "Welcome to DuckClinic",
+                    Subject = "Create account successfully at DuckClinic",
+                    PhoneNumber = $"{user.PhoneNumber}",
+                    Password = unhashedPassword,
+                    To = $"{user.Email}",
+                    ViewUrl = "./View/NotificationEmailTemplate.cshtml"
+                });
                 return new BaseResponse<CreateDentistResponse>("Create Dentist Successfully!",
                     StatusCodeEnum.Created_201);
             }
