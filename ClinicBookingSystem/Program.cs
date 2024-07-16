@@ -126,6 +126,7 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 });  
 app.UseCors();
 app.UseAuthentication();
+app.UseStaticFiles();
 
 app.UseAuthorization();
 
