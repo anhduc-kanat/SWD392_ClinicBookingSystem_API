@@ -9,8 +9,6 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <NoWarn>$(NoWarn);1591</NoWarn>
-    <EnableDefaultContentItems>false</EnableDefaultContentItems>
-
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,10 +33,10 @@
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
 
-    <Content Include="wwwroot/View/NotificationEmailTemplate.cshtml" CopyToPublishDirectory="PreserveNewest" />
-    <Content Include="wwwroot/View/NotificationEmailTemplate.cshtml.cs" CopyToPublishDirectory="PreserveNewest" />
-
+  <ItemGroup>
+    <Compile Include="wwwroot\View\NotificationEmailTemplate.cshtml.cs" />
   </ItemGroup>
 
 </Project>
