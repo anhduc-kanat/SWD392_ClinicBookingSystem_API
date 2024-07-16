@@ -26,16 +26,13 @@ public class AppointmentController : ControllerBase
     private readonly IAppointmentService _appointmentService;
     private readonly IPaymentService _paymentService;
     private readonly GetUserIpAddress _getUserIpAddress;
-    private readonly IEmailService _emailService;
     public AppointmentController(IAppointmentService appointmentService,
         IPaymentService paymentService,
-        GetUserIpAddress getUserIpAddress,
-        IEmailService emailService)
+        GetUserIpAddress getUserIpAddress)
     {
         _appointmentService = appointmentService;
         _paymentService = paymentService;
         _getUserIpAddress = getUserIpAddress;
-        _emailService = emailService;
     }
     /// <summary>
     /// API NÀY KHÔNG SỬ DỤNG ĐƯỢC

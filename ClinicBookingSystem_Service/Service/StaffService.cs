@@ -14,6 +14,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClinicBookingSystem_Service.Notification.EmailNotification.IService;
+using ClinicBookingSystem_Service.RabbitMQ.Events.EmailNotification;
+using ClinicBookingSystem_Service.RabbitMQ.IService;
 
 namespace ClinicBookingSystem_Service.Service
 {
@@ -21,11 +24,14 @@ namespace ClinicBookingSystem_Service.Service
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-
-        public StaffService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IRabbitMQBus _rabbitMqBus;
+        public StaffService(IUnitOfWork unitOfWork, 
+            IMapper mapper, 
+            IRabbitMQBus rabbitMqBus)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _rabbitMqBus = rabbitMqBus;
         }
         public async Task<BaseResponse<CreateStaffResponse>> CreateStaff(CreateStaffRequest request)
         {
@@ -36,13 +42,25 @@ namespace ClinicBookingSystem_Service.Service
                 {
                     return new BaseResponse<CreateStaffResponse>("Phone was existed", StatusCodeEnum.BadRequest_400);
                 }
+                string unhashedPassword = request.Password;
                 HashPassword hash = new HashPassword();
                 request.Password = hash.EncodePassword(request.Password);
                 User user = _mapper.Map<User>(request);
                 Role role = await _unitOfWork.RoleRepository.GetRoleByName("STAFF");
                 user.Role = role;
-                var createdUser = await _unitOfWork.StaffRepository.AddAsync(user);
-                await _unitOfWork.SaveChangesAsync();
+                
+                /*var createdUser = await _unitOfWork.StaffRepository.AddAsync(user);
+                await _unitOfWork.SaveChangesAsync();*/
+                
+                await _rabbitMqBus.PublishAsync(new EmailNotificationEvent()
+                {
+                    To = user.Email,
+                    Password = unhashedPassword,
+                    PhoneNumber = user.PhoneNumber,
+                    Subject = "Create account successfully at DuckClinic",
+                    Title = "Welcome To DuckClinic",
+                    ViewUrl = "./wwwroot/View/NotificationEmailTemplate.cshtml"
+                });
                 return new BaseResponse<CreateStaffResponse>("Create Staff Successfully!", StatusCodeEnum.Created_201);
             }
             catch (Exception ex)
