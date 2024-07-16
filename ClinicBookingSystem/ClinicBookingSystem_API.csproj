@@ -35,9 +35,9 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup>
+<!--  <ItemGroup>
     <Compile Include="wwwroot\View\NotificationEmailTemplate.cshtml.cs" />
-  </ItemGroup>
+  </ItemGroup>-->
   
   <ItemGroup>
     <Content Include="wwwroot/**" CopyToPublishDirectory="PreserveNewest" />
