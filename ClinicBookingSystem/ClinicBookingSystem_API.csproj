@@ -36,6 +36,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="wwwroot\View\NotificationEmailTemplate.cshtml.cs" />
+    <Compile Include="/wwwroot/View/**" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>
