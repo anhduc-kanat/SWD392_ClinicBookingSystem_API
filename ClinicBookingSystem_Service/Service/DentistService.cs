@@ -59,8 +59,8 @@ namespace ClinicBookingSystem_Service.Services
                         services.Add(service);
                     }
                 }
-                /*var createdUser = await _unitOfWork.DentistRepository.CreateNewDentist(user, services);
-                await _unitOfWork.SaveChangesAsync();*/
+                var createdUser = await _unitOfWork.DentistRepository.CreateNewDentist(user, services);
+                await _unitOfWork.SaveChangesAsync();
 
                 await _rabbitMQBus.PublishAsync(new EmailNotificationEvent()
                 {

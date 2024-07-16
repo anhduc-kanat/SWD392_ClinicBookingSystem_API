@@ -49,8 +49,8 @@ namespace ClinicBookingSystem_Service.Service
                 Role role = await _unitOfWork.RoleRepository.GetRoleByName("STAFF");
                 user.Role = role;
                 
-                /*var createdUser = await _unitOfWork.StaffRepository.AddAsync(user);
-                await _unitOfWork.SaveChangesAsync();*/
+                var createdUser = await _unitOfWork.StaffRepository.AddAsync(user);
+                await _unitOfWork.SaveChangesAsync();
                 
                 await _rabbitMqBus.PublishAsync(new EmailNotificationEvent()
                 {
